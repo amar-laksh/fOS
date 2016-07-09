@@ -16,13 +16,13 @@ uint64_t delay(uint64_t t);
 
 void draw_num(int64_t num, int32_t r, int32_t c);
 
-void draw_char(uint32_t p, int8_t ch, uint8_t fg, uint8_t bg);
+void draw_char(uint32_t p, char ch, uint8_t fg, uint8_t bg);
 
-int32_t draw_str(int8_t string[], int32_t r, int32_t c);
+int32_t draw_str(char string[], int32_t r, int32_t c);
 
-void write_char(int8_t ascii);
+void write_char(char ascii);
 
-void write_str(int8_t* string);
+void write_str(char* string);
 
 void vga_init();
 

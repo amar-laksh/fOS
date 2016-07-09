@@ -1,17 +1,15 @@
 #include <stdint.h>
 #include <string.h>
 
-int32_t strlen(int8_t str[]){
-        int32_t i=0;
-        int8_t ch;
-        while((ch=str[i]) != '\0')
-                i++;
-        return i+1;
+int32_t strlen(char str[]){
+	int32_t len=0;
+	while (str[len++]);
+	return len;
 }
 
-void itoa(uint64_t i,uint32_t base, int8_t* buf) {
-	int8_t tbuf[100];
-	int8_t bchars[] = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+void itoa(uint64_t i,uint32_t base, char* buf) {
+	char tbuf[100];
+	char bchars[] = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
 	int32_t pos = 0;
 	int32_t opos = 0;
 	int32_t top = 0;

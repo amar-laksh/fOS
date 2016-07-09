@@ -30,8 +30,8 @@ int32_t get_point(uint32_t r, uint32_t c){
 	return (get_row(r)+get_column(c));
 }
 
-void draw_char(uint32_t p, int8_t ch, uint8_t fg, uint8_t bg) {
-	int8_t *fb = (int8_t *) VIDMEM;
+void draw_char(uint32_t p, char ch, uint8_t fg, uint8_t bg) {
+	char *fb = (char *) VIDMEM;
 	fb[p] = ch;
 	fb[p + 1] = ((fg & 0x0F) << 4) | (bg & 0x0F);
 }
@@ -43,7 +43,7 @@ void clear_screen(){
         }
 }
 
-int32_t draw_str(int8_t *string, int32_t r, int32_t c){
+int32_t draw_str(char *string, int32_t r, int32_t c){
 	uint32_t i=0,j=0,sp=0;
 	sp = get_point(r,c);
 	for(i=sp;i<(sp+(strlen(string)*2));i=i+2){
@@ -64,7 +64,7 @@ uint64_t delay(uint64_t t){
 }
 
 
-void write_char(int8_t ascii){
+void write_char(char ascii){
 	if(ascii == '\b'){
 		if(curpos%160>3){
 			curpos = curpos - 2;
@@ -86,7 +86,7 @@ void write_char(int8_t ascii){
 	}
 }
 
-void write_str(int8_t* string){
+void write_str(char* string){
 	int32_t i=0;
 	for(i=-1;i<strlen(string);i++){
 		write_char(string[i]);
@@ -95,10 +95,8 @@ void write_str(int8_t* string){
 
 
 void vga_init(){
-	int8_t header[] = ".f.O.S. - By Amar Lakshya";
-	int8_t arrow[] = "#";
+	char header[] = ".f.O.S. - By Amar Lakshya";
 	draw_str(header,0,20);
-	draw_str(arrow,1,0);
 	while(read_scan_code()){
 			write_char(get_kbd());
 		}

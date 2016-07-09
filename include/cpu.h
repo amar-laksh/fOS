@@ -4,12 +4,8 @@
 #include <vga.h>
 #include <io.h>
 
-uint64_t rdtsc();
-
-uint64_t get_control_register(int number);
+void cpuid(int code);
 
 void get_cpuid_string(int code, char* where);
-
-void poll_init();
 
 #endif

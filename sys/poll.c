@@ -1,6 +1,9 @@
 #include <vga.h>
 #include <io.h>
 #include <stdint.h>
+#include <string.h>
+
+#include <cpu.h>
 
 uint64_t rdtsc() {
 	    uint64_t ret=0;
@@ -28,19 +31,13 @@ uint64_t get_control_register(int number)
     return ret;
 }
 
-void get_cpuid_string(int code, int8_t* where) {
-	asm volatile("cpuid":"=a"(*where),"=b"(*(where+1)),
-               "=c"(*(where+2)),"=d"(*(where+3)):"a"(code));
-}
 
 void poll_init(){
 	clear_screen();
-	int8_t debug[] = "poll initializing...";
-	int8_t cpuid[10];
-	int8_t cpumsg[20] = "CPUID is: ";
-	write_str(debug);
-	write_str(cpumsg);
+	char cpuid[1];
+	write_str("# Poll Initializing...\n");
+	write_str("# CPUID = ");
 	get_cpuid_string(0,cpuid);
 	write_str(cpuid);
-
+	write_str("\r");
 }
