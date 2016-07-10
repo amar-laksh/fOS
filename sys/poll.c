@@ -34,10 +34,6 @@ uint64_t get_control_register(int number)
 
 void poll_init(){
 	clear_screen();
-	char cpuid[1];
-	write_str("# Poll Initializing...\n");
-	write_str("# CPUID = ");
-	get_cpuid_string(0,cpuid);
-	write_str(cpuid);
-	write_str("\r");
+	write_str("Poll Initializing...\r");
+	cpu_init();
 }

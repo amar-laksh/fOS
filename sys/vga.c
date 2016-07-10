@@ -88,7 +88,7 @@ void write_char(char ascii){
 
 void write_str(char* string){
 	int32_t i=0;
-	for(i=-1;i<strlen(string);i++){
+	for(i=0;i<strlen(string);i++){
 		write_char(string[i]);
 	}
 }
