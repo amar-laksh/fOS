@@ -1,12 +1,11 @@
+/* TODO- IMPLEMENT FUNCTION 0x02 FROM INTEL */
+
 #ifndef CPU_H
 #define CPU_H
 #include <stdint.h>
 #include <vga.h>
 #include <io.h>
-
-// ------------------------------------------------------------------------------------------------
-// Function 0x01
-
+/* FUNCTION - 0x00*/
 #define ECX_SSE3                        (1 << 0)    // Streaming SIMD Extensions 3
 #define ECX_PCLMULQDQ                   (1 << 1)    // PCLMULQDQ Instruction
 #define ECX_DTES64                      (1 << 2)    // 64-Bit Debug Store Area
@@ -36,7 +35,7 @@
 #define ECX_AVX                         (1 << 28)   // AVX Instructions
 #define ECX_F16C                        (1 << 29)   // 16-bit Floating Point Instructions
 #define ECX_RDRAND                      (1 << 30)   // RDRAND Instruction
-
+/* FUNCTION - 0x01*/
 #define EDX_FPU                         (1 << 0)    // Floating-Point Unit On-Chip
 #define EDX_VME                         (1 << 1)    // Virtual 8086 Mode Extensions
 #define EDX_DE                          (1 << 2)    // Debugging Extensions
@@ -67,14 +66,233 @@
 #define EDX_TM                          (1 << 29)   // Thermal Monitor
 #define EDX_PBE                         (1 << 31)   // Pending Break Enable
 
-// ------------------------------------------------------------------------------------------------
-// Extended Function 0x01
 
 #define EDX_SYSCALL                     (1 << 11)   // SYSCALL/SYSRET
 #define EDX_XD                          (1 << 20)   // Execute Disable Bit
 #define EDX_1GB_PAGE                    (1 << 26)   // 1 GB Pages
 #define EDX_RDTSCP                      (1 << 27)   // RDTSCP and IA32_TSC_AUX
 #define EDX_64_BIT                      (1 << 29)   // 64-bit Architecture
+
+struct CPU_FEATURE{
+	int8_t FPU;
+	int8_t VME;
+	int8_t DE; 
+	int8_t PSE;
+	int8_t TSC;
+	int8_t MSR;
+	int8_t PAE;
+	int8_t MCE;
+	int8_t CX8;
+	int8_t APIC;
+	int8_t SEP;
+	int8_t MTRR;
+	int8_t PGE; 
+	int8_t MCA; 
+	int8_t CMOV;
+	int8_t PAT; 
+	int8_t PSE36;
+	int8_t PSN;  
+	int8_t CLFLUSH;
+	int8_t DS;     
+	int8_t ACPI;
+	int8_t MMX; 
+	int8_t FXSR; 
+	int8_t SSE;  
+	int8_t SSE2; 
+	int8_t SS;   
+	int8_t HTT;  
+	int8_t TM;   
+	int8_t PBE;  
+
+	int8_t SSE3;     
+	int8_t PCLMULQDQ;
+	int8_t DTES64; 
+	int8_t MONITOR;
+	int8_t DS_CPL; 
+	int8_t VMX;    
+	int8_t SMX;    
+	int8_t EST;    
+	int8_t TM2;    
+	int8_t SSSE3;  
+	int8_t CNXT_ID;
+	int8_t FMA;   
+	int8_t CX16;  
+	int8_t XTPR;  
+	int8_t PDCM;  
+	int8_t PCID;  
+	int8_t DCA;   
+	int8_t SSE41; 
+	int8_t SSE42; 
+	int8_t X2APIC;
+	int8_t MOVBE; 
+	int8_t POPCNT;
+	int8_t TSCOUNT;    
+	int8_t AESNI;  
+	int8_t XSAVE;  
+	int8_t OSXSAVE;
+	int8_t AVX;   
+	int8_t F16C;  
+	int8_t RDRAND;
+
+	int8_t _64_BIT;
+};
+
+struct PROCESSOR_SIGNATURE{
+	int8_t EXTENDED_FAMILY;
+	int8_t FAMILY_CODE;
+	int8_t EXTENDED_MODEL;
+	int8_t MODEL_NUMBER;
+	int8_t STEPPING_ID;
+	int8_t TYPE;
+
+};
+
+struct CPU_INSTRUCTION{
+	int8_t TSC;
+	int8_t MSR;
+	int8_t SSE;
+	int8_t SSE2;
+	int8_t SSE3;
+	int8_t SSSE3;
+	int8_t SSE41;
+	int8_t SSE42;
+	int8_t AVX;
+	int8_t F16C;
+	int8_t RDRAND;
+};
+
+struct PROCESSOR_SERIAL_NUMBER{
+	uint64_t UPPERBITS;
+	uint32_t LOWERBITS;
+};
+
+struct DETERMINSTIC_CACHE_PARAMETERS{
+	int8_t NO_APCID;
+	int16_t NO_MAXTHREAD;
+	int16_t FAC;
+	int8_t SICL;
+	int8_t CACHE_TYPE;
+	int16_t WOA;
+	int16_t PARTITIONS;
+	int16_t LINE_SIZE;
+	int32_t SETS;
+	int8_t INC_LC;
+	int8_t WBINVD;
+};
+
+struct MONITOR{
+	int16_t MIN_MON_SIZE;
+	int16_t MAX_MONS_IZE;
+	int8_t INTM_WAIT;
+	int8_t MONITOR_EXT;
+	int8_t NO_C7_C4;
+	int8_t NO_C6_C3;
+	int8_t NO_C2;
+	int8_t NO_C1;
+	int8_t NO_C0;
+};
+
+struct DIGTSPM{
+	int8_t INTEL_TB;
+	int8_t DIG_T_SENS;
+	int8_t NO_INTR_THRES;
+	int8_t HCFC;
+};
+
+struct DCA {
+	int32_t PLATFORM_DCA_CAP;
+};
+
+struct ARCH_PER_MON_FEATURES {
+	int8_t ARCH_EVENTS;
+	int8_t BITS_PC;
+	int8_t NO_COUNTER;
+	int8_t PERFMON_VER;
+	int8_t BRANCH_MISS;
+	int8_t BRANCH_INST;
+	int8_t LL_CACHE_MISS;
+	int8_t LL_CACHE_REF;
+	int8_t EBX_REF_CYCLES;
+	int8_t INSTR_RETD;
+	int8_t CORE_CYCLES;
+	int8_t BITS_FC;
+	int8_t NO_FC;
+};
+
+struct PROCESSOR_TOPOLOGY {
+	int8_t BITS_RS_APIC;
+	int8_t NO_FC_LOG_PRO;
+	int8_t LEVEL_TYPE;
+	int8_t LEVEL_NUMBER;
+	int32_t EXT_APIC_ID;	
+};
+
+struct XSAVE {
+	int32_t LOWER_32_BITS_XCR0;
+	int32_t MAX_BYTES_XCR0;
+	int32_t MAX_BYTES_XSAVE;
+	int32_t UPPER_32_BITS_XCR0;
+};
+
+
+// Extended Functions 
+
+struct EXT_CPU_FEATURE{
+	int8_t SYSCALL;
+	int8_t XD_BIT;
+	int8_t INTEL_64;
+	int8_t LAHF_OR_SAHF;
+};
+
+
+struct CPU_TOPOLOGY{
+	/* 				STANDARD FUNCTIONS 			*/
+
+	// Function 0x00
+	char cpu_vendor_id;
+	uint32_t highest_std_info;
+
+	// Function 0x01
+	struct PROCESSOR_SIGNATURE processor_signature;
+	struct CPU_FEATURE  cpu_features;
+	struct CPU_INSTRUCTION cpu_instructions;
+	
+	// Function 0x03
+	struct PROCESSOR_SERIAL_NUMBER psn;
+
+	// Funciton 0x04
+	struct DETERMINSTIC_CACHE_PARAMETERS determinstic_cache_params;
+
+	// Function 0x05
+	struct MONITOR monitor_mwait;
+
+	// Function 0x06
+	struct DIGTSPM dig_sensor_pm;
+
+	// Function 0x09
+	struct DCA direct_cache;
+
+	// Function 0x0A
+	struct ARCH_PER_MON_FEATURES  arcpmf;
+
+	// Function 0x0B
+	struct PROCESSOR_TOPOLOGY processor_topology;
+
+	// Function 0x0D
+	struct XSAVE processor_ext_state_enum;
+
+
+	/* 				EXTENDED FUNCTIONS 			*/
+
+	uint32_t highest_ext_info;	
+
+	// Function 0x8000_0001
+	struct EXT_CPU_FEATURE extended_cpu_features;
+
+	// Function 0x8000_0002, 0x8000_0003, 0x800_0004
+	
+};
+
 
 static inline void cpuid(uint32_t reg, uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t *edx)
 {

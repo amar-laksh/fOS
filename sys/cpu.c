@@ -55,7 +55,6 @@ void cpu_init(){
     write_str("\r");
 
     write_str("Instructions:");
-    if (edx & EDX_HTT)      write_str(" HTT");
     if (edx & EDX_TSC)      write_str(" TSC");
     if (edx & EDX_MSR)      write_str(" MSR");
     if (edx & EDX_SSE)      write_str(" SSE");
