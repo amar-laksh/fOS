@@ -46,6 +46,7 @@ void cpu_init(){
 
     write_str("Features:");
 
+    if (edx & EDX_PSN)      write_str(" PSN");
     if (edx & EDX_HTT)      write_str(" HTT");
     if (edx & EDX_PSE)      write_str(" PSE");
     if (edx & EDX_PAE)      write_str(" PAE");

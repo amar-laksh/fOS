@@ -1,4 +1,10 @@
-/* TODO- IMPLEMENT FUNCTION 0x02 FROM INTEL */
+/* TODO- IMPLEMENT FUNCTION 0x02 FROM INTEL 
+*  TODO- WRITE AMD FUNCTION COMMENTS IN FORM-
+*		INTEL_FUNCITON, AMD_FUNCTION
+*
+*	.E.G.- Function 0x01, Function 0x0D
+*
+*/
 
 #ifndef CPU_H
 #define CPU_H
@@ -78,62 +84,35 @@ struct CPU_FEATURE{
 	int8_t VME;
 	int8_t DE; 
 	int8_t PSE;
-	int8_t TSC;
-	int8_t MSR;
 	int8_t PAE;
 	int8_t MCE;
-	int8_t CX8;
 	int8_t APIC;
-	int8_t SEP;
 	int8_t MTRR;
 	int8_t PGE; 
 	int8_t MCA; 
-	int8_t CMOV;
 	int8_t PAT; 
 	int8_t PSE36;
 	int8_t PSN;  
-	int8_t CLFLUSH;
 	int8_t DS;     
-	int8_t ACPI;
-	int8_t MMX; 
-	int8_t FXSR; 
-	int8_t SSE;  
-	int8_t SSE2; 
+	int8_t ACPI;    
 	int8_t SS;   
 	int8_t HTT;  
 	int8_t TM;   
 	int8_t PBE;  
-
-	int8_t SSE3;     
-	int8_t PCLMULQDQ;
 	int8_t DTES64; 
-	int8_t MONITOR;
 	int8_t DS_CPL; 
 	int8_t VMX;    
 	int8_t SMX;    
 	int8_t EST;    
-	int8_t TM2;    
-	int8_t SSSE3;  
-	int8_t CNXT_ID;
-	int8_t FMA;   
-	int8_t CX16;  
+	int8_t TM2;      
+	int8_t CNXT_ID;     
 	int8_t XTPR;  
 	int8_t PDCM;  
 	int8_t PCID;  
 	int8_t DCA;   
-	int8_t SSE41; 
-	int8_t SSE42; 
-	int8_t X2APIC;
-	int8_t MOVBE; 
-	int8_t POPCNT;
+	int8_t X2APIC; 
 	int8_t TSCOUNT;    
-	int8_t AESNI;  
-	int8_t XSAVE;  
-	int8_t OSXSAVE;
-	int8_t AVX;   
-	int8_t F16C;  
-	int8_t RDRAND;
-
+	int8_t F16C; 
 	int8_t _64_BIT;
 };
 
@@ -149,6 +128,13 @@ struct PROCESSOR_SIGNATURE{
 
 struct CPU_INSTRUCTION{
 	int8_t TSC;
+	int8_t MMX;
+	int8_t FXSR;
+	int8_t CLFLUSH;
+	int8_t FMA;
+	int8_t MONITOR;
+	int8_t CX8;
+	int8_t CX16;
 	int8_t MSR;
 	int8_t SSE;
 	int8_t SSE2;
@@ -157,8 +143,22 @@ struct CPU_INSTRUCTION{
 	int8_t SSE41;
 	int8_t SSE42;
 	int8_t AVX;
-	int8_t F16C;
 	int8_t RDRAND;
+	int8_t CMOV;
+	int8_t XSAVE; 
+	int8_t OSXSAVE;
+	int8_t MOVBE;
+	int8_t POPCNT; 
+	int8_t AESNI;
+	int8_t PCLMULQDQ;
+	int8_t SEP;
+};
+
+struct CPU_MISC_INFO{
+	int8_t LOCAL_APIC_ID;
+	int8_t LOG_PRO_COUNT;
+	int8_t CLFLUSH_SIZE;
+	int8_t BRAND_ID;
 };
 
 struct PROCESSOR_SERIAL_NUMBER{
@@ -189,7 +189,7 @@ struct MONITOR{
 	int8_t NO_C6_C3;
 	int8_t NO_C2;
 	int8_t NO_C1;
-	int8_t NO_C0;
+	int8_t NO_C0;	
 };
 
 struct DIGTSPM{
@@ -197,6 +197,7 @@ struct DIGTSPM{
 	int8_t DIG_T_SENS;
 	int8_t NO_INTR_THRES;
 	int8_t HCFC;
+	int8_t EFF_FREQ;
 };
 
 struct DCA {
@@ -232,31 +233,56 @@ struct XSAVE {
 	int32_t MAX_BYTES_XCR0;
 	int32_t MAX_BYTES_XSAVE;
 	int32_t UPPER_32_BITS_XCR0;
+	int32_t YMM_SAVE_STATE_OFFSET;
+	int32_t LWP_SAVE_STATE_SIZE;
+	int32_t LWP_SAVE_STATE_OFFSET;
 };
 
 
 // Extended Functions 
 
 struct EXT_CPU_FEATURE{
+	int8_t BMI;
 	int8_t SYSCALL;
 	int8_t XD_BIT;
 	int8_t INTEL_64;
 	int8_t LAHF_OR_SAHF;
 };
 
+struct PROCESSOR_NAME{
+	int64_t FIRST_16;
+	int64_t SECOND_16;
+	int64_t THIRD_16;
+};
+
+struct EXT_L2_CACHE {
+	int16_t L2_SIZE;
+	int8_t L2_ASSOC;
+	int8_t L2_LINE_SIZE;
+};
+
+struct ADV_POW_MANG{
+	int8_t TSC_INVAR;
+};
+
+struct VIR_PHY_ADDR_SIZE{
+	int8_t VIRT_ADDR_SIZE;
+	int8_t PHY_ADDR_SIZE;
+};
 
 struct CPU_TOPOLOGY{
 	/* 				STANDARD FUNCTIONS 			*/
 
 	// Function 0x00
-	char cpu_vendor_id;
+	char cpu_vendor_id[32];
 	uint32_t highest_std_info;
 
 	// Function 0x01
 	struct PROCESSOR_SIGNATURE processor_signature;
 	struct CPU_FEATURE  cpu_features;
 	struct CPU_INSTRUCTION cpu_instructions;
-	
+	struct CPU_MISC_INFO cpu_mis_informtion;
+
 	// Function 0x03
 	struct PROCESSOR_SERIAL_NUMBER psn;
 
@@ -290,7 +316,18 @@ struct CPU_TOPOLOGY{
 	struct EXT_CPU_FEATURE extended_cpu_features;
 
 	// Function 0x8000_0002, 0x8000_0003, 0x800_0004
-	
+	struct PROCESSOR_NAME processor_name;	
+
+	// Function 0x8000_0006
+	struct EXT_L2_CACHE extended_L2_cache;
+
+	// Function 0x8000_0007
+	struct ADV_POW_MANG advance_power_management;
+
+	// Function 0x8000_0008
+	struct VIR_PHY_ADDR_SIZE virtual_physcial_address;
+
+
 };
 
 
