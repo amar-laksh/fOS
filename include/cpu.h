@@ -1,8 +1,8 @@
 /* TODO- IMPLEMENT FUNCTION 0x02 FROM INTEL 
 *  TODO- WRITE AMD FUNCTION COMMENTS IN FORM-
-*		INTEL_FUNCITON, AMD_FUNCTION
+*		INTEL_FUNCITON | AMD_FUNCTION
 *
-*	.E.G.- Function 0x01, Function 0x0D
+*	.E.G.- Function 0x01 | Function 0x0D
 *
 */
 
@@ -113,7 +113,25 @@ struct CPU_FEATURE{
 	int8_t X2APIC; 
 	int8_t TSCOUNT;    
 	int8_t F16C; 
-	int8_t _64_BIT;
+	int8_t TOPO_EXT;
+	int8_t NODE_ID;
+	int8_t LWP;
+	int8_t WDT;
+	int8_t SKINT;
+	int8_t XOP;
+	int8_t IBS;
+	int8_t OSVW;
+	int8_t MIS_SSE;
+	int8_t ABM;
+	int8_t ALT_MOV_CR8;
+	int8_t XAPIC_SPACE;
+	int8_t SVM;
+	int8_t CMP_LEGACY;
+	int8_t THREE_DNOW_EXT;
+	int8_t LM;
+	int8_t FFXSR;
+	int8_t MMX_EXT;
+
 };
 
 struct PROCESSOR_SIGNATURE{
@@ -152,6 +170,11 @@ struct CPU_INSTRUCTION{
 	int8_t AESNI;
 	int8_t PCLMULQDQ;
 	int8_t SEP;
+	int8_t TBM;
+	int8_t THREE_DNOW_PRE;
+	int8_t SSE4A;
+	int8_t THREE_DNOW_INSTR;
+	int8_t RDTSCP;
 };
 
 struct CPU_MISC_INFO{
@@ -181,10 +204,10 @@ struct DETERMINSTIC_CACHE_PARAMETERS{
 };
 
 struct MONITOR{
-	int16_t MIN_MON_SIZE;
-	int16_t MAX_MONS_IZE;
-	int8_t INTM_WAIT;
-	int8_t MONITOR_EXT;
+	int16_t MIN_MONS_SIZE;
+	int16_t MAX_MONS_SIZE;
+	int8_t IBE;
+	int8_t EMX;
 	int8_t NO_C7_C4;
 	int8_t NO_C6_C3;
 	int8_t NO_C2;
@@ -273,29 +296,29 @@ struct VIR_PHY_ADDR_SIZE{
 struct CPU_TOPOLOGY{
 	/* 				STANDARD FUNCTIONS 			*/
 
-	// Function 0x00
+	// Function 0x00 | Function 0x00
 	char cpu_vendor_id[32];
 	uint32_t highest_std_info;
 
-	// Function 0x01
+	// Function 0x01 | Function 0x01
 	struct PROCESSOR_SIGNATURE processor_signature;
 	struct CPU_FEATURE  cpu_features;
 	struct CPU_INSTRUCTION cpu_instructions;
 	struct CPU_MISC_INFO cpu_mis_informtion;
 
-	// Function 0x03
+	// Function 0x03 
 	struct PROCESSOR_SERIAL_NUMBER psn;
 
 	// Funciton 0x04
 	struct DETERMINSTIC_CACHE_PARAMETERS determinstic_cache_params;
 
-	// Function 0x05
+	// Function 0x05 | Function 0x05
 	struct MONITOR monitor_mwait;
 
-	// Function 0x06
+	// Function 0x06 | Function 0x06
 	struct DIGTSPM dig_sensor_pm;
 
-	// Function 0x09
+	// Function 0x09 
 	struct DCA direct_cache;
 
 	// Function 0x0A
@@ -304,7 +327,7 @@ struct CPU_TOPOLOGY{
 	// Function 0x0B
 	struct PROCESSOR_TOPOLOGY processor_topology;
 
-	// Function 0x0D
+	// Function 0x0D | Function 0x0D
 	struct XSAVE processor_ext_state_enum;
 
 
@@ -312,13 +335,13 @@ struct CPU_TOPOLOGY{
 
 	uint32_t highest_ext_info;	
 
-	// Function 0x8000_0001
+	// Function 0x8000_0001 | Function 0x0000_0007
 	struct EXT_CPU_FEATURE extended_cpu_features;
 
 	// Function 0x8000_0002, 0x8000_0003, 0x800_0004
 	struct PROCESSOR_NAME processor_name;	
 
-	// Function 0x8000_0006
+	// Function 0x8000_0006 
 	struct EXT_L2_CACHE extended_L2_cache;
 
 	// Function 0x8000_0007

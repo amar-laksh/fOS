@@ -1,0 +1,8 @@
+language: c
+#install: ./dependencies.sh
+script: make os.iso
+
+compiler:
+  - clang
+  - gcc
+
