@@ -1,3 +1,4 @@
+// TODO - IMPLEMENT DECLARATION AND INITIALIZATION OF STRUCTS IN CPU.H
 #include <cpuid.h>
 #include <cpu.h>
 #include <vga.h>
@@ -26,6 +27,10 @@ void cpuid_get_processor_name(char* name){
 }
 
 void cpu_init(){
+// TODO - ADD ALL THE STRUCTS AND VALUES
+  struct CPU_INSTRUCTION cpu_instr = {
+	  				(1<<4)
+  				};
   uint32_t highest_std_info, highest_ext_info;
   
   uint32_t eax, ebx, ecx, edx;
@@ -56,7 +61,8 @@ void cpu_init(){
     write_str("\r");
 
     write_str("Instructions:");
-    if (edx & EDX_TSC)      write_str(" TSC");
+    if (edx && cpu_instr.TSC) write_str(" TSC");
+    //if (edx & EDX_TSC)      write_str(" TSC");
     if (edx & EDX_MSR)      write_str(" MSR");
     if (edx & EDX_SSE)      write_str(" SSE");
     if (edx & EDX_SSE2)     write_str(" SSE2");

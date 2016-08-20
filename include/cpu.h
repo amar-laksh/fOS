@@ -347,7 +347,7 @@ struct CPU_TOPOLOGY{
 	// Function 0x8000_0007
 	struct ADV_POW_MANG advance_power_management;
 
-	// Function 0x8000_0008
+	// Function 0x8000_Z0008
 	struct VIR_PHY_ADDR_SIZE virtual_physcial_address;
 
 
