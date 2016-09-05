@@ -2,9 +2,10 @@
 #include <vga.h>
 #include <io.h>
 #include <stdint.h>
+#include <gdt.h>
 
 #if !defined(__cplusplus)
-#include <stdbool.h> 
+#include <stdbool.h>
 #endif
 #include <stddef.h>
 #include <stdint.h>
@@ -23,6 +24,7 @@
 *	TODO - implement proper function for delay
 */
 void kmain(){
+	gdt_install();
 	poll_init();
 	vga_init();
 }
