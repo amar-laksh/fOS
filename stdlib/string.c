@@ -9,7 +9,9 @@ int32_t strlen(char str[]){
 
 void itoa(uint64_t i,uint32_t base, char* buf) {
 	char tbuf[100];
-	char bchars[] = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+	char bchars[] = {'0','1','2','3','4','5',
+			 '6','7','8','9','A','B',
+			 'C','D','E','F'};
 	int32_t pos = 0;
 	int32_t opos = 0;
 	int32_t top = 0;

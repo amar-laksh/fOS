@@ -26,6 +26,7 @@ _start:
 	mov $stack_top, %esp
 
 	call kmain
+	cli
 	gdt_flush:
     		lgdt gp
 		#gdt_reg:
@@ -40,7 +41,6 @@ _start:
     		jmp $0x08,$flush2
 flush2:
     ret
-	cli
 1:	hlt
 	jmp 1b
 

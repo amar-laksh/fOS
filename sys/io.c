@@ -26,9 +26,11 @@ void kbd_set_leds (bool num, bool caps, bool scroll) {
     outb(0x06,data);
 }
 
-void pic_acknowledge(uint32_t interrupt){
-	if (interrupt < PIC1_START_INTERRUPT || interrupt > PIC2_END_INTERRUPT)
+void pic_acknowledge(uint32_t interrupt) {
+	if (interrupt < PIC1_START_INTERRUPT || 
+			interrupt > PIC2_END_INTERRUPT)
 		return;
+
 	if (interrupt < PIC2_START_INTERRUPT) {
 		outb(PIC1_PORT_A, PIC_ACK);
 	} else {
@@ -36,22 +38,22 @@ void pic_acknowledge(uint32_t interrupt){
 	}
 }
 
-int8_t readb(int8_t port){
+int8_t readb(int8_t port) {
 	return inb(port);
 }
 
-int8_t read_scan_code(){
+int8_t read_scan_code() {
 	return inb(KBD_DATA_PORT);
 }
 
-void move_cursor(int32_t pos){
+void move_cursor(int32_t pos) {
         outb(FB_COMMAND_PORT, FB_HIGH_BYTE_COMMAND);
         outb(FB_DATA_PORT, ((pos >> 8) & 0x00FF));
 	outb(FB_COMMAND_PORT, FB_LOW_BYTE_COMMAND);
         outb(FB_DATA_PORT, pos & 0x00FF);
     }
 
-int8_t get_kbd(){
+int8_t get_kbd() {
         int8_t sc;
 	while(read_scan_code()){
                 sc = '\0';

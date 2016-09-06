@@ -22,7 +22,7 @@ struct gdt_ptr
 } __attribute__((packed));
 
 /* Our GDT, with 3 entries, and finally our special GDT pointer */
-struct gdt_entry gdt[3];
+struct gdt_entry gdt[5];
 struct gdt_ptr gp;
 
 /* This will be a function in start.asm. We use this to properly
@@ -30,7 +30,8 @@ struct gdt_ptr gp;
 extern void gdt_flush();
 
 /* Setup a descriptor in the Global Descriptor Table */
-void gdt_set_gate(int num, uint64_t base, uint64_t limit, uint8_t access, uint8_t gran)
+void gdt_set_gate(int num, uint64_t base, uint64_t limit,
+		uint8_t access, uint8_t gran)
 {
     /* Setup the descriptor base address */
     gdt[num].base_low = (base & 0xFFFF);
@@ -60,6 +61,8 @@ void gdt_install()
     /* Our NULL descriptor */
     gdt_set_gate(0, 0, 0, 0, 0);
 
+/* Ring-0 Level GDT entries */
+
     /* The second entry is our Code Segment. The base address
     *  is 0, the limit is 4GBytes, it uses 4KByte granularity,
     *  uses 32-bit opcodes, and is a Code Segment descriptor.
@@ -71,6 +74,14 @@ void gdt_install()
     *  same as our code segment, but the descriptor type in
     *  this entry's access byte says it's a Data Segment */
     gdt_set_gate(2, 0, 0xFFFFFFFF, 0x92, 0xCF);
+
+
+/* Ring-3 Level GDT Entries */
+
+    gdt_set_gate(3, 0, 0xFFFFFFFF, 0x9A, 0xCF);
+
+    gdt_set_gate(4, 0, 0xFFFFFFFF, 0x92, 0xCF);
+
 
     /* Flush out the old GDT and install the new changes! */
     gdt_flush();

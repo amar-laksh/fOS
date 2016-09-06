@@ -146,8 +146,8 @@ struct PROCESSOR_SIGNATURE{
 
 struct CPU_INSTRUCTION{
 	int8_t TSC;
-	int8_t MMX;
 	int8_t FXSR;
+	int8_t MMX;
 	int8_t CLFLUSH;
 	int8_t FMA;
 	int8_t MONITOR;

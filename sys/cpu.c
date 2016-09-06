@@ -8,22 +8,32 @@
 
 
 void cpuid_get_vendor_string(char* where) {
-      cpuid(0, 0, (uint32_t *)(where + 0), (uint32_t *)(where + 8), (uint32_t *)(where + 4));
+      cpuid(0, 0, (uint32_t *)(where + 0),
+		      (uint32_t *)(where + 8), 
+		      (uint32_t *)(where + 4));
       where[12] = '\0';
   }
 
 void cpuid_get_processor_name(char* name){
-        cpuid(0x80000002, (uint32_t *)(name +  0), (uint32_t *)(name +  4), (uint32_t *)(name +  8), (uint32_t *)(name + 12));
-        cpuid(0x80000003, (uint32_t *)(name + 16), (uint32_t *)(name + 20), (uint32_t *)(name + 24), (uint32_t *)(name + 28));
-        cpuid(0x80000004, (uint32_t *)(name + 32), (uint32_t *)(name + 36), (uint32_t *)(name + 40), (uint32_t *)(name + 44));
+     cpuid(0x80000002, (uint32_t *)(name +  0), 
+		     (uint32_t *)(name +  4), 
+		     (uint32_t *)(name +  8), 
+		     (uint32_t *)(name + 12));
 
-        // Processor name is right justified with leading spaces
-        const char *p = name;
-        while (*p == ' ')
-        {
-            ++p;
-        }
-        name[41] = '\0';
+    cpuid(0x80000003, (uint32_t *)(name + 16), 
+		    (uint32_t *)(name + 20), 
+		    (uint32_t *)(name + 24), 
+		    (uint32_t *)(name + 28));
+
+    cpuid(0x80000004, (uint32_t *)(name + 32), 
+		    (uint32_t *)(name + 36), 
+		    (uint32_t *)(name + 40), 
+		    (uint32_t *)(name + 44));
+
+    // Processor name is right justified with leading spaces
+    const char *p = name;
+    while (*p == ' ') ++p;
+    name[41] = '\0';
 }
 
 void cpu_init(){
@@ -37,8 +47,10 @@ void cpu_init(){
   
   char where[12], cpu_name[41];
 
-  cpuid(0x80000000, &highest_ext_info, &ebx, &ecx, &edx);
-  cpuid(0x00000001, &highest_std_info, &ebx, &ecx, &edx);
+  cpuid(0x80000000, &highest_ext_info,
+		  &ebx, &ecx, &edx);
+  cpuid(0x00000001, &highest_std_info,
+		  &ebx, &ecx, &edx);
 
   write_str("Initializing CPU Topology scan...\r");
   write_str("Vendor String:");
