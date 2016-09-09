@@ -1,4 +1,5 @@
 #include <gdt.h>
+#include <sys/vga.h>
 
 /* Setup a descriptor in the Global Descriptor Table */
 void gdt_set_gate(int num, uint64_t base, uint64_t limit,
@@ -56,4 +57,6 @@ void gdt_install()
 
     /* Flush out the old GDT and install the new changes! */
     gdt_flush();
+    
+    //while(1){write_str("GDT flushed & installed!");}
 }

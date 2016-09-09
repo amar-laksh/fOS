@@ -1,5 +1,6 @@
 #include <idt.h>
 #include <kernel/fos.h>
+#include <sys/vga.h>
 
 /* Use this function to set an entry in the IDT. Alot simpler
 *  than twiddling with the GDT ;) */
@@ -25,5 +26,7 @@ void idt_install()
 
     /* Points the processor's internal register to the new IDT */
     idt_load();
+
+    //while(1){write_str("IDT loaded!");}
 }
 

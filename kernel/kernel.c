@@ -33,5 +33,8 @@ void kmain(){
 	gdt_install();
 	idt_install();
 	isrs_install();
+
+	poll_init();
 	vga_init();
+
 }
