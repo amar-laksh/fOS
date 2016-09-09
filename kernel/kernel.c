@@ -3,12 +3,14 @@
 #include <io.h>
 #include <stdint.h>
 #include <gdt.h>
+#include <idt.h>
+#include <isrs.h>
+#include <stddef.h>
 
 #if !defined(__cplusplus)
 #include <stdbool.h>
 #endif
-#include <stddef.h>
-#include <stdint.h>
+
  
 #if defined(__linux__)
 #error "You are not using a cross-compiler, you will most certainly run into trouble"
@@ -22,9 +24,11 @@
 *	TODO - differentiate properly between CR NL LF etc.
 *	TODO - implement proper function for printing(somehow carry char* and int8_t* at the same time.)
 *	TODO - implement proper function for delay
+*	TODO - divide gdt, idt and isr codes into seperate .s files
 */
 void kmain(){
 	gdt_install();
-	poll_init();
-	vga_init();
+	idt_install();
+	isrs_install();
+	//vga_init();
 }

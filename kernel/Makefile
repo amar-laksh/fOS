@@ -6,7 +6,7 @@ INCLUDE    := $(shell find $(INCLUDEDIR) -name '*.c')
 SYS	   := $(shell find $(SYSDIR) -name '*.c')
 STDLIB     := $(shell find $(STDLIBDIR) -name '*.c')
 
-OBJECTS = $(patsubst %.c,$(INCLUDEDIR)/%.o,$(INCLUDE)) $(patsubst %.c,$(SYSDIR)/%.o,$(SYS)) $(patsubst %.c,$(STDLIBDIR)/%.o,$(STDLIB)) kernel.o boot.o gdt.o
+OBJECTS = $(patsubst %.c,$(INCLUDEDIR)/%.o,$(INCLUDE)) $(patsubst %.c,$(SYSDIR)/%.o,$(SYS)) $(patsubst %.c,$(STDLIBDIR)/%.o,$(STDLIB)) boot.o kernel.o gdt.o idt.o isrs.o
 
 CC = i686-elf-gcc
 CFLAGS = -I../include -std=gnu99 -ffreestanding -O2 -Wall -Wextra -c
