@@ -2,8 +2,8 @@
 #define VGA_H
 #include <stdint.h>
 #include <stdbool.h>
-#include <io.h>
-#include <string.h>
+#include <sys/io.h>
+#include <stdlib/string.h>
 int32_t get_row(uint32_t p);
 
 int32_t get_column(uint32_t p);

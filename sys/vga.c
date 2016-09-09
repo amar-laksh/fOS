@@ -1,8 +1,4 @@
-#include <stdint.h>
-#include <stdbool.h>
-#include <vga.h>
-#include <io.h>
-#include <string.h>
+#include <sys/vga.h>
 
 #define	VIDMEM 0x000B8000
 #define MAX_ROWS 24

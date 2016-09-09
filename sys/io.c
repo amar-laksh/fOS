@@ -1,7 +1,4 @@
-#include <io.h>
-#include <stdbool.h>
-#include <stdint.h>
-#include <vga.h>
+#include <sys/io.h>
 
 #define FB_COMMAND_PORT 0x3D4
 #define FB_DATA_PORT 0x3D5

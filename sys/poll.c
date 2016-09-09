@@ -1,9 +1,4 @@
-#include <vga.h>
-#include <io.h>
-#include <stdint.h>
-#include <string.h>
-
-#include <cpu.h>
+#include <sys/poll.h>
 
 uint64_t rdtsc() {
 	    uint64_t ret=0;

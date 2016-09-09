@@ -1,11 +1,10 @@
 #ifndef ISRS_H
 #define ISRS_H
 
-
 #include <stdint.h>
 #include <stddef.h>
 #include <idt.h>
-#include <vga.h>
+#include <sys/vga.h>
 
 extern void isr0();
 extern void isr1();
@@ -40,48 +39,16 @@ extern void isr29();
 extern void isr30();
 extern void isr31();
 
-
+/* This defines what the stack looks like after an ISR was running */
+struct regs {
+    uint32_t gs, fs, es, ds;      /* pushed the segs last */
+    uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;  /* pushed by 'pusha' */
+    uint32_t int_no, err_code;    /* our 'push byte #' and ecodes do this */
+    uint32_t eip, cs, eflags, useresp, ss;   /* pushed by the processor automatically */ 
+};
 void isrs_install();
 
-char *exception_messages[] =
-{
-    "Division By Zero",
-    "Debug",
-    "Non Maskable Interrupt",
-    "Breakpoint",
-    "Into Detected Overflow",
-    "Out of Bounds",
-    "Invalid Opcode",
-    "No Coprocessor",
-
-    "Double Fault",
-    "Coprocessor Segment Overrun",
-    "Bad TSS",
-    "Segment Not Present",
-    "Stack Fault",
-    "General Protection Fault",
-    "Page Fault",
-    "Unknown Interrupt",
-
-    "Coprocessor Fault",
-    "Alignment Check",
-    "Machine Check",
-    "Reserved",
-    "Reserved",
-    "Reserved",
-    "Reserved",
-    "Reserved",
-
-    "Reserved",
-    "Reserved",
-    "Reserved",
-    "Reserved",
-    "Reserved",
-    "Reserved",
-    "Reserved",
-    "Reserved"
-};
-
 void fault_handler(struct regs *r);
+
 
 #endif

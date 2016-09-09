@@ -1,11 +1,5 @@
 // TODO - IMPLEMENT DECLARATION AND INITIALIZATION OF STRUCTS IN CPU.H
-#include <cpuid.h>
-#include <cpu.h>
-#include <vga.h>
-#include <io.h>
-#include <stdint.h>
-#include <string.h>
-
+#include <sys/cpu.h>
 
 void cpuid_get_vendor_string(char* where) {
       cpuid(0, 0, (uint32_t *)(where + 0),

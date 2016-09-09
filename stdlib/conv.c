@@ -1,7 +1,4 @@
-#include <stdint.h>
-#include <vga.h>
-#include <io.h>
-
+#include <stdlib/conv.h>
 
 void itoi(uint64_t i,uint32_t base, uint64_t* buf) {
 	uint64_t tbuf[100];

@@ -1,11 +1,14 @@
-#include <poll.h>
-#include <vga.h>
-#include <io.h>
 #include <stdint.h>
+#include <stddef.h>
+
 #include <gdt.h>
 #include <idt.h>
 #include <isrs.h>
-#include <stddef.h>
+
+#include <sys/poll.h>
+#include <sys/vga.h>
+#include <sys/io.h>
+
 
 #if !defined(__cplusplus)
 #include <stdbool.h>
@@ -30,5 +33,5 @@ void kmain(){
 	gdt_install();
 	idt_install();
 	isrs_install();
-	//vga_init();
+	vga_init();
 }

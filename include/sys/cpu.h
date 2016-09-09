@@ -9,8 +9,8 @@
 #ifndef CPU_H
 #define CPU_H
 #include <stdint.h>
-#include <vga.h>
-#include <io.h>
+#include <sys/vga.h>
+#include <sys/io.h>
 /* FUNCTION - 0x00*/
 #define ECX_SSE3                        (1 << 0)    // Streaming SIMD Extensions 3
 #define ECX_PCLMULQDQ                   (1 << 1)    // PCLMULQDQ Instruction

@@ -1,5 +1,4 @@
-#include <stdint.h>
-#include <string.h>
+#include <stdlib/string.h>
 
 int32_t strlen(char str[]){
 	int32_t len=0;
