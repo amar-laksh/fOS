@@ -4,6 +4,7 @@
 #include <gdt.h>
 #include <idt.h>
 #include <isrs.h>
+#include <irq.h>
 
 #include <sys/poll.h>
 #include <sys/vga.h>
@@ -33,8 +34,10 @@ void kmain(){
 	gdt_install();
 	idt_install();
 	isrs_install();
+	irq_install();
 
-	poll_init();
-	vga_init();
+	timer_install();
+//	poll_init();
+//	vga_init();
 
 }
