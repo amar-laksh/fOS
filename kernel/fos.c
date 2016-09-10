@@ -19,8 +19,8 @@ void kmain(){
 	idt_install();
 	isrs_install();
 	irq_install();
-
 	timer_install();
+	write_char("a");
 //	poll_init();
 //	vga_init();
 

@@ -14,7 +14,7 @@ struct idt_entry
 struct idt_ptr
 {
     uint16_t limit;
-    uint32_t base;
+    int base;
 } __attribute__((packed));
 
 
@@ -26,7 +26,7 @@ extern void idt_load();
 
 /* Use this function to set an entry in the IDT. Alot simpler
 *  than twiddling with the GDT ;) */
-void idt_set_gate(uint8_t num, uint32_t base, uint16_t sel, uint8_t flags) {
+void idt_set_gate(uint8_t num, uint64_t base, uint16_t sel, uint8_t flags) {
 	idt[num].base_low = (base & 0xFFFF);
 	idt[num].base_high  = ( (base >> 16) & 0xFFFF);
 	idt[num].selector = sel;
@@ -39,7 +39,7 @@ void idt_install()
 {
     /* Sets the special IDT pointer up, just like in 'gdt.c' */
     idtp.limit = (sizeof (struct idt_entry) * 256) - 1;
-    idtp.base = (uint32_t)&idt;
+    idtp.base = &idt;
 
     /* Clear out the entire IDT, initializing it to zeros */
     memset(&idt, 0, sizeof(struct idt_entry) * 256);
