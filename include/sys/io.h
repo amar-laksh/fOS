@@ -5,12 +5,12 @@
 
 
 static inline void outb(uint16_t port, uint8_t val) {
-	asm volatile ( "out %0, %1" : : "a"(val), "Nd"(port) );
+	__asm__ __volatile__( "out %1, %0" : : "Nd"(port), "a"(val) );
 }
 
 static inline uint8_t inb(uint16_t port) {
 	uint8_t ret;
-	asm volatile ( "in %1, %0":  "=a"(ret): "Nd"(port) );
+	__asm__ __volatile__( "in %1, %0":  "=a"(ret): "Nd"(port) );
 	return ret;
 }
 

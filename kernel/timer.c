@@ -1,6 +1,10 @@
 #include <timer.h>
 
 
+/* This will keep track of how many ticks that the system
+*  has been running for */
+int timer_ticks = 0;
+
 void timer_handler(struct regs *r)
 {
 
@@ -14,7 +18,7 @@ void timer_handler(struct regs *r)
 
 void timer_wait(int ticks)
 {
-    uint64_t eticks;
+    int32_t eticks;
 
     eticks = timer_ticks + ticks;
     while(timer_ticks < eticks);

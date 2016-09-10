@@ -1,21 +1,42 @@
 #ifndef FOS_H
 #define FOS_H
 #include <stdint.h>
-#include <sys/io.h>
 #include <stddef.h>
 
+#if !defined(__cplusplus)
+#include <stdbool.h>
+#endif
+
+ 
+#if defined(__linux__)
+#error "You are not using a cross-compiler, you will most certainly run into trouble"
+#endif
+ 
+#if !defined(__i386__)
+#error "This kernel needs to be compiled with a ix86-elf compiler"
+#endif
+
+#include <gdt.h>
+#include <idt.h>
+#include <isrs.h>
+#include <irq.h>
+#include <timer.h>
+
+#include <sys/poll.h>
+#include <sys/vga.h>
+#include <sys/io.h>
 
 
-void  *memset(void *b, int c, int len) {
 
-  uint8_t *p = b;
-  while(len > 0) {
-      *p = c;
-      p++;
-      len--;
-    }
-  return(b);
-}
+struct regs {
+    uint32_t gs, fs, es, ds;      /* pushed the segs last */
+    uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;  /* pushed by 'pusha' */
+    uint32_t int_no, err_code;    /* our 'push byte #' and ecodes do this */
+    uint32_t eip, cs, eflags, useresp, ss;   /* pushed by the processor automatically */ 
+};
 
+void *memset(void *dest, char val, size_t count);
+
+void kmain();
 
 #endif

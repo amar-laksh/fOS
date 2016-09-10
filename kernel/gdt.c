@@ -1,6 +1,26 @@
 #include <gdt.h>
 #include <sys/vga.h>
 
+struct gdt_entry {
+	uint16_t limit_low;
+	uint16_t base_low;
+	uint8_t base_middle;
+	uint8_t access;
+	uint8_t granularity;
+	uint8_t base_high;
+} __attribute__((packed));
+
+struct gdt_ptr {
+	uint16_t limit;
+	uint32_t base;
+} __attribute__((packed));
+
+struct gdt_entry gdt[3];
+struct gdt_ptr gp;
+
+extern void gdt_flush();
+
+
 /* Setup a descriptor in the Global Descriptor Table */
 void gdt_set_gate(int num, uint64_t base, uint64_t limit,
 		uint8_t access, uint8_t gran)
@@ -28,7 +48,7 @@ void gdt_install()
 {
     /* Setup the GDT pointer and limit */
     gp.limit = (sizeof(struct gdt_entry) * 3) - 1;
-    gp.base = (int)&gdt;
+    gp.base = (uint32_t)&gdt;
 
     /* Our NULL descriptor */
     gdt_set_gate(0, 0, 0, 0, 0);
@@ -50,13 +70,11 @@ void gdt_install()
 
 /* Ring-3 Level GDT Entries */
 
-    gdt_set_gate(3, 0, 0xFFFFFFFF, 0x9A, 0xCF);
-
-    gdt_set_gate(4, 0, 0xFFFFFFFF, 0x92, 0xCF);
+    
 
 
     /* Flush out the old GDT and install the new changes! */
     gdt_flush();
     
-    //while(1){write_str("GDT flushed & installed!");}
+//    while(1){write_str("GDT flushed & installed!");}
 }

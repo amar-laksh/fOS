@@ -4,9 +4,6 @@
 #include <sys/vga.h>
 #include <irq.h>
 
-/* This will keep track of how many ticks that the system
-*  has been running for */
-uint32_t timer_ticks = 0;
 
 /* Handles the timer. In this case, it's very simple: We
 *  increment the 'timer_ticks' variable every time the
