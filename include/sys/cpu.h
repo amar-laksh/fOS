@@ -105,7 +105,7 @@ struct CPU_INSTRUCTION{
 	int8_t MOVBE;
 	int8_t POPCNT; 
 	int8_t AESNI;
-	int8_t PCLMULQDQ;
+	int8_t PCLMUL;
 	int8_t SEP;
 	// Probably AMD Instructions
 	int8_t TBM;
@@ -128,10 +128,10 @@ struct PROCESSOR_SERIAL_NUMBER{
 	int32_t LOWER_BITS;
 };
 
-struct DETERMINSTIC_CACHE_PARAMETERS{
+struct DET_CACHE_PARAMS{
 	int8_t CACHE_TYPE;
 	int8_t CACHE_LEVEL;
-	int8_t SELF_INIT_CACHE_LEVEL;
+	int8_t SINIT_CACHE_LVL;
 	int8_t FULLY_ASSOC_CACHE;
 	int8_t MAX_IDS_LOG_PRO;
 	int8_t MAX_IDS_PRO_CORES;
@@ -139,9 +139,7 @@ struct DETERMINSTIC_CACHE_PARAMETERS{
 	int16_t PHY_LINE_PART;
 	int16_t WAYS_OF_ASSOC;
 	int32_t NO_OF_SETS;
-	int8_t WBINVD_INCL_COMPLEX_COMPACT;
-
-
+	int8_t WBINVD_COMPACT;
 };
 
 struct MONITOR{
@@ -149,7 +147,7 @@ struct MONITOR{
 	int16_t MAX_MONS_SIZE;
 	int8_t EMX;
 	int8_t INTR_BRK_EVENT;
-	int32_t C0-C7;
+	int32_t C0_C7;
 };
 
 struct DIGTSPM{
@@ -241,7 +239,7 @@ typedef struct {
 	struct PROCESSOR_SERIAL_NUMBER psn;
 
 	// Funciton 0x04
-	struct DETERMINSTIC_CACHE_PARAMETERS determinstic_cache_params;
+	struct DET_CACHE_PARAMS det_cache_params;
 
 	// Function 0x05 | Function 0x05
 	struct MONITOR monitor_mwait;

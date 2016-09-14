@@ -10,7 +10,8 @@ struct CPU_INSTRUCTION cpu_instructions;
 struct PROCESSOR_SIGNATURE processor_signature;
 struct CPU_MISC_INFO cpu_misc_info;
 struct PROCESSOR_SERIAL_NUMBER processor_serial_number;
-struct DETERMINSITIC_CACHE_PARAMETERS deterministic_cache_parameters;
+struct DET_CACHE_PARAMS det_cache_params;
+struct MONITOR monitor;
 CPU_TOPOLOGY cpu;
 
 
@@ -80,7 +81,7 @@ void intel_init(){
 	/** Processor Signature **/
 	cpuid(0x01, &eax, &ebx, &ecx, &edx);
 	processor_signature.STEPPING_ID = (eax & 0xF);
-	processor_signature.MODEL = (eax & 0xF0);
+	processor_signature.MODEL_NUMBER = (eax & 0xF0);
 	processor_signature.FAMILY_CODE = (eax & 0xF00);
 	processor_signature.PROCESSOR_TYPE = (eax & 0x6000);
 	processor_signature.EXTENDED_MODEL_ID = (eax & 0xF0000);
@@ -99,7 +100,27 @@ void intel_init(){
 	processor_serial_number.UPPER_BITS = edx;
 
 	/** Deterministic Cache Parameters **/
-	
+	cpuid(0x04,&eax, &ebx, &ecx, &edx);
+	det_cache_params.CACHE_TYPE = (eax & 0x1F);
+	det_cache_params.CACHE_LEVEL = (eax & 0xE0);
+	det_cache_params.SINIT_CACHE_LVL = (eax & 0x100);
+	det_cache_params.FULLY_ASSOC_CACHE = (eax & 0x200);
+	det_cache_params.MAX_IDS_LOG_PRO = (eax & 0x3FFC000);
+	det_cache_params.MAX_IDS_PRO_CORES = (eax & 0xFC000000);
+	det_cache_params.SYS_COH_LINE_SIZE = (ebx & 0xFFF);
+	det_cache_params.PHY_LINE_PART = (ebx & 0x3FF000);
+	det_cache_params.WAYS_OF_ASSOC = (ebx & 0xFFC00000);
+	det_cache_params.NO_OF_SETS = ecx;
+	det_cache_params.WBINVD_COMPACT = edx;
+
+
+	/** MONITOR Features **/
+	cpuid(0x05,&eax, &ebx, &ecx, &edx);
+	monitor.MIN_MONS_SIZE = (eax & 0xFFFF);
+	monitor.MAX_MONS_SIZE = (ebx & 0xFFFF);
+	monitor.EMX = (ecx & 0x1);
+	monitor.INTR_BRK_EVENT = (ecx & 0x2);
+	monitor.C0_C7 = edx;
 
 	/** CPU Instructions and Features **/
 	if (highest_std_info >= 0x01){
@@ -157,7 +178,7 @@ void intel_init(){
 	    if (edx & (1<<26) )		cpu_instructions.SSE2 = 1;
 
 	    if (ecx & (1<<0) )		cpu_instructions.SSE3 = 1;
-	    if (ecx & (1<<1) )		cpu_instructions.PCLMULQDQ = 1;
+	    if (ecx & (1<<1) )		cpu_instructions.PCLMUL = 1;
 	    if (ecx & (1<<9) )		cpu_instructions.SSSE3 = 1;
 	    if (ecx & (1<<12) )		cpu_instructions.FMA = 1;
 	    if (ecx & (1<<13) )		cpu_instructions.CX16 = 1;
@@ -172,16 +193,15 @@ void intel_init(){
 	    if (ecx & (1<<30) )		cpu_instructions.RDRAND = 1; 
 
 	  }
+	  struct CPU_FEATURE ptr = cpu_features;
 
-	  write_str("\r");
-
-	  if (highest_ext_info >= 0x80000001){
-	    cpuid(0x80000001, &eax, &ebx, &ecx, &edx);
-	    if (edx & EDX_64_BIT) write_str("64-bit Architecture");
-	    else write_str("32-bit Architecture");
+	  for(int i=0;i<4;i++){
+	  	if(i==3){
+	  		if(&ptr == 1){
+	  			write_str("PAE feature is supported!");
+	  		}
+	  	}
 	  }
-
-	  write_str("\r");
 
 	  if(highest_ext_info >= 0x80000004){
 	    get_processor_name(cpu_name);
