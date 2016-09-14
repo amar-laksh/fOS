@@ -54,6 +54,7 @@ idt_load:
 	lidt idtp
 	ret
 
+
 # All the ISR Exception functions
 .global isr0
 .global isr1

@@ -8,10 +8,10 @@ STDLIB     := $(shell find $(STDLIBDIR) -name '*.c')
 
 OBJECTS = $(patsubst %.c,$(INCLUDEDIR)/%.o,$(INCLUDE)) $(patsubst %.c,$(SYSDIR)/%.o,$(SYS)) $(patsubst %.c,$(STDLIBDIR)/%.o,$(STDLIB)) boot.o fos.o gdt.o idt.o isrs.o irq.o timer.o
 
-CC = i686-elf-gcc
+CC =  i686-elf-gcc
 CFLAGS = -I../include -std=gnu99 -ffreestanding -O2 -Wall -Wextra -c
 LDFLAGS = -T linker.ld -o fos.elf -ffreestanding -O2 -nostdlib 
-AS = i686-elf-as
+AS =  i686-elf-as
 
 all: kernel.elf
 

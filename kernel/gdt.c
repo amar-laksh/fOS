@@ -15,7 +15,7 @@ struct gdt_ptr {
 	uint32_t base;
 } __attribute__((packed));
 
-struct gdt_entry gdt[3];
+struct gdt_entry gdt[5];
 struct gdt_ptr gp;
 
 extern void gdt_flush();
@@ -48,7 +48,7 @@ void gdt_install()
 {
     /* Setup the GDT pointer and limit */
     gp.limit = (sizeof(struct gdt_entry) * 3) - 1;
-    gp.base = (uint32_t)&gdt;
+    gp.base = &gdt;
 
     /* Our NULL descriptor */
     gdt_set_gate(0, 0, 0, 0, 0);
@@ -69,9 +69,6 @@ void gdt_install()
 
 
 /* Ring-3 Level GDT Entries */
-
-    
-
 
     /* Flush out the old GDT and install the new changes! */
     gdt_flush();

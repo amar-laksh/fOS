@@ -1,6 +1,6 @@
 #include <idt.h>
 #include <sys/vga.h>
-
+#include <isrs.h>
 
 struct idt_entry
 {
@@ -14,7 +14,7 @@ struct idt_entry
 struct idt_ptr
 {
     uint16_t limit;
-    int base;
+    uint32_t base;
 } __attribute__((packed));
 
 
@@ -45,6 +45,10 @@ void idt_install()
     memset(&idt, 0, sizeof(struct idt_entry) * 256);
 
     /* Add any new ISRs to the IDT here using idt_set_gate */
+    isrs_install(); 
+    irq_install();
+
+
 
     /* Points the processor's internal register to the new IDT */
     idt_load();

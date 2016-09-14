@@ -1,14 +1,39 @@
 // TODO - IMPLEMENT DECLARATION AND INITIALIZATION OF STRUCTS IN CPU.H
-#include <sys/cpu.h>
+// TODO - IMPLEMENT CACHE AND TLB IMPLEMENTATION
 
-void cpuid_get_vendor_string(char* where) {
+#include <sys/cpu.h>
+#define cpuid_simple(in, a, b, c, d) asm("cpuid": "=a" (a), "=b" (b), "=c" (c), "=d" (d) : "a" (in));
+
+
+struct CPU_FEATURE cpu_features;
+struct CPU_INSTRUCTION cpu_instructions;
+struct PROCESSOR_SIGNATURE processor_signature;
+struct CPU_MISC_INFO cpu_misc_info;
+struct PROCESSOR_SERIAL_NUMBER processor_serial_number;
+struct DETERMINSITIC_CACHE_PARAMETERS deterministic_cache_parameters;
+CPU_TOPOLOGY cpu;
+
+
+uint32_t highest_std_info, highest_ext_info;
+uint32_t eax, ebx, ecx, edx,crap;
+  
+char cpu_name[41];
+char *vendor_strings[] ={
+	"AuthenticAMD",
+	"AMDisbetter!",
+	"GenuineIntel"
+};
+
+
+
+static void get_vendor_string(char* where) {
       cpuid(0, 0, (uint32_t *)(where + 0),
 		      (uint32_t *)(where + 8), 
 		      (uint32_t *)(where + 4));
       where[12] = '\0';
   }
 
-void cpuid_get_processor_name(char* name){
+static void get_processor_name(char* name){
      cpuid(0x80000002, (uint32_t *)(name +  0), 
 		     (uint32_t *)(name +  4), 
 		     (uint32_t *)(name +  8), 
@@ -31,67 +56,142 @@ void cpuid_get_processor_name(char* name){
 }
 
 void cpu_init(){
-// TODO - ADD ALL THE STRUCTS AND VALUES
-  uint32_t highest_std_info, highest_ext_info;
-  
-  uint32_t eax, ebx, ecx, edx;
-  
-  char where[12], cpu_name[41];
-
-  cpuid(0x80000000, &highest_ext_info,
-		  &ebx, &ecx, &edx);
-  cpuid(0x00000001, &highest_std_info,
-		  &ebx, &ecx, &edx);
-
-  write_str("Initializing CPU Topology scan...\r");
-  write_str("Vendor String:");
-  cpuid_get_vendor_string(where);
-  write_str(where);
-  write_str("\r");
-
-  if (highest_std_info >= 0x01){
-    cpuid(0x01, &eax, &ebx, &ecx, &edx);
-
-    write_str("Features:");
-
-    if (edx & EDX_PSN)      write_str(" PSN");
-    if (edx & EDX_HTT)      write_str(" HTT");
-    if (edx & EDX_PSE)      write_str(" PSE");
-    if (edx & EDX_PAE)      write_str(" PAE");
-    if (edx & EDX_APIC)     write_str(" APIC");
-    if (edx & EDX_MTRR)     write_str(" MTRR");
-
-    write_str("\r");
-
-    write_str("Instructions:");
-    //if (edx && cpu_instr.TSC) write_str(" TSC");
-    if (edx & EDX_TSC)      write_str(" TSC");
-    if (edx & EDX_MSR)      write_str(" MSR");
-    if (edx & EDX_SSE)      write_str(" SSE");
-    if (edx & EDX_SSE2)     write_str(" SSE2");
-    if (ecx & ECX_SSE3)     write_str(" SSE3");
-    if (ecx & ECX_SSSE3)    write_str(" SSSE3");
-    if (ecx & ECX_SSE41)    write_str(" SSE41");
-    if (ecx & ECX_SSE42)    write_str(" SSE42");
-    if (ecx & ECX_AVX)      write_str(" AVX");
-    if (ecx & ECX_F16C)     write_str(" F16C");
-    if (ecx & ECX_RDRAND)   write_str(" RDRAND");
-
+	cpuid_simple(0,crap,ebx,crap,crap);
+	switch(ebx){
+		case 0x756e6547:	intel_init();break;
+  		case 0x68747541:	amd_init();break;
+  	}
   }
 
-  write_str("\r");
+void intel_init(){
+	cpuid(0x80000000, 
+		&highest_ext_info,
+		&ebx, &ecx, &edx);
+	cpuid(0x00000001, 
+		&highest_std_info,
+		&ebx, &ecx, &edx);
 
-  if (highest_ext_info >= 0x80000001){
-    cpuid(0x80000001, &eax, &ebx, &ecx, &edx);
-    if (edx & EDX_64_BIT) write_str("64-bit Architecture");
-    else write_str("32-bit Architecture");
-  }
+	get_vendor_string(cpu.cpu_vendor_string);
+	
+	cpu.highest_std_info = highest_std_info;
+	cpu.highest_ext_info = highest_ext_info;
 
-  write_str("\r");
 
-  if(highest_ext_info >= 0x80000004){
-    cpuid_get_processor_name(cpu_name);
-    write_str("CPU name:");
-    write_str(cpu_name);
-  }
+	/** Processor Signature **/
+	cpuid(0x01, &eax, &ebx, &ecx, &edx);
+	processor_signature.STEPPING_ID = (eax & 0xF);
+	processor_signature.MODEL = (eax & 0xF0);
+	processor_signature.FAMILY_CODE = (eax & 0xF00);
+	processor_signature.PROCESSOR_TYPE = (eax & 0x6000);
+	processor_signature.EXTENDED_MODEL_ID = (eax & 0xF0000);
+	processor_signature.EXTENDED_FAMILY_ID = (eax & 0xFF00000);
+
+
+	/** CPU Miscellaneous Information **/
+	cpu_misc_info.BRAND_ID = (ebx & 0xFF);
+	cpu_misc_info.CLFLUSH_SIZE = (ebx & 0xF00);
+	cpu_misc_info.LOCAL_APIC_ID = (ebx & 0xFF000000);
+
+
+	/** Processor Serial Number **/
+	cpuid(0x03,&eax, &ebx, &ecx, &edx);
+	processor_serial_number.LOWER_BITS = ecx;
+	processor_serial_number.UPPER_BITS = edx;
+
+	/** Deterministic Cache Parameters **/
+	
+
+	/** CPU Instructions and Features **/
+	if (highest_std_info >= 0x01){
+
+		/** Getting CPU Features **/
+	    cpuid(0x01, &eax, &ebx, &ecx, &edx); 
+
+	    if (edx & (1<<0) )		cpu_features.FPU = 1;
+	    if (edx & (1<<1) )		cpu_features.VME = 1;
+	    if (edx & (1<<2) )		cpu_features.DE = 1;
+	    if (edx & (1<<3) )		cpu_features.PSE = 1;
+	    if (edx & (1<<5) )		cpu_features.TSC = 1;
+	    if (edx & (1<<6) )		cpu_features.PAE = 1;
+	    if (edx & (1<<7) )		cpu_features.MCE = 1;
+	    if (edx & (1<<9) )		cpu_features.APIC = 1;
+	    if (edx & (1<<12) )		cpu_features.MTRR = 1;
+	    if (edx & (1<<13) )		cpu_features.PGE = 1;
+	    if (edx & (1<<14) )		cpu_features.MCA = 1;
+
+	    if (edx & (1<<16) )		cpu_features.PAT = 1;
+	    if (edx & (1<<17) )		cpu_features.PSE36 = 1;
+	    if (edx & (1<<18) )		cpu_features.PSN = 1;
+	    if (edx & (1<<21) )		cpu_features.DS = 1;
+	    if (edx & (1<<22) )		cpu_features.ACPI = 1;
+	    if (edx & (1<<27) )		cpu_features.SS = 1;
+	    if (edx & (1<<28) )		cpu_features.HTT = 1;
+	    if (edx & (1<<29) )		cpu_features.TM = 1;
+	    if (edx & (1<<31) )		cpu_features.PBE = 1;
+
+	    if (ecx & (1<<2) )		cpu_features.DTES64 = 1;
+	    if (ecx & (1<<3) )		cpu_features.MONITOR = 1;
+	    if (ecx & (1<<4) )		cpu_features.DS_CPL = 1;
+	    if (ecx & (1<<5) )		cpu_features.VMX = 1;
+	    if (ecx & (1<<6) )		cpu_features.SMX = 1;
+	    if (ecx & (1<<7) )		cpu_features.EST = 1;
+	    if (ecx & (1<<8) )		cpu_features.TM2 = 1;
+	    if (ecx & (1<<10) )		cpu_features.CNXT_ID = 1;
+	    if (ecx & (1<<14) )		cpu_features.XTPR = 1;
+	    if (ecx & (1<<15) )		cpu_features.PDCM = 1;
+
+	    if (ecx & (1<<17) )		cpu_features.PCID = 1;
+	    if (ecx & (1<<18) )		cpu_features.DCA = 1;
+	    if (ecx & (1<<21) )		cpu_features.X2APIC = 1;
+	    if (ecx & (1<<29) )		cpu_features.F16C = 1;
+
+	    /** Getting CPU Instructions **/
+	    if (edx & (1<<5) )		cpu_instructions.MSR = 1;
+	    if (edx & (1<<8) )		cpu_instructions.CX8 = 1;
+	    if (edx & (1<<11) )		cpu_instructions.SEP = 1;
+	    if (edx & (1<<15) )		cpu_instructions.CMOV = 1;
+	    if (edx & (1<<19) )		cpu_instructions.CLFLUSH = 1;
+	    if (edx & (1<<23) )		cpu_instructions.MMX = 1;
+	    if (edx & (1<<24) )		cpu_instructions.FXSR = 1;
+	    if (edx & (1<<25) )		cpu_instructions.SSE = 1;
+	    if (edx & (1<<26) )		cpu_instructions.SSE2 = 1;
+
+	    if (ecx & (1<<0) )		cpu_instructions.SSE3 = 1;
+	    if (ecx & (1<<1) )		cpu_instructions.PCLMULQDQ = 1;
+	    if (ecx & (1<<9) )		cpu_instructions.SSSE3 = 1;
+	    if (ecx & (1<<12) )		cpu_instructions.FMA = 1;
+	    if (ecx & (1<<13) )		cpu_instructions.CX16 = 1;
+	    if (ecx & (1<<19) )		cpu_instructions.SSE41 = 1;
+	    if (ecx & (1<<20) )		cpu_instructions.SSE42 = 1;
+	    if (ecx & (1<<22) )		cpu_instructions.MOVBE = 1;
+	    if (ecx & (1<<23) )		cpu_instructions.POPCNT = 1;
+	    if (ecx & (1<<25) )		cpu_instructions.AESNI = 1;
+	    if (ecx & (1<<26) )		cpu_instructions.XSAVE = 1;
+	    if (ecx & (1<<27) )		cpu_instructions.OSXSAVE = 1;
+	    if (ecx & (1<<28) )		cpu_instructions.AVX = 1;
+	    if (ecx & (1<<30) )		cpu_instructions.RDRAND = 1; 
+
+	  }
+
+	  write_str("\r");
+
+	  if (highest_ext_info >= 0x80000001){
+	    cpuid(0x80000001, &eax, &ebx, &ecx, &edx);
+	    if (edx & EDX_64_BIT) write_str("64-bit Architecture");
+	    else write_str("32-bit Architecture");
+	  }
+
+	  write_str("\r");
+
+	  if(highest_ext_info >= 0x80000004){
+	    get_processor_name(cpu_name);
+	    write_str("CPU name:");
+	    write_str(cpu_name);
+	  }
+}
+
+
+void amd_init(vendor_magic_no){
+	// TODO - Implment AMD things.
+	write_str("AMD welcomes you");
 }

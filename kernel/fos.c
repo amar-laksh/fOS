@@ -15,14 +15,9 @@ void *memset(void *dest, char val, size_t count){
 
 
 void kmain(){
-	gdt_install();
-	idt_install();
-	isrs_install();
-	irq_install();
-	timer_install();
-	write_char("a");
-//	poll_init();
-//	vga_init();
-
+	//gdt_install();
+	//idt_install();
+	//timer_install();
+	poll_init();
+	vga_init();
 }
-
