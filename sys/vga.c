@@ -68,11 +68,20 @@ void write_char(char ascii){
 			move_cursor(curpos/2);
 		}
 	}
-	else if(ascii == '\n' || ascii == '\r' ){			
-		while(curpos%160>3){
+	else if(ascii == '\r'){			
+		while(curpos%160>0){
 			curpos = curpos + 2;
 		}
-		move_cursor((curpos/2));
+		draw_char(curpos,'#',0,15);
+		move_cursor(curpos/2);
+		curpos += 2;
+	}
+	else if(ascii == '\n'){
+		while(curpos%160>0){
+			curpos = curpos + 2;
+		}
+		move_cursor(curpos/2);
+		curpos += 2;
 	}
 	else{
 		draw_char(curpos,ascii,0,15);
@@ -93,7 +102,7 @@ void write_str(char* string){
 void vga_init(){
 	char header[] = ".f.O.S. - By Amar Lakshya";
 	draw_str(header,0,20);
-	write_str("\rHello World\r");
+	write_str("\rHello World! Currently the console provides the two commands:\n whoami, whoiscpu \r");
 	while(read_scan_code()){
 			write_char(get_kbd());
 		}
