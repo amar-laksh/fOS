@@ -1,5 +1,4 @@
 // TODO - IMPLEMENT DECLARATION AND INITIALIZATION OF STRUCTS IN CPU.H
-// TODO - IMPLEMENT CACHE AND TLB IMPLEMENTATION
 
 #include <sys/cpu.h>
 #define cpuid_simple(in, a, b, c, d) asm("cpuid": "=a" (a), "=b" (b), "=c" (c), "=d" (d) : "a" (in));
@@ -77,22 +76,7 @@ void intel_init(){
 	cpu.highest_std_info = highest_std_info;
 	cpu.highest_ext_info = highest_ext_info;
 
-
-	/** Processor Signature **/
-	cpuid(0x01, &eax, &ebx, &ecx, &edx);
-	processor_signature.STEPPING_ID = (eax & 0xF);
-	processor_signature.MODEL_NUMBER = (eax & 0xF0);
-	processor_signature.FAMILY_CODE = (eax & 0xF00);
-	processor_signature.PROCESSOR_TYPE = (eax & 0x6000);
-	processor_signature.EXTENDED_MODEL_ID = (eax & 0xF0000);
-	processor_signature.EXTENDED_FAMILY_ID = (eax & 0xFF00000);
-
-
-	/** CPU Miscellaneous Information **/
-	cpu_misc_info.BRAND_ID = (ebx & 0xFF);
-	cpu_misc_info.CLFLUSH_SIZE = (ebx & 0xF00);
-	cpu_misc_info.LOCAL_APIC_ID = (ebx & 0xFF000000);
-
+	
 
 	/** Processor Serial Number **/
 	cpuid(0x03,&eax, &ebx, &ecx, &edx);
@@ -122,12 +106,19 @@ void intel_init(){
 	monitor.INTR_BRK_EVENT = (ecx & 0x2);
 	monitor.C0_C7 = edx;
 
-	/** CPU Instructions and Features **/
+	/** Function 0x01 **/
 	if (highest_std_info >= 0x01){
+	    cpuid(0x01, &eax, &ebx, &ecx, &edx);
 
-		/** Getting CPU Features **/
-	    cpuid(0x01, &eax, &ebx, &ecx, &edx); 
-
+	    /** Processor Signature **/
+	    cpuid(0x01, &eax, &ebx, &ecx, &edx);
+	    processor_signature.STEPPING_ID = (eax & 0xF);
+	    processor_signature.MODEL_NUMBER = (eax & 0xF0);
+	    processor_signature.FAMILY_CODE = (eax & 0xF00);
+	    processor_signature.PROCESSOR_TYPE = (eax & 0x6000);
+	    processor_signature.EXTENDED_MODEL_ID = (eax & 0xF0000);
+	    processor_signature.EXTENDED_FAMILY_ID = (eax & 0xFF00000);
+	    /** CPU Features **/
 	    if (edx & (1<<0) )		cpu_features.FPU = 1;
 	    if (edx & (1<<1) )		cpu_features.VME = 1;
 	    if (edx & (1<<2) )		cpu_features.DE = 1;
@@ -166,7 +157,7 @@ void intel_init(){
 	    if (ecx & (1<<21) )		cpu_features.X2APIC = 1;
 	    if (ecx & (1<<29) )		cpu_features.F16C = 1;
 
-	    /** Getting CPU Instructions **/
+	    /** CPU Instructions **/
 	    if (edx & (1<<5) )		cpu_instructions.MSR = 1;
 	    if (edx & (1<<8) )		cpu_instructions.CX8 = 1;
 	    if (edx & (1<<11) )		cpu_instructions.SEP = 1;
@@ -191,17 +182,16 @@ void intel_init(){
 	    if (ecx & (1<<27) )		cpu_instructions.OSXSAVE = 1;
 	    if (ecx & (1<<28) )		cpu_instructions.AVX = 1;
 	    if (ecx & (1<<30) )		cpu_instructions.RDRAND = 1; 
+	    
+	    /** CPU Miscellaneous Information **/
+	    cpu_misc_info.BRAND_ID = (ebx & 0xFF);
+	    cpu_misc_info.CLFLUSH_SIZE = (ebx & 0xF00);
+	    cpu_misc_info.LOCAL_APIC_ID = (ebx & 0xFF000000);
+
+
 
 	  }
-	  struct CPU_FEATURE ptr = cpu_features;
 
-	  for(int i=0;i<4;i++){
-	  	if(i==3){
-	  		if(&ptr == 1){
-	  			write_str("PAE feature is supported!");
-	  		}
-	  	}
-	  }
 
 	  if(highest_ext_info >= 0x80000004){
 	    get_processor_name(cpu_name);

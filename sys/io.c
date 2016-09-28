@@ -62,9 +62,8 @@ int8_t get_kbd() {
             return '\r';
         }
 		if(sc == '\x0E'){
-                        while(read_scan_code() != '\x8E'){
-
-                        }
+			int8_t c=0;
+                        //while(read_scan_code() != '\x8E')
 			return '\b';
 		}
                 if(sc == '\x1E'){

@@ -20,6 +20,9 @@ os.iso: kernel.elf
 	cp fos.elf iso/boot/fos.elf
 	cp grub.cfg iso/boot/grub/grub.cfg
 	grub-mkrescue -o fos.iso iso
+
+bootable:
+	genisoimage -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -o fos_bootable.iso iso
 kernel.elf: $(OBJECTS)
 	$(CC) $(LDFLAGS) $(OBJECTS) -lgcc
 

@@ -23,14 +23,10 @@ extern void irq15();
 
 /* This array is actually an array of function pointers. We use
 *  this to handle custom IRQ handlers for a given IRQ */
-void *irq_routines[16] =
-{
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0
-};
+static irq_handler_t *irq_routines[16] = { NULL };
 
 
-void irq_install_handler(int irq, void (*handler)(struct regs *r)) {
+void irq_install_handler(int irq, irq_handler_t handler) {
     irq_routines[irq] = handler;
 }
 
@@ -73,18 +69,29 @@ void irq_install() {
     idt_set_gate(45, (unsigned)irq13, 0x08, 0x8E);
     idt_set_gate(46, (unsigned)irq14, 0x08, 0x8E);
     idt_set_gate(47, (unsigned)irq15, 0x08, 0x8E);
+    IRQ_RES;
 }
 
+void irq_ack(int irq_no) {
+	if (irq_no >= 12) {
+		outb(0xA0, 0x20);
+	}
+	outb(0x20, 0x20);
+}
 
 void irq_handler(struct regs *r) {
-    void (*handler)(struct regs *r);
-    handler = irq_routines[r->int_no - 32];
-    if (handler)
-	    handler(r);
-
-    if (r->int_no >= 40)
-	    outb(0xA0, 0x20);
-
-    outb(0x20, 0x20);
+	IRQ_OFF;
+	void (*handler)(struct regs *r);
+    	if(r->int_no > 47 || r->int_no <32){
+		handler = NULL;
+    	} else {
+		handler = irq_routines[r->int_no - 32];
+	}
+    	if (handler){
+		    handler(r);
+    	} else{
+		    irq_ack(r->int_no -32);
+    	}
+    	IRQ_RES;
 }
 

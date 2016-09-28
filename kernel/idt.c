@@ -14,7 +14,7 @@ struct idt_entry
 struct idt_ptr
 {
     uint16_t limit;
-    uint32_t base;
+    uintptr_t base;
 } __attribute__((packed));
 
 
@@ -39,15 +39,10 @@ void idt_install()
 {
     /* Sets the special IDT pointer up, just like in 'gdt.c' */
     idtp.limit = (sizeof (struct idt_entry) * 256) - 1;
-    idtp.base = &idt;
+    idtp.base = (uintptr_t)&idt;
 
     /* Clear out the entire IDT, initializing it to zeros */
     memset(&idt, 0, sizeof(struct idt_entry) * 256);
-
-    /* Add any new ISRs to the IDT here using idt_set_gate */
-    isrs_install(); 
-    irq_install();
-
 
 
     /* Points the processor's internal register to the new IDT */

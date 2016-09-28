@@ -495,8 +495,10 @@ irq_common_stub:
     add %esp, 8
     iret
 
-
-
-
+.global tss_flush
+tss_flush:
+	mov %ax, 0x2B
+	ltr %ax
+	ret
 
 .size _start, . - _start

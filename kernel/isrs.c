@@ -35,6 +35,20 @@ extern void isr30();
 extern void isr31();
 
 
+static irq_handler_t isrs_routines[32] = { NULL };
+
+void isrs_install_handler(
+		int isrs,
+		irq_handler_t handler
+		) {
+	isrs_routines[isrs] = handler;
+}
+
+void isrs_uninstall_handler(
+		int isrs
+		) {
+	isrs_routines[isrs] = 0;
+}
 
 
 char *exception_messages[] =
@@ -116,9 +130,22 @@ void isrs_install(){
 
 
 void fault_handler(struct regs *r) {
-	if (r->int_no < 32){
-			//write_str(exception_messages[r->int_no]);
-			write_str(" Exception. System Halted!");
-			for(;;);
+	if (r->int_no == 8) {
+		STOP;
 	}
+	if (r->int_no >= 32 ) {
+		STOP;
+	}
+	IRQ_OFF;
+	void (*handler)(struct regs *r);
+	handler = isrs_routines[r->int_no];
+	if (handler) {
+		handler(r);
+	} else {
+		write_str("Unhandled exception\r");
+		write_str(exception_messages[r->int_no]);
+		write_str("Process caused an unhandled exception");
+		STOP;
+	}
+	IRQ_RES;
 }

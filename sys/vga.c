@@ -93,6 +93,7 @@ void write_str(char* string){
 void vga_init(){
 	char header[] = ".f.O.S. - By Amar Lakshya";
 	draw_str(header,0,20);
+	write_str("\rHello World\r");
 	while(read_scan_code()){
 			write_char(get_kbd());
 		}
