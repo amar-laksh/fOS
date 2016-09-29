@@ -9,6 +9,12 @@
 #define RTC_PORT 0x70
 int32_t x=1,y=2;
 int32_t curpos=162;
+typedef struct {
+	char buffer[100];
+	int8_t offset;
+} console;
+
+console *term;
 
 int32_t get_row(uint32_t p){
 	if(p>MAX_ROWS)
@@ -53,7 +59,7 @@ uint64_t delay(uint64_t t){
 	uint64_t i=0;
 	uint64_t et = 0;
 	st = 0;
-	while(i<(t*1000000))
+	while(i<(t*100000000))
 		i=i+1;
 	et = i;
 	return (et-st);
@@ -68,13 +74,24 @@ void write_char(char ascii){
 			move_cursor(curpos/2);
 		}
 	}
-	else if(ascii == '\r'){			
+	else if(ascii == '\r'){	
+		int8_t c = 0;	
 		while(curpos%160>0){
 			curpos = curpos + 2;
 		}
 		draw_char(curpos,'#',0,15);
+		draw_char(curpos+2,' ',0,15);
+		curpos +=2;
 		move_cursor(curpos/2);
-		curpos += 2;
+		/*
+		if(term->buffer[0] != ' '){
+			while(c < term->offset){
+				write_char(term->buffer[c]);
+				c++;
+			}
+			null_buffer();
+		}
+		*/
 	}
 	else if(ascii == '\n'){
 		while(curpos%160>0){
@@ -84,9 +101,11 @@ void write_char(char ascii){
 		curpos += 2;
 	}
 	else{
+		term->buffer[term->offset] = ascii;
+		term->offset += 1;
 		draw_char(curpos,ascii,0,15);
 		draw_char(curpos+2,' ',0,15);
-		curpos = curpos + 2;
+		curpos += 2;
 		move_cursor(curpos/2);
 	}
 }
@@ -99,12 +118,25 @@ void write_str(char* string){
 }
 
 
+void null_buffer(){
+	int8_t c = 0;
+	while(c <= 100){
+		term->buffer[c] = 0;
+		c++;
+	}
+	term->offset=0;
+}
+
 void vga_init(){
+	int i=0;
 	char header[] = ".f.O.S. - By Amar Lakshya";
 	draw_str(header,0,20);
-	write_str("\rHello World! Currently the console provides the two commands:\n whoami, whoiscpu \r");
+	write_str("\nHello World! Currently the console provides the two commands:\n whoami, whoiscpu \n");
+	null_buffer();
 	while(read_scan_code()){
-			write_char(get_kbd());
+			char l = get_kbd();
+			write_char(l);
+			i++;
 		}
 
 }

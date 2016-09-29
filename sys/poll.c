@@ -33,6 +33,8 @@ uint64_t get_control_register(int number)
 
 void poll_init(){
 	clear_screen();
-	write_str("Poll Initializing...\r");
+	write_str("Poll Initializing...\n");
 	cpu_init();
+	write_str("\n");
+	write_str("--------------------------------------------------\n");
 }
