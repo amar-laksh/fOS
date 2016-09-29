@@ -188,8 +188,32 @@ void intel_init(){
 	    cpu_misc_info.CLFLUSH_SIZE = (ebx & 0xF00);
 	    cpu_misc_info.LOCAL_APIC_ID = (ebx & 0xFF000000);
 
+	    write_str("This CPU supports the following features:\n");
+	    if(cpu_features.FPU == 1)
+		    write_str("FPU | ");
+	    if(cpu_features.VME == 1)
+		    write_str("VME | ");
+	    if(cpu_features.DE == 1)
+		    write_str("DE | ");
+	    if(cpu_features.PSE == 1)
+		    write_str("PSE | ");
+	    if(cpu_features.TSC == 1)
+		    write_str("TSC | ");
+	    if(cpu_features.PAE == 1)
+		    write_str("PAE | ");
 
+	    write_str("\n");
 
+	    write_str("This CPU supports the following instructions:\n");
+	    if(cpu_instructions.MSR == 1)
+		    write_str("MSR | ");
+	    if(cpu_instructions.CX8 == 1)
+		    write_str("CX8 | ");
+	    if(cpu_instructions.SEP == 1)
+		    write_str("SEP | ");
+	    if(cpu_instructions.CMOV == 1)
+		    write_str("CMOV | ");
+	    write_str("\n");
 	  }
 
 
