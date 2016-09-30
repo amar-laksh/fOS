@@ -37,4 +37,6 @@ void poll_init(){
 	cpu_init();
 	write_str("\n");
 	write_str("--------------------------------------------------\n");
+	delay(10);
+	clear_screen();
 }

@@ -74,6 +74,7 @@ void clear_screen(){
         for(i=0;i<5000;i=i+2){
                 draw_char(i,' ',0,0);
         }
+	curpos = 2;
 }
 
 int32_t draw_str(char *string, int32_t r, int32_t c){
@@ -87,9 +88,9 @@ int32_t draw_str(char *string, int32_t r, int32_t c){
 
 void delay(int64_t t){
 	int c=0,i=0;
-	while(c <= 999999999){
-		for(i=0;i<99999999;i++)
-			;
+	while(c <= t){
+		for(i=0;i<999;i++)
+			draw_str("",0,100);
 		c++;
 	}
 }
@@ -112,15 +113,6 @@ void write_char(char ascii){
 		draw_char(curpos+2,' ',0,15);
 		curpos +=2;
 		move_cursor(curpos/2);
-		/*
-		if(term->buffer[0] != ' '){
-			while(c < term->offset){
-				write_char(term->buffer[c]);
-				c++;
-			}
-			null_buffer();
-		}
-		*/
 	}
 	else if(ascii == '\n'){
 		while(curpos%160>0){
@@ -130,8 +122,6 @@ void write_char(char ascii){
 		curpos += 2;
 	}
 	else{
-		term->buffer[term->offset] = ascii;
-		term->offset += 1;
 		draw_char(curpos,ascii,0,15);
 		draw_char(curpos+2,' ',0,15);
 		curpos += 2;
@@ -144,16 +134,6 @@ void write_str(char* string){
 	for(i=0;i<strlen(string);i++){
 		write_char(string[i]);
 	}
-}
-
-
-void null_buffer(){
-	int8_t c = 0;
-	while(c <= 100){
-		term->buffer[c] = 0;
-		c++;
-	}
-	term->offset=0;
 }
 
 void print_registers(){
@@ -174,26 +154,104 @@ void print_registers(){
 	eip_t = get_register(4);
 	itoa(eip_t,16,eip);
 
-	draw_str("System Registers: ",0,10);
-	draw_str("EAX: ",1,10); draw_str(eax,1,15);
-	draw_str("EBX: ",2,10); draw_str(ebx,2,15);
-	draw_str("ECX: ",3,10); draw_str(ecx,3,15);
-	draw_str("EDX: ",4,10); draw_str(edx,4,15);
-	draw_str("EIP: ",5,10); draw_str(eip,5,15);
-	draw_str("----------------------------------------",6,0);
+	draw_str("System Registers: ",0,50);
+	draw_str("EAX: ",1,50); draw_str(eax,1,55);
+	draw_str("EBX: ",2,50); draw_str(ebx,2,55);
+	draw_str("ECX: ",3,50); draw_str(ecx,3,55);
+	draw_str("EDX: ",4,50); draw_str(edx,4,55);
+	draw_str("EIP: ",5,50); draw_str(eip,5,55);
+	draw_str("------------------------------",6,50);
+}
+
+
+void null_buffer(){
+	int c = 0;
+	while(c < term->offset){
+		term->buffer[c] = ' ';
+		c++;
+	}
+	term->offset=0;
+
+}
+
+void append_buffer(char l){
+	if(l !='\r'){
+		term->buffer[term->offset] = l;
+		term->offset += 1;
+	}
+}
+
+int process_buffer(){
+	if(equals("exit",term->buffer,term->offset) == 0){	
+		write_str("\nYOU PRESSED EXIT! THE SYSTEM WILL NOW HALT!");
+		null_buffer();
+		return -999;
+	}
+	if(equals("whoami",term->buffer,term->offset) == 0){
+		write_str("\n");
+		cpu_init();
+		write_str("\n");
+		null_buffer();
+	}
+	if(equals("clear",term->buffer,term->offset) == 0){
+		write_str("\n");
+		clear_screen();
+		write_str("\n");
+		null_buffer();
+	}
+	if(equals("sorry",term->buffer,term->offset) == 0){
+		write_str("\n");
+		int i=0,c=0;
+		while(i<10){
+			if(c>=0){
+				draw_str("SSSORRY MA'AM!!",10,c++);
+				draw_str(" ",10,--c);
+				c++;
+				delay(10);
+			}
+			i++;
+		}
+		null_buffer();
+	}
+	else{
+		null_buffer();
+	}
+	return 0;
+}
+
+void welcome_splash(){
+	for(int i=0;i<50;i++){
+		draw_str("HELLO WORLD",8,i);
+		delay(10);
+		clear_screen();
+	}
+	delay(100);
 }
 
 void vga_init(){
-	int i=0;
+	int i=0,code=0;
+	curpos=162;
+
+	welcome_splash();
+
+	clear_screen();
+
 	char header[] = ".f.O.S. - By Amar Lakshya";
 	draw_str(header,0,20);
-	clear_screen();
-	write_str("\r");
-	write_str("\nHello World! Currently the console provides the two commands:\n whoami, whoiscpu \n");
+	write_str("\nHello World!\nThe console provides the following commands:\n whoami, exit, clear \n");
+	null_buffer();
 	write_str("\r");
 	while(read_scan_code()){
 			print_registers();
 			char l = get_kbd();
+			draw_str(header,0,20);
+			append_buffer(l);
+			if(l=='\r')
+				code = process_buffer();
+			if(code == -999)
+				break;
+			draw_str("Console Buffer: ",7,50);
+			draw_str(term->buffer,8,50);
 			write_char(l);
 		}
 
