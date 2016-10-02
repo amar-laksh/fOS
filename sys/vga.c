@@ -1,4 +1,5 @@
 #include <sys/vga.h>
+#include <sys/commands.h>
 
 #define	VIDMEM 0x000B8000
 #define MAX_ROWS 24
@@ -10,12 +11,22 @@
 
 int32_t x=1,y=2;
 int32_t curpos=162;
+int8_t cmd = 4;
+
+char* commands[4] = {
+	"clear",
+	"exit",
+	"whoami",
+	"welcome"
+};
+
 typedef struct {
 	char buffer[100];
 	int8_t offset;
 } console;
 
 console *term;
+
 
 
 uint64_t get_register(int number)
@@ -77,10 +88,10 @@ void clear_screen(){
 	curpos = 2;
 }
 
-int32_t draw_str(char *string, int32_t r, int32_t c){
+int32_t draw_str(char string[], int32_t r, int32_t c){
 	uint32_t i=0,j=0,sp=0;
 	sp = get_point(r,c);
-	for(i=sp;i<(sp+(strlen(string)*2));i=i+2){
+	for(i=sp;i<(sp+(strlen(string)*2) )-1;i=i+2){
 			draw_char(i,string[j++],0,15);
 	}
 	return PASS_CODE;
@@ -166,8 +177,8 @@ void print_registers(){
 
 void null_buffer(){
 	int c = 0;
-	while(c < term->offset){
-		term->buffer[c] = ' ';
+	while(c < 100){
+		term->buffer[c] = '\0';
 		c++;
 	}
 	term->offset=0;
@@ -176,46 +187,28 @@ void null_buffer(){
 
 void append_buffer(char l){
 	if(l !='\r'){
-		term->buffer[term->offset] = l;
-		term->offset += 1;
+		term->buffer[term->offset++] = l;
 	}
 }
 
 int process_buffer(){
-	if(equals("exit",term->buffer,term->offset) == 0){	
-		write_str("\nYOU PRESSED EXIT! THE SYSTEM WILL NOW HALT!");
-		null_buffer();
-		return -999;
-	}
-	if(equals("whoami",term->buffer,term->offset) == 0){
-		write_str("\n");
-		cpu_init();
-		write_str("\n");
-		null_buffer();
-	}
-	if(equals("clear",term->buffer,term->offset) == 0){
-		write_str("\n");
-		clear_screen();
-		write_str("\n");
-		null_buffer();
-	}
-	if(equals("sorry",term->buffer,term->offset) == 0){
-		write_str("\n");
-		int i=0,c=0;
-		while(i<10){
-			if(c>=0){
-				draw_str("SSSORRY MA'AM!!",10,c++);
-				draw_str(" ",10,--c);
-				c++;
-				delay(10);
-			}
-			i++;
+	char b[2];
+	int8_t c=0;
+	itoa(term->offset,10,b);
+	draw_str("Console offset: ",9,50);
+	draw_str(b,10,50);
+	for(int i=0; i<cmd;i++){
+		if(equals(commands[i],term->buffer) == 0){
+			exec_cmd(i, term->buffer);
+			null_buffer;
+			c++;
 		}
+	}
+	if(c == 0){
+		exec_cmd(cmd+1, term->buffer);
 		null_buffer();
 	}
-	else{
-		null_buffer();
-	}
+
 	return 0;
 }
 
@@ -229,14 +222,14 @@ void welcome_splash(){
 }
 
 void vga_init(){
-	int i=0,code=0;
+	int code=0;
 	curpos=162;
 
 	welcome_splash();
 
 	clear_screen();
 
-	char header[] = ".f.O.S. - By Amar Lakshya";
+	char header[] = "f.O.S. - Made By Amar Lakshya";
 	draw_str(header,0,20);
 	write_str("\nHello World!\nThe console provides the following commands:\n whoami, exit, clear \n");
 	null_buffer();

@@ -32,23 +32,17 @@ void itoa(uint64_t i,uint32_t base, char* buf) {
 	buf[opos] = 0;
 }
 
-int8_t equals(char* first, char* second,int length){
-	uint8_t flag = -9,c=0;
-	for(int i=0;i<length;i++){
-		if(first[i] == second[i]){
-			flag = 0;
-			c++;
+int8_t equals(char* first, char* second){
+	int32_t c=0, length = strlen(first);
+	if(length == strlen(second) ){
+		for(int i=0;i<length;i++){
+			if( first[i] == second[i]){
+				c++;
+			}	
 		}
-		else if(first[i] > second[i]){
-			flag = 1;
-			c++;
-		}
-		else if(first[i] < second[i]){
-			flag = -1;
-			c++;
-		}
+		if(c == length)
+			return 0;
 	}
-	if(c == length)
-		return flag;
-	return -9;
+	else
+		return 1;
 }
