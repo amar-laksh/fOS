@@ -5,4 +5,4 @@ and a Resume of its Author.
 
 
 #Progress
-![Progress](https://thumbs.gfycat.com/OrganicUnkemptKoalabear-size_restricted.gif)
+![Progress](dekho.gif)
