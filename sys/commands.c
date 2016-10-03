@@ -29,11 +29,12 @@ void exec_cmd(int n, char buff[]){
 			write_str(buff);
 			null_buffer();
 			break;
+		
 		default:
 			if(strlen(buff) > 1){
 				write_str("\n");
 				write_str(buff);
-				write_str(": Command not found! :(");
+				write_str(": Command not found! (baap ki shaadi h? *_* )");
 			}
 			null_buffer();
 			break;
