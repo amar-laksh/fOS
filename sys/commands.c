@@ -24,10 +24,17 @@ void exec_cmd(int n, char buff[]){
 			null_buffer();
 			break;
 
-		default:
-			write_str("\n");
+		case 4:
+			write_str("\nThe echoed value is: ");
 			write_str(buff);
-			write_str(": Command not found! :(");
+			null_buffer();
+			break;
+		default:
+			if(strlen(buff) > 1){
+				write_str("\n");
+				write_str(buff);
+				write_str(": Command not found! :(");
+			}
 			null_buffer();
 			break;
 	}

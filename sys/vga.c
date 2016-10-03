@@ -2,6 +2,7 @@
 #include <sys/commands.h>
 
 #define	VIDMEM 0x000B8000
+//#define VIDMEM 0x00A0000
 #define MAX_ROWS 24
 #define MAX_COLUMNS 79
 #define ERROR_CODE -12321
@@ -11,13 +12,14 @@
 
 int32_t x=1,y=2;
 int32_t curpos=162;
-int8_t cmd = 4;
+int8_t cmd = 5;
 
-char* commands[4] = {
+char* commands[5] = {
 	"clear",
 	"exit",
 	"whoami",
-	"welcome"
+	"welcome",
+	"echo"
 };
 
 typedef struct {
@@ -26,8 +28,6 @@ typedef struct {
 } console;
 
 console *term;
-
-
 
 uint64_t get_register(int number)
 {
@@ -199,9 +199,14 @@ int process_buffer(){
 	draw_str(b,10,50);
 	for(int i=0; i<cmd;i++){
 		if(equals(commands[i],term->buffer) == 0){
-			exec_cmd(i, term->buffer);
-			null_buffer;
-			c++;
+			if(i == 4){
+				draw_str(substring("amarlakshya", 0, 3),14,50);
+			}
+			else{
+				exec_cmd(i, term->buffer);
+				null_buffer;
+				c++;
+			}
 		}
 	}
 	if(c == 0){

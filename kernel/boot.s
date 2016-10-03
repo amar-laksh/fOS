@@ -1,7 +1,9 @@
 # Constants declared for the Multi-boot specification header. 
 .set ALIGN,    1<<0             # align loaded modules on page boundaries
 .set MEMINFO,  1<<1             # provide memory map
-.set FLAGS,    ALIGN | MEMINFO  # this is the Multiboot 'flag' field
+
+#.set USE_GFX,  1<<2
+.set FLAGS,    ALIGN | MEMINFO #| USE_GFX  # this is the Multiboot 'flag' field
 .set MAGIC,    0x1BADB002       # 'magic number' lets bootloader find the header
 .set CHECKSUM, -(MAGIC + FLAGS) # checksum of above, to prove we are multiboot
 
@@ -10,6 +12,13 @@
 .long MAGIC
 .long FLAGS
 .long CHECKSUM
+# Graphics requests
+#	.quad 0x00000000 # 0 = linear graphics
+#	.quad 0
+#	.quad 0
+#	.quad 32         # Set me to 32 or else.
+
+
 
 .section .bootstrap_stack, "aw", @nobits
 stack_bottom:

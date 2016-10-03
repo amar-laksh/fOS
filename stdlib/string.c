@@ -6,6 +6,15 @@ int32_t strlen(char str[]){
 	return len;
 }
 
+char* substring(char buff[], int start, int end){
+	int i=start,j=0;
+	char result[(end-start)+1];
+	while(i < end){
+		result[j++] = buff[i++];
+	}
+	return result;
+}
+
 void itoa(uint64_t i,uint32_t base, char* buf) {
 	char tbuf[100];
 	char bchars[] = {'0','1','2','3','4','5',
