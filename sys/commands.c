@@ -25,8 +25,7 @@ void exec_cmd(int n, char buff[]){
 			break;
 
 		case 4:
-			write_str("\nThe echoed value is: ");
-			write_str(buff);
+			write_str("\nHello, World!\n");
 			null_buffer();
 			break;
 		

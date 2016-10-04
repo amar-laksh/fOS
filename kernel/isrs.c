@@ -125,7 +125,6 @@ void isrs_install(){
 	idt_set_gate(29,(unsigned)isr29,0x08,0x8E);
 	idt_set_gate(30,(unsigned)isr30,0x08,0x8E);
 	idt_set_gate(31,(unsigned)isr31,0x08,0x8E);
-	write_str("insrs_install..");
 }
 
 
@@ -142,10 +141,10 @@ void fault_handler(struct regs *r) {
 	if (handler) {
 		handler(r);
 	} else {
-		write_str("Unhandled exception\r");
-		write_str(exception_messages[r->int_no]);
-		write_str("Process caused an unhandled exception");
-		STOP;
+		clear_screen();
+		draw_str("Unhandled exception: ",0,1);
+		draw_str(exception_messages[r->int_no],0,30);
+		for(;;);
 	}
 	IRQ_RES;
 }

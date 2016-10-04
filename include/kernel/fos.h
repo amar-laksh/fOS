@@ -26,11 +26,18 @@
 #include <sys/vga.h>
 #include <sys/io.h>
 
+#define IRQ_OFF { asm volatile ("cli"); }
+#define IRQ_RES { asm volatile ("sti"); }
+#define PAUSE { asm volatile ("hlt"); }
+#define IRQS_ON_AND_PAUSE { asm volatile ("sti\nhlt\ncli"); }
+#define STOP while (1) { PAUSE; }
+
 
 
 struct regs {
     uint32_t gs, fs, es, ds;      /* pushed the segs last */
     uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;  /* pushed by 'pusha' */
+
     uint32_t int_no, err_code;    /* our 'push byte #' and ecodes do this */
     uint32_t eip, cs, eflags, useresp, ss;   /* pushed by the processor automatically */ 
 };

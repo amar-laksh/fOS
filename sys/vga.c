@@ -1,5 +1,6 @@
 #include <sys/vga.h>
 #include <sys/commands.h>
+#include <timer.h>
 
 #define	VIDMEM 0x000B8000
 //#define VIDMEM 0x00A0000
@@ -19,7 +20,7 @@ char* commands[5] = {
 	"exit",
 	"whoami",
 	"welcome",
-	"echo"
+	"hello"
 };
 
 typedef struct {
@@ -50,8 +51,17 @@ uint64_t get_register(int number)
 					: "=r"(ret));
 			break;
 		case 4:
-			asm volatile ( "call 1f \n\t"
-					"1: pop %0" : "=r"(ret));
+			asm volatile ("1: movl $1b, %0" 
+					: "=r" (ret));
+			break;	
+		case 5:
+			asm volatile ("mov %%cs, %0"
+					: "=r"(ret));
+			break;
+		case 6:
+			asm volatile ("mov %%ds, %0"
+					: "=r"(ret));
+			break;
 	}
     return ret;
 }
@@ -148,8 +158,8 @@ void write_str(char* string){
 }
 
 void print_registers(){
-	uint64_t eax_t, ebx_t, ecx_t, edx_t, eip_t;
-	char eax[16], ebx[16], ecx[16], edx[16], eip[16];
+	uint64_t eax_t, ebx_t, ecx_t, edx_t, eip_t, cs_t, ds_t;
+	char eax[16], ebx[16], ecx[16], edx[16], eip[16],cs[16],ds[16];
 	eax_t = get_register(0);
 	itoa(eax_t,16,eax);
 	
@@ -165,13 +175,21 @@ void print_registers(){
 	eip_t = get_register(4);
 	itoa(eip_t,16,eip);
 
+	cs_t = get_register(5);
+	itoa(cs_t,16,cs);
+
+	ds_t = get_register(6);
+	itoa(ds_t,16,ds);
+
 	draw_str("System Registers: ",0,50);
 	draw_str("EAX: ",1,50); draw_str(eax,1,55);
 	draw_str("EBX: ",2,50); draw_str(ebx,2,55);
 	draw_str("ECX: ",3,50); draw_str(ecx,3,55);
 	draw_str("EDX: ",4,50); draw_str(edx,4,55);
 	draw_str("EIP: ",5,50); draw_str(eip,5,55);
-	draw_str("------------------------------",6,50);
+	draw_str("CS:  ",6,50); draw_str(cs,6,55);
+	draw_str("DS:  ",7,50); draw_str(ds,7,55);
+	draw_str("------------------------------",8,50);
 }
 
 
@@ -195,18 +213,13 @@ int process_buffer(){
 	char b[2];
 	int8_t c=0;
 	itoa(term->offset,10,b);
-	draw_str("Console offset: ",9,50);
-	draw_str(b,10,50);
+	draw_str("Console offset: ",12,50);
+	draw_str(b,13,50);
 	for(int i=0; i<cmd;i++){
 		if(equals(commands[i],term->buffer) == 0){
-			if(i == 4){
-				draw_str(substring("amarlakshya", 0, 3),14,50);
-			}
-			else{
 				exec_cmd(i, term->buffer);
 				null_buffer;
 				c++;
-			}
 		}
 	}
 	if(c == 0){
@@ -248,8 +261,8 @@ void vga_init(){
 				code = process_buffer();
 			if(code == -999)
 				break;
-			draw_str("Console Buffer: ",7,50);
-			draw_str(term->buffer,8,50);
+			draw_str("Console Buffer: ",10,50);
+			draw_str(term->buffer,11,50);
 			write_char(l);
 		}
 

@@ -50,6 +50,7 @@ void move_cursor(int32_t pos) {
         outb(FB_DATA_PORT, pos & 0x00FF);
     }
 
+
 int8_t get_kbd() {
         int8_t sc;
 	while(read_scan_code()){

@@ -47,7 +47,6 @@ void idt_install()
 
     /* Points the processor's internal register to the new IDT */
     idt_load();
-
 //    while(1){write_str("IDT loaded!");}
 }
 
