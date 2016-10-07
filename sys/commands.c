@@ -33,7 +33,7 @@ void exec_cmd(int n, char buff[]){
 			if(strlen(buff) > 1){
 				write_str("\n");
 				write_str(buff);
-				write_str(": Command not found! (baap ki shaadi h? *_* )");
+				write_str(": Command not found!");
 			}
 			null_buffer();
 			break;

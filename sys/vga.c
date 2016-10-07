@@ -204,7 +204,9 @@ void null_buffer(){
 }
 
 void append_buffer(char l){
-	if(l !='\r'){
+	if(l == '\b')
+		term->buffer[--term->offset] = 0;
+	else if(l !='\r'){
 		term->buffer[term->offset++] = l;
 	}
 }
@@ -246,6 +248,9 @@ void vga_init(){
 	welcome_splash();
 
 	clear_screen();
+	init_serial();
+	write_serial("\033c");
+	write_serial("Hello world from the fOS. ");
 
 	char header[] = "f.O.S. - Made By Amar Lakshya";
 	draw_str(header,0,20);

@@ -28,7 +28,7 @@ kernel.elf: $(OBJECTS)
 	$(CC) $(LDFLAGS) $(OBJECTS) -lgcc
 
 run: os.iso
-	qemu-system-i386 -cdrom fos.iso
+	qemu-system-i386 -serial stdio -cdrom fos.iso
 
 debug: os.iso
 	objcopy --only-keep-debug fos.elf fos.sym
