@@ -23,6 +23,7 @@ void kmain(){
 	irq_install();
 	timer_install();
 	poll_init();
+	pci_install();
 	vga_init();
 	for(;;)
 		asm("hlt");

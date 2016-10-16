@@ -213,6 +213,14 @@ void append_buffer(char l){
 	}
 }
 
+char** parse_command(char buff[], const char delim){
+	char** args;
+	write_str("\n");
+	write_str(args);
+	for(;;);
+	return args;
+}
+
 int process_buffer(){
 	char b[2];
 	int8_t c=0;
