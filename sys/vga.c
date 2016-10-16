@@ -1,7 +1,6 @@
 #include <sys/vga.h>
 #include <sys/commands.h>
 #include <timer.h>
-
 #define	VIDMEM 0x000B8000
 //#define VIDMEM 0x00A0000
 #define MAX_ROWS 24
@@ -10,17 +9,20 @@
 #define PASS_CODE 32123
 #define PORT 0x09
 #define RTC_PORT 0x70
+#define beepStart() asm ("push %eax\nin $0x61,%al\nor $3,%al\nout %al,$0x61");
+#define beepEnd() asm ("in $0x61,%al\nand $0xFD,%al\nout %al,$0x61\npop ecx");
 
 int32_t x=1,y=2;
 int32_t curpos=162;
-int8_t cmd = 5;
+int8_t cmd = 6;
 
-char* commands[5] = {
+char* commands[6] = {
 	"clear",
 	"exit",
 	"whoami",
 	"welcome",
-	"hello"
+	"hello",
+	"serial"
 };
 
 typedef struct {
@@ -220,7 +222,7 @@ int process_buffer(){
 	for(int i=0; i<cmd;i++){
 		if(equals(commands[i],term->buffer) == 0){
 				exec_cmd(i, term->buffer);
-				null_buffer;
+				null_buffer();
 				c++;
 		}
 	}
@@ -238,7 +240,6 @@ void welcome_splash(){
 		delay(10);
 		clear_screen();
 	}
-	delay(100);
 }
 
 void vga_init(){
@@ -248,7 +249,7 @@ void vga_init(){
 	welcome_splash();
 
 	clear_screen();
-	init_serial();
+	serial_install();
 	write_serial("\033c");
 	write_serial("Hello world from the fOS. ");
 

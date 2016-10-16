@@ -26,6 +26,8 @@
 #include <sys/vga.h>
 #include <sys/io.h>
 
+#include <drivers/serial.h>
+
 #define IRQ_OFF { asm volatile ("cli"); }
 #define IRQ_RES { asm volatile ("sti"); }
 #define PAUSE { asm volatile ("hlt"); }

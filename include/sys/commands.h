@@ -5,7 +5,7 @@
 #include <sys/io.h>
 #include <sys/vga.h>
 #include <stdlib/string.h>
-
+#include <drivers/serial.h>
 
 void exec_cmd(int n, char buff[]);
 

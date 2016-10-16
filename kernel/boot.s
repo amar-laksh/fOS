@@ -125,23 +125,26 @@ isr_common:
 	pushl %es
 	pushl %fs
 	pushl %gs
-	movw $0x10, %ax   # Load the Kernel Data Segment descriptor!
+
+	movw $0x10, %ax 
 	movw %ax, %ds
 	movw %ax, %es
 	movw %ax, %fs
 	movw %ax, %gs
-	movl %esp, %eax   # Push us the stack
+	movl %esp, %eax 
+
 	pushl %eax
 	mov $fault_handler, %eax
-	call *%eax       # A special call, preserves the 'eip' register
+	call *%eax 
 	pop %eax
+
 	popl %gs
 	popl %fs
 	popl %es
 	popl %ds
 	popa
-	addl $8, %esp    # Cleans up the pushed error code and pushed ISR number
-	iret           # pops 5 things at once: CS, EIP, EFLAGS, SS, and ESP!
+	addl $8, %esp   
+	iret          
 
 
 IRQ_ENTRY 0, 32

@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <sys/io.h>
+#include <drivers/serial.h>
 #include <stdlib/string.h>
 
 
