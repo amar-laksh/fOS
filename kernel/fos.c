@@ -1,5 +1,4 @@
 #include <kernel/fos.h>
-#include <mouse.h>
 /*	TODO - bind Escape-sequences to write_char and draw_char
 *	TODO - differentiate properly between CR NL LF etc.
 *	TODO - implement proper function for log_print, printf(args)
@@ -23,7 +22,6 @@ void kmain(){
 	irq_install();
 	timer_install();
 	poll_init();
-	pci_install();
 	vga_init();
 	for(;;)
 		asm("hlt");

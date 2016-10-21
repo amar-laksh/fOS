@@ -2,6 +2,7 @@
 #define GDT_H
 #include <stdint.h>
 #include <stddef.h>
+#include <sys/vga.h>
 
 void gdt_set_gate(int num, uint64_t base, uint64_t limit, uint8_t access, uint8_t gran);
 

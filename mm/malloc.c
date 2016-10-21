@@ -1,10 +1,4 @@
 #include <stdint.h>
-#include "../include/display.h"
-#include "../include/memory.h"
-#include "../include/tasking.h"
-#include "../include/pit.h"
-
-MODULE("MMU");
 #define MAX_PAGE_ALIGNED_ALLOCS 32
 
 uint32_t last_alloc = 0;

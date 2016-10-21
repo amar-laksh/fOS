@@ -1,5 +1,5 @@
 #include <gdt.h>
-#include <sys/vga.h>
+
 
 static void write_tss(int32_t, uint16_t, uint32_t);
 typedef struct tss_entry {

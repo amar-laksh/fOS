@@ -1,6 +1,4 @@
 #include <idt.h>
-#include <sys/vga.h>
-#include <isrs.h>
 
 struct idt_entry
 {

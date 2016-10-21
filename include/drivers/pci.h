@@ -2,7 +2,7 @@
 #ifndef PCI_H_
 #define PCI_H_
 #include <stdint.h>
-
+#include <drivers/pci_list.h>
 struct __pci_driver;
 
 typedef struct {

@@ -5,6 +5,9 @@
 #include <sys/io.h>
 #include <drivers/serial.h>
 #include <stdlib/string.h>
+#include <sys/commands.h>
+#include <timer.h>
+#include <drivers/pcsound.h>
 
 
 int32_t get_row(uint32_t p);

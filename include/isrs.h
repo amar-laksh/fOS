@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <idt.h>
-
+#include <sys/vga.h>
 void isrs_install();
 
 

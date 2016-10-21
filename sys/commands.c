@@ -8,12 +8,13 @@ void exec_cmd(int n, char buff[]){
 			clear_screen();
 			break;
 		case 1:
-			write_str("\nYou Pressed Exit! System will now halt!");
-			asm volatile ("outw %1,%0" :: "dN" ((uint16_t)0xB004), "a" ((uint16_t)0x2000));
+			write_str("\nYou Pressed Exit! System will now halt!\n");
+			timer_wait(10);
+			write_str("Just kidding, can't perform that craziness right now :( ");
 			break;
 		case 2:
 			write_str("\n");
-			cpu_init();
+			write_str("I am root");
 			write_str("\n");
 			break;
 		case 3:
@@ -23,7 +24,9 @@ void exec_cmd(int n, char buff[]){
 			write_str("\nHello, World!\n");
 			break;
 		case 5:
+			write_serial("\n");
 			write_serial(buff);
+			write_serial("\n");
 			break;
 		default:
 			if(strlen(buff) > 1){

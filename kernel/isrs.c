@@ -1,5 +1,4 @@
 #include <isrs.h>
-#include <sys/vga.h>
 
 extern void isr0();
 extern void isr1();

@@ -3,7 +3,6 @@
 
 #include <stdint.h>
 #include <stddef.h>
-#include <kernel/fos.h>
 
 //Mouse functions
 void mouse_handler(struct regs *a_r);

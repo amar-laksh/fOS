@@ -28,6 +28,8 @@
 
 #include <drivers/serial.h>
 
+#include <drivers/pcsound.h>
+
 #define IRQ_OFF { asm volatile ("cli"); }
 #define IRQ_RES { asm volatile ("sti"); }
 #define PAUSE { asm volatile ("hlt"); }

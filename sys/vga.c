@@ -1,16 +1,11 @@
 #include <sys/vga.h>
-#include <sys/commands.h>
-#include <timer.h>
 #define	VIDMEM 0x000B8000
-//#define VIDMEM 0x00A0000
 #define MAX_ROWS 24
 #define MAX_COLUMNS 79
 #define ERROR_CODE -12321
 #define PASS_CODE 32123
 #define PORT 0x09
 #define RTC_PORT 0x70
-#define beepStart() asm ("push %eax\nin $0x61,%al\nor $3,%al\nout %al,$0x61");
-#define beepEnd() asm ("in $0x61,%al\nand $0xFD,%al\nout %al,$0x61\npop ecx");
 
 int32_t x=1,y=2;
 int32_t curpos=162;
@@ -136,6 +131,12 @@ void write_char(char ascii){
 		draw_char(curpos+2,' ',0,15);
 		curpos +=2;
 		move_cursor(curpos/2);
+		for(int i=1000;i<5000;i+=2000){
+			play_sound(i);
+			delay(10);
+			nosound();
+			delay(1);
+		}
 	}
 	else if(ascii == '\n'){
 		while(curpos%160>0){
@@ -253,23 +254,20 @@ void welcome_splash(){
 void vga_init(){
 	int code=0;
 	curpos=162;
-
-	welcome_splash();
+		welcome_splash();
 
 	clear_screen();
 	serial_install();
 	write_serial("\033c");
-	write_serial("Hello world from the fOS. ");
-
-	char header[] = "f.O.S. - Made By Amar Lakshya";
-	draw_str(header,0,20);
-	write_str("\nHello World!\nThe console provides the following commands:\n whoami, exit, clear \n");
+	write_serial("Hello world from the fOS. \nI will now be talking to you over serial! ");
+	draw_str("f.O.S. - Made By Amar Lakshya",0,20);
+	write_str("\nHello World!\nThe console provides the following commands:\n whoami, hello, exit, clear \n");
 	null_buffer();
 	write_str("\r");
 	while(read_scan_code()){
 			print_registers();
 			char l = get_kbd();
-			draw_str(header,0,20);
+			draw_str("f.O.S. - Made By Amar Lakshya",0,20);
 			append_buffer(l);
 			if(l=='\r')
 				code = process_buffer();

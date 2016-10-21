@@ -200,12 +200,6 @@ struct EXT_CPU_FEATURE{
 	int32_t EXT_FEATURES;
 };
 
-struct PROCESSOR_NAME{
-	int64_t FIRST_16;
-	int64_t SECOND_16;
-	int64_t THIRD_16;
-};
-
 struct EXT_L2_CACHE {
 	int16_t L2_SIZE;
 	int8_t L2_ASSOC;
@@ -233,16 +227,16 @@ typedef struct {
 	struct PROCESSOR_SIGNATURE processor_signature;
 	struct CPU_FEATURE  cpu_features;
 	struct CPU_INSTRUCTION cpu_instructions;
-	struct CPU_MISC_INFO cpu_mis_informtion;
+	struct CPU_MISC_INFO cpu_misc_info;
 
 	// Function 0x03 
-	struct PROCESSOR_SERIAL_NUMBER psn;
+	struct PROCESSOR_SERIAL_NUMBER processor_serial_number;
 
 	// Funciton 0x04
 	struct DET_CACHE_PARAMS det_cache_params;
 
 	// Function 0x05 | Function 0x05
-	struct MONITOR monitor_mwait;
+	struct MONITOR monitor;
 
 	// Function 0x06 | Function 0x06
 	struct DIGTSPM dig_sensor_pm;
@@ -268,7 +262,7 @@ typedef struct {
 	struct EXT_CPU_FEATURE extended_cpu_features;
 
 	// Function 0x8000_0002, 0x8000_0003, 0x800_0004
-	struct PROCESSOR_NAME processor_name;	
+	char processor_name[15];	
 
 	// Function 0x8000_0006 
 	struct EXT_L2_CACHE extended_L2_cache;

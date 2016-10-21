@@ -3,11 +3,10 @@
 
 #include <sys/io.h>
 
-
 //Play sound using built in speaker
-static void play_sound(uint32_t nFrequence);
+void play_sound(uint32_t nFrequence);
 
 //make it shutup
-static void nosound();
+void nosound();
 
 #endif

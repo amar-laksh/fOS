@@ -18,10 +18,7 @@
  * Set the phase (in hertz) for the Programmable
  * Interrupt Timer (PIT).
  */
-void
-timer_phase(
-		int hz
-		) {
+void timer_phase(int hz) {
 	int divisor = PIT_SCALE / hz;
 	outb(PIT_CONTROL, PIT_SET);
 	outb(PIT_A, divisor & PIT_MASK);

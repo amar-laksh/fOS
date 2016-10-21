@@ -1,5 +1,3 @@
-
-
 #if 0
 
 PCIHDR.H: PCI Vendors, Devices, and Class Type information
