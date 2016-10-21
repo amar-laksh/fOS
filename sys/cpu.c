@@ -194,7 +194,6 @@ void intel_init(){
 }
 
 
-void amd_init(vendor_magic_no){
+void amd_init(){
 	// TODO - Implment AMD things.
-	write_str("AMD welcomes you");
 }

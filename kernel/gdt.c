@@ -92,6 +92,7 @@ void gdt_install() {
 	/* Go go go */
 	gdt_flush();
 	tss_flush();
+	dprintf("GDT installed at:	0x%x\n",gp.base);
 }
 
 /**

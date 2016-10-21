@@ -18,7 +18,7 @@ void exec_cmd(int n, char buff[]){
 			write_str("\n");
 			break;
 		case 3:
-			welcome_splash();
+			dprintf("Men at work...\n");
 			break;
 		case 4:
 			write_str("\nHello, World!\n");

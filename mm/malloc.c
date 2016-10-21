@@ -18,7 +18,7 @@ void mm_init(uint32_t kernel_end)
 	heap_end = pheap_begin;
 	memset((char *)heap_begin, 0, heap_end - heap_begin);
 	pheap_desc = (uint8_t *)malloc(MAX_PAGE_ALIGNED_ALLOCS);
-	mprint("Kernel heap starts at 0x%x\n", last_alloc);
+	("Kernel heap starts at 0x%x\n", last_alloc);
 }
 
 void mm_print_out()

@@ -16,6 +16,7 @@ void *memset(void *dest, char val, size_t count){
 
 
 void kmain(){
+	serial_install();
 	gdt_install();
 	idt_install();
 	isrs_install();

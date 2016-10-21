@@ -285,5 +285,7 @@ static inline void cpuid(uint32_t reg, uint32_t *eax, uint32_t *ebx, uint32_t *e
 }
 
 void cpu_init();
+void intel_init();
+void amd_init();
 
 #endif

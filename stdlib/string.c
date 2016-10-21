@@ -1,6 +1,6 @@
 #include <stdlib/string.h>
 
-int32_t strlen(char str[]){
+int32_t strlen(const char str[]){
 	int32_t len=0;
 	while (str[len++]);
 	return len;
@@ -12,7 +12,8 @@ char* substring(char buff[], int start, int end){
 	while(i < end){
 		result[j++] = buff[i++];
 	}
-	return result;
+	buff = result;
+	return buff;
 }
 
 void itoa(uint64_t i,uint32_t base, char* buf) {

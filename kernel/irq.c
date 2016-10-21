@@ -70,6 +70,7 @@ void irq_install() {
     idt_set_gate(46, (unsigned)irq14, 0x08, 0x8E);
     idt_set_gate(47, (unsigned)irq15, 0x08, 0x8E);
     IRQ_RES;
+    dprintf("IRQ status:    OK\n");
 }
 
 void irq_ack(int irq_no) {

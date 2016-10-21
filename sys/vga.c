@@ -123,7 +123,6 @@ void write_char(char ascii){
 		}
 	}
 	else if(ascii == '\r'){	
-		int8_t c = 0;	
 		while(curpos%160>0){
 			curpos = curpos + 2;
 		}
@@ -161,38 +160,38 @@ void write_str(char* string){
 }
 
 void print_registers(){
-	uint64_t eax_t, ebx_t, ecx_t, edx_t, eip_t, cs_t, ds_t;
-	char eax[16], ebx[16], ecx[16], edx[16], eip[16],cs[16],ds[16];
-	eax_t = get_register(0);
-	itoa(eax_t,16,eax);
-	
-	ebx_t = get_register(1);
-	itoa(ebx_t,16,ebx);
+		uint64_t eax_t, ebx_t, ecx_t, edx_t, eip_t, cs_t, ds_t;
+		char eax[16], ebx[16], ecx[16], edx[16], eip[16],cs[16],ds[16];
+		eax_t = get_register(0);
+		itoa(eax_t,16,eax);
+		
+		ebx_t = get_register(1);
+		itoa(ebx_t,16,ebx);
 
-	ecx_t = get_register(2);
-	itoa(ecx_t,16,ecx);
+		ecx_t = get_register(2);
+		itoa(ecx_t,16,ecx);
 
-	edx_t = get_register(3);
-	itoa(edx_t,16,edx);
+		edx_t = get_register(3);
+		itoa(edx_t,16,edx);
 
-	eip_t = get_register(4);
-	itoa(eip_t,16,eip);
+		eip_t = get_register(4);
+		itoa(eip_t,16,eip);
 
-	cs_t = get_register(5);
-	itoa(cs_t,16,cs);
+		cs_t = get_register(5);
+		itoa(cs_t,16,cs);
 
-	ds_t = get_register(6);
-	itoa(ds_t,16,ds);
+		ds_t = get_register(6);
+		itoa(ds_t,16,ds);
 
-	draw_str("System Registers: ",0,50);
-	draw_str("EAX: ",1,50); draw_str(eax,1,55);
-	draw_str("EBX: ",2,50); draw_str(ebx,2,55);
-	draw_str("ECX: ",3,50); draw_str(ecx,3,55);
-	draw_str("EDX: ",4,50); draw_str(edx,4,55);
-	draw_str("EIP: ",5,50); draw_str(eip,5,55);
-	draw_str("CS:  ",6,50); draw_str(cs,6,55);
-	draw_str("DS:  ",7,50); draw_str(ds,7,55);
-	draw_str("------------------------------",8,50);
+		draw_str("System Registers: ",0,50);
+		draw_str("EAX: ",1,50); draw_str(eax,1,55);
+		draw_str("EBX: ",2,50); draw_str(ebx,2,55);
+		draw_str("ECX: ",3,50); draw_str(ecx,3,55);
+		draw_str("EDX: ",4,50); draw_str(edx,4,55);
+		draw_str("EIP: ",5,50); draw_str(eip,5,55);
+		draw_str("CS:  ",6,50); draw_str(cs,6,55);
+		draw_str("DS:  ",7,50); draw_str(ds,7,55);
+		draw_str("------------------------------",8,50);
 }
 
 
@@ -212,14 +211,6 @@ void append_buffer(char l){
 	else if(l !='\r'){
 		term->buffer[term->offset++] = l;
 	}
-}
-
-char** parse_command(char buff[], const char delim){
-	char** args;
-	write_str("\n");
-	write_str(args);
-	for(;;);
-	return args;
 }
 
 int process_buffer(){
@@ -243,23 +234,10 @@ int process_buffer(){
 	return 0;
 }
 
-void welcome_splash(){
-	for(int i=0;i<50;i++){
-		draw_str("HELLO WORLD",8,i);
-		delay(10);
-		clear_screen();
-	}
-}
-
 void vga_init(){
 	int code=0;
 	curpos=162;
-		welcome_splash();
-
 	clear_screen();
-	serial_install();
-	write_serial("\033c");
-	write_serial("Hello world from the fOS. \nI will now be talking to you over serial! ");
 	draw_str("f.O.S. - Made By Amar Lakshya",0,20);
 	write_str("\nHello World!\nThe console provides the following commands:\n whoami, hello, exit, clear \n");
 	null_buffer();

@@ -16,5 +16,6 @@ void irq_uninstall_handler(int);
 
 void irq_install();
 
+void irq_ack(int irq_no);
 
 #endif

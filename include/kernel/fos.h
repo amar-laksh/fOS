@@ -25,6 +25,7 @@
 #include <sys/poll.h>
 #include <sys/vga.h>
 #include <sys/io.h>
+#include <sys/print.h>
 
 #include <drivers/serial.h>
 
