@@ -81,6 +81,11 @@ int32_t get_point(uint32_t r, uint32_t c){
 	return (get_row(r)+get_column(c));
 }
 
+char get_char_cell(int r, int c){
+	char *fb = (char *) 0x000B8000;
+	return fb[get_point(r,c)]; 
+}
+
 void draw_char(uint32_t p, char ch, uint8_t fg, uint8_t bg) {
 	char *fb = (char *) VIDMEM;
 	fb[p] = ch;

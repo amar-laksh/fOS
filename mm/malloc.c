@@ -1,4 +1,5 @@
 #include <mm/malloc.h>
+#include <sys/print.h>
 
 uint32_t last_alloc = 0;
 uint32_t heap_end = 0;
@@ -12,10 +13,6 @@ void mm_init(uint32_t kernel_end)
 	heap_end = 0x400000;
 	memset((char *)heap_begin, 0, heap_end - heap_begin);
 	dprintf("Kernel heap starts at 0x%x\n", last_alloc);
-}
-
-void mm_print_out()
-{
 	dprintf("Memory used: %d bytes\n", memory_used);
 	dprintf("Memory free: %d bytes\n", heap_end - heap_begin - memory_used);
 	dprintf("Heap size: %d bytes\n", heap_end - heap_begin);
@@ -61,7 +58,7 @@ char* malloc(size_t size)
 			/* Set to allocated */
 			a->status = 1;
 
-			dprint("RE:Allocated %d bytes from 0x%x to 0x%x\n", size, mem + sizeof(alloc_t), mem + sizeof(alloc_t) + size);
+			dprintf("RE:Allocated %d bytes from 0x%x to 0x%x\n", size, mem + sizeof(alloc_t), mem + sizeof(alloc_t) + size);
 			memset(mem + sizeof(alloc_t), 0, size);
 			memory_used += size + sizeof(alloc_t);
 			return (char *)(mem + sizeof(alloc_t));
@@ -78,7 +75,6 @@ char* malloc(size_t size)
 	nalloc:;
 	if(last_alloc+size+sizeof(alloc_t) >= heap_end)
 	{
-		set_task(0);
 		sprintf("Cannot allocate %d bytes! Out of memory.\n", size);
 	}
 	alloc_t *alloc = (alloc_t *)last_alloc;
@@ -88,7 +84,7 @@ char* malloc(size_t size)
 	last_alloc += size;
 	last_alloc += sizeof(alloc_t);
 	last_alloc += 4;
-	dprint("Allocated %d bytes from 0x%x to 0x%x\n", size, (uint32_t)alloc + sizeof(alloc_t), last_alloc);
+	dprintf("Allocated %d bytes from 0x%x to 0x%x\n", size, (uint32_t)alloc + sizeof(alloc_t), last_alloc);
 	memory_used += size + 4 + sizeof(alloc_t);
 	memset((char *)((uint32_t)alloc + sizeof(alloc_t)), 0, size);
 	return (char *)((uint32_t)alloc + sizeof(alloc_t));

@@ -3,14 +3,16 @@ SYSDIR  = ../sys
 STDLIBDIR = ../stdlib
 DRIVERSDIR = ../drivers
 KERNELDIR = ./
+MEMDIR = ../mm
 
 INCLUDE    := $(shell find $(INCLUDEDIR) -name '*.c')
 SYS	   := $(shell find $(SYSDIR) -name '*.c')
 STDLIB     := $(shell find $(STDLIBDIR) -name '*.c')
 DRIVERS    := $(shell find $(DRIVERSDIR) -name '*.c')
 KERNEL     := $(shell find $(KERNELDIR) -name '*.c')
+MEM 	   := $(shell find $(MEMDIR) -name '*.c')
 
-OBJECTS = $(patsubst %.c,$(INCLUDEDIR)/%.o,$(INCLUDE)) $(patsubst %.c,$(SYSDIR)/%.o,$(SYS)) $(patsubst %.c,$(STDLIBDIR)/%.o,$(STDLIB)) $(patsubst %.c,$(DRIVERSDIR)/%.o,$(DRIVERS)) $(patsubst %.c,$(KERNELDIR)/%.o,$(KERNEL)) boot.o
+OBJECTS = $(patsubst %.c,$(INCLUDEDIR)/%.o,$(INCLUDE)) $(patsubst %.c,$(SYSDIR)/%.o,$(SYS)) $(patsubst %.c,$(STDLIBDIR)/%.o,$(STDLIB)) $(patsubst %.c,$(DRIVERSDIR)/%.o,$(DRIVERS)) $(patsubst %.c,$(KERNELDIR)/%.o,$(KERNEL)) $(patsubst %.c,$(MEMDIR)/%.o,$(MEM)) boot.o
 
 CC =  i686-elf-gcc
 CFLAGS = -I../include -std=gnu99 -ffreestanding -O2 -Wall -Wextra -c

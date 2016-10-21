@@ -2,12 +2,13 @@
 
 CPU_TOPOLOGY cpu;
 
+
+/* TODO- The case 3 is temperory. Create a text-based graphics engine.*/
 void create(char* args,int x, int y){
 	if(equals(args,"player") == 0){
 		draw_char(get_point(y,x-1),'=',0,COLOR_RED);
 		draw_char(get_point(y,x),'#',0,COLOR_RED);
 		draw_char(get_point(y,x+1),'=',0,COLOR_RED);
-		//return get_point(y-1,x);
 	}
 	else if(equals(args,"nothing") == 0){
 		draw_char(get_point(y,x-1),' ',0,COLOR_BLACK);
@@ -84,9 +85,7 @@ void exec_cmd(int n, char buff[]){
 			break;
 		default:
 			if(strlen(buff) > 1){
-				write_str("\n");
-				write_str(buff);
-				write_str(": Command not found!");
+				kprintf("\n%s: not found!\n",buff);
 			}
 			
 			break;

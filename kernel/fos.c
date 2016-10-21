@@ -4,6 +4,8 @@
 *	TODO - try to refactor timer_wait, to see why it doesn't work
 */
 
+extern void*  endKernel;
+
 void *memset(void *dest, char val, size_t count){
 	char *temp = (char *)dest;
 	for( ; count != 0; count--) *temp++ = val;

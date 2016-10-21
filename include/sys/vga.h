@@ -40,7 +40,7 @@ void clear_screen();
 
 void delay(int64_t t);
 
-void draw_num(int64_t num, int32_t r, int32_t c);
+char get_char_cell(int r, int c);
 
 void draw_char(uint32_t p, char ch, uint8_t fg, uint8_t bg);
 

@@ -1,7 +1,6 @@
 #include <drivers/serial.h>
 #define COM1_PORT 0x3f8   /* COM1 */
 
-
 void serial_install() {
    outb(COM1_PORT + 1, 0x00);    // Disable all interrupts
    outb(COM1_PORT + 3, 0x80);    // Enable DLAB (set baud rate divisor)
