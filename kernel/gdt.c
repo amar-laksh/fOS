@@ -89,7 +89,6 @@ void gdt_install() {
 	/* User data */
 	gdt_set_gate(4, 0, 0xFFFFFFFF, 0xF2, 0xCF);
 	write_tss(5, 0x10, 0x0);
-	/* Go go go */
 	gdt_flush();
 	tss_flush();
 	dprintf("GDT installed at:	0x%x\n",gp.base);
@@ -123,11 +122,6 @@ static void write_tss(
 	tss_entry.iomap_base = sizeof(tss_entry);
 }
 
-/**
- * Set the kernel stack.
- *
- * @param stack Pointer to a the stack pointer for the kernel.
- */
 void
 set_kernel_stack(
 		uintptr_t stack

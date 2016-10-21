@@ -15,7 +15,7 @@ char* commands[6] = {
 	"clear",
 	"exit",
 	"whoami",
-	"welcome",
+	"game",
 	"hello",
 	"serial"
 };
@@ -68,7 +68,7 @@ uint64_t get_register(int number)
 int32_t get_row(uint32_t p){
 	if(p>MAX_ROWS)
 		return ERROR_CODE;
-        return p*160;
+    return p*160;
 }
 
 int32_t get_column(uint32_t p){
