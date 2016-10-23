@@ -27,6 +27,6 @@ typedef struct __pci_driver {
 } pci_driver;
 
 extern void pci_install();
-extern void pci_proc_dump(uint8_t *buffer);
+extern void pci_proc_dump();
 
 #endif

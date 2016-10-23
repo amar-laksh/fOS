@@ -53,7 +53,6 @@ uint16_t getSubClassId(uint16_t bus, uint16_t device, uint16_t function)
 
 void pci_probe()
 {
-	char dev[5],vend[5];
 	for(uint32_t bus = 0; bus < 256; bus++)
     {
         for(uint32_t slot = 0; slot < 32; slot++)
@@ -63,13 +62,8 @@ void pci_probe()
                     uint16_t vendor = getVendorID(bus, slot, function);
                     if(vendor == 0xffff) continue;
                     uint16_t device = getDeviceID(bus, slot, function);
-		    itoa(vendor,16,vend);
-		    itoa(device,16,dev);
-                    write_str("vendor:device    |  ");
-		    write_str(vend);
-		    write_str(dev);
-		    write_str("\n");
-                    //pci_device *pdev = (pci_device *)malloc(sizeof(pci_device));
+                    //dprintf("vendor|device = %d | %d\n",vendor,device);
+                    pci_device *pdev = (pci_device *)malloc(sizeof(pci_device));
                     pdev->vendor = vendor;
                     pdev->device = device;
                     pdev->func = function;
@@ -94,10 +88,9 @@ void pci_probe()
 void pci_install()
 {
 	devs = drivs = 0;
-	//pci_devices = (pci_device **)malloc(32 * sizeof(pci_device));
-	//pci_drivers = (pci_driver **)malloc(32 * sizeof(pci_driver));
+	pci_devices = (pci_device **)malloc(32 * sizeof(pci_device));
+	pci_drivers = (pci_driver **)malloc(32 * sizeof(pci_driver));
 	pci_probe();
-	write_str("PCI driver support loaded.\n");
 }
 
 void pci_register_driver(pci_driver *driv)
@@ -107,14 +100,14 @@ void pci_register_driver(pci_driver *driv)
 	return;
 }
 
-void pci_proc_dump(uint8_t *buffer)
+void pci_proc_dump()
 {
 	for(int i = 0; i < devs; i++)
 	{
 		pci_device *pci_dev = pci_devices[i];
-		//if(pci_dev->driver)
-		//	kprintf("[%x:%x:%x] => %s\n", pci_dev->vendor, pci_dev->device, pci_dev->func, pci_dev->driver->name);
-		//else
-		//	kprintf("[%x:%x:%x]\n", pci_dev->vendor, pci_dev->device, pci_dev->func);
+		if(pci_dev->driver)
+			dprintf("[%x:%x:%x] => %s\n", pci_dev->vendor, pci_dev->device, pci_dev->func, pci_dev->driver->name);
+		else
+			dprintf("[%x:%x:%x]\n", pci_dev->vendor, pci_dev->device, pci_dev->func);
 	}
 }

@@ -16,7 +16,7 @@ char* commands[6] = {
 	"exit",
 	"whoami",
 	"game",
-	"hello",
+	"mem",
 	"serial"
 };
 
@@ -82,7 +82,7 @@ int32_t get_point(uint32_t r, uint32_t c){
 }
 
 char get_char_cell(int r, int c){
-	char *fb = (char *) 0x000B8000;
+	char *fb = (char *) VIDMEM;
 	return fb[get_point(r,c)]; 
 }
 
@@ -99,6 +99,25 @@ void clear_screen(){
         }
 	curpos = 2;
 }
+
+void scroll_down(){
+	char *fb = (char *) VIDMEM;
+	for(int i=0;i<25;i++){
+		for(int m=0;m<80;m++){
+			fb[i * 160 + m] = fb[(i+1)*160 + m];
+		}
+	}
+}
+
+void scroll_up(){
+	char *fb = (char *) VIDMEM;
+	for(int i=0;i<25;i++){
+		for(int m=0;m<80;m++){
+			fb[(i+1) * 160 + m] = fb[(i)*160 + m];
+		}
+	}
+}
+
 
 int32_t draw_str(char string[], int32_t r, int32_t c){
 	uint32_t i=0,j=0,sp=0;
@@ -128,18 +147,23 @@ void write_char(char ascii){
 		}
 	}
 	else if(ascii == '\r'){	
-		while(curpos%160>0){
-			curpos = curpos + 2;
+		if(curpos >= 3842){
+			int tmp = curpos;
+			scroll_down();
+			draw_char(curpos,'#',0,15);
+			draw_char(curpos+2,' ',0,15);
+			//curpos += 2;
+			move_cursor(curpos/2);
+			curpos = tmp;
 		}
-		draw_char(curpos,'#',0,15);
-		draw_char(curpos+2,' ',0,15);
-		curpos +=2;
-		move_cursor(curpos/2);
-		for(int i=1000;i<5000;i+=2000){
-			play_sound(i);
-			delay(10);
-			nosound();
-			delay(1);
+		else{
+			while(curpos%160>0){
+				curpos = curpos + 2;
+			}
+			draw_char(curpos,'#',0,15);
+			draw_char(curpos+2,' ',0,15);
+			curpos +=2;
+			move_cursor(curpos/2);
 		}
 	}
 	else if(ascii == '\n'){
@@ -238,6 +262,8 @@ int process_buffer(){
 
 	return 0;
 }
+
+
 
 void vga_init(){
 	int code=0;

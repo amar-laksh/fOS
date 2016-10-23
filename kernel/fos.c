@@ -13,6 +13,7 @@ void *memset(void *dest, char val, size_t count){
 }
 
 void kmain(){
+	mm_init(&endKernel);
 	serial_install();
 	gdt_install();
 	idt_install();
@@ -20,6 +21,7 @@ void kmain(){
 	irq_install();
 	timer_install();
 	poll_init();
+	pci_install();
 	vga_init();
 	for(;;)
 		asm("hlt");

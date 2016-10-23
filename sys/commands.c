@@ -76,7 +76,9 @@ void exec_cmd(int n, char buff[]){
 			start_game();
 			break;
 		case 4:
-			write_str("\nHello, World!\n");
+			dprintf("\n");
+			//mm_print_out();
+			pci_proc_dump();
 			break;
 		case 5:
 			write_serial("\n");

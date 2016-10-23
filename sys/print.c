@@ -1,6 +1,6 @@
 #include <sys/print.h>
 
-static void print_dec(unsigned intvalue, unsigned int width, char * buf, int * ptr );
+static void print_dec(unsigned int value, unsigned int width, char * buf, int * ptr );
 
 static void print_hex(unsigned int value, unsigned int width, char * buf, int * ptr);
 
