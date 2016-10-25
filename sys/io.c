@@ -293,6 +293,23 @@ int8_t get_kbd() {
                         }
                         return '9';
                 }
+        if(sc == '\xE0'){
+            sc = '\0';
+            sc = read_scan_code();
+            if(sc == '\x51'){
+                        while(read_scan_code() != '\xD1'){
+
+                        }
+                        return '\xDEAD';
+            }
+            if(sc == '\x49'){
+                        while(read_scan_code() != '\xD9'){
+
+                        }
+                        return '\xBEEF';
+            }            
+                
+        }
 
 	}
 	return '\0';

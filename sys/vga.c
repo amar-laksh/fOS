@@ -1,5 +1,8 @@
+// TODO - Completely refactor this shitty code
 #include <sys/vga.h>
 #define	VIDMEM 0x000B8000
+#define VIDMEM_END 0x00BFFFF
+#define VIDMEM_SIZE 32767
 #define MAX_ROWS 24
 #define MAX_COLUMNS 79
 #define ERROR_CODE -12321
@@ -21,6 +24,7 @@ char* commands[6] = {
 };
 
 typedef struct {
+	char *frame_buffer;
 	char buffer[100];
 	int8_t offset;
 } console;
@@ -93,31 +97,27 @@ void draw_char(uint32_t p, char ch, uint8_t fg, uint8_t bg) {
 }
 
 void clear_screen(){
-        int32_t i=0;
-        for(i=0;i<5000;i=i+2){
-                draw_char(i,' ',0,0);
-        }
+	memset(VIDMEM,0,VIDMEM_SIZE);
 	curpos = 2;
 }
 
 void scroll_down(){
-	char *fb = (char *) VIDMEM;
+	char *vidmemptr = (char *) VIDMEM;
+	term->frame_buffer = memmove(term->frame_buffer, vidmemptr, VIDMEM_SIZE);
 	for(int i=0;i<25;i++){
 		for(int m=0;m<80;m++){
-			fb[i * 160 + m] = fb[(i+1)*160 + m];
+			term->frame_buffer[i * 160 + m] = vidmemptr[(i+1)*160 + m];
 		}
 	}
-}
-
-void scroll_up(){
-	char *fb = (char *) VIDMEM;
+	vidmemptr = memset(vidmemptr,0,VIDMEM_SIZE);
+	
 	for(int i=0;i<25;i++){
 		for(int m=0;m<80;m++){
-			fb[(i+1) * 160 + m] = fb[(i)*160 + m];
+			vidmemptr[i * 160 + m] = term->frame_buffer[i*160 + m];
 		}
 	}
+	draw_char(curpos,'#',0,15); 	
 }
-
 
 int32_t draw_str(char string[], int32_t r, int32_t c){
 	uint32_t i=0,j=0,sp=0;
@@ -149,7 +149,6 @@ void write_char(char ascii){
 	else if(ascii == '\r'){	
 		if(curpos >= 3842){
 			int tmp = curpos;
-			scroll_down();
 			draw_char(curpos,'#',0,15);
 			draw_char(curpos+2,' ',0,15);
 			//curpos += 2;
@@ -276,6 +275,19 @@ void vga_init(){
 	while(read_scan_code()){
 			print_registers();
 			char l = get_kbd();
+			if(l == '\xDEAD'){
+				scroll_down();
+				draw_char(curpos-2,'#',0,15);
+				continue;
+			}
+			if(l == 'z'){
+				char *fp = (char*)VIDMEM;
+				for(int i=VIDMEM_SIZE*4;i<VIDMEM_SIZE*;i++){
+					if(i % 10 == 0)
+						sprintf("%c",fp[i]);
+				}
+				continue;
+			}
 			draw_str("f.O.S. - Made By Amar Lakshya",0,20);
 			append_buffer(l);
 			if(l=='\r')

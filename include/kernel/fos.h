@@ -50,6 +50,8 @@ struct regs {
 
 void *memset(void *dest, char val, size_t count);
 
+void * memmove(void * restrict dest, const void * restrict src, size_t count);
+
 void kmain();
 
 #endif

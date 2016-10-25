@@ -1,37 +1,14 @@
-#if 0
-
-PCIHDR.H: PCI Vendors, Devices, and Class Type information
-
-Created automatically from the web using the following URL:
-http://pcidatabase.com/
-Software to create and maintain the PCICODE List written by:
-Jim Boemler (jboemler@halcyon.com)
-
-  This header created on Fri Jan 16 09:49:40 PST 2009
-
-Too many people have contributed to this list to acknowledge them all, but
-a few have provided the majority of the input and deserve special mention:
-   Frederic Potter, who maintains a list for Linux.
-   Chris Aston at Madge Networks.
-   Thomas Dippon of Hewlett-Packard GmbH.
-   Jurgen ("Josh") Thelen
-   William H. Avery III at Altitech
-   Sergei Shtylyov of Brain-dead Software in Russia
-#endif
-
-//  NOTE that the 0xFFFF of 0xFF entries at the end of some tables below are
-//  not properly list terminators, but are actually the printable definitions
-//  of values that are legitimately found on the PCI bus.  The size
-//  definitions should be used for loop control when the table is searched.
-
-typedef struct _PCI_VENTABLE
+#ifndef PCI_LIST_H
+#define PCI_LIST_H
+#include <kernel/fos.h>
+typedef struct
 {
-	unsigned short	VenId ;
-	const char *	VenShort ;
-	const char *	VenFull ;
-}  PCI_VENTABLE, *PPCI_VENTABLE ;
+	uint32_t	ven_ID ;
+	char*		ven_short ;
+	char*		ven_full ;
+} PCI_VENDOR_TABLE;
 
-PCI_VENTABLE	PciVenTable [] =
+PCI_VENDOR_TABLE	lookupTable [] =
 {
 	{ 0x0033, "", "Paradyne Corp." } ,
 	{ 0x003D, "well", "master" } ,
@@ -6893,9 +6870,9 @@ PCI_DEVTABLE	PciDevTable [] =
 
 
 // Use this value for loop control during searching:
-#define	PCI_DEVTABLE_LEN	(sizeof(PciDevTable)/sizeof(PCI_DEVTABLE))
+#define	PCI_VENDOR_TABLE_LEN	(sizeof(lookupTable)/sizeof(PCI_VENDOR_TABLE))
 
-typedef struct _PCI_CLASSCODETABLE
+typedef struct
 {
 	unsigned char	BaseClass ;
 	unsigned char	SubClass ;
@@ -6903,7 +6880,7 @@ typedef struct _PCI_CLASSCODETABLE
 	const char *		BaseDesc ;
 	const char *		SubDesc ;
 	const char *		ProgDesc ;
-}  PCI_CLASSCODETABLE, *PPCI_CLASSCODETABLE ;
+}  PCI_CLASSCODETABLE ;
 
 PCI_CLASSCODETABLE PciClassCodeTable [] =
 {
@@ -7053,3 +7030,4 @@ const char *	PciDevSelFlags [] =
 // Use this value for loop control during searching:
 #define	PCI_DEVSELFLAGS_LEN	(sizeof(PciDevSelFlags)/sizeof(char *))
 
+#endif

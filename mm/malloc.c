@@ -15,9 +15,10 @@ void mm_init(uint32_t kernel_end)
 	dprintf("Kernel heap starts at 0x%x\n", last_alloc);
 }
 void mm_print_out(){
-	dprintf("Memory used: %d bytes\n", memory_used);
-	dprintf("Memory free: %d bytes\n", heap_end - heap_begin - memory_used);
-	dprintf("Heap size: %d bytes\n", heap_end - heap_begin);
+	dprintf("Kernel heap starts at 0x%x\n", last_alloc);
+	dprintf("Memory used: %x bytes\n", memory_used);
+	dprintf("Memory free: %x bytes\n", heap_end - heap_begin - memory_used);
+	dprintf("Heap size: %x bytes\n", heap_end - heap_begin);
 	dprintf("Heap start: 0x%x\n", heap_begin);
 	dprintf("Heap end: 0x%x\n", heap_end);
 }

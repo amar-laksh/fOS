@@ -1,3 +1,4 @@
+// TODO - add full support for pci_list
 #include <kernel/fos.h>
 #include <drivers/pci.h>
 pci_device **pci_devices = 0;
@@ -105,9 +106,18 @@ void pci_proc_dump()
 	for(int i = 0; i < devs; i++)
 	{
 		pci_device *pci_dev = pci_devices[i];
-		if(pci_dev->driver)
-			dprintf("[%x:%x:%x] => %s\n", pci_dev->vendor, pci_dev->device, pci_dev->func, pci_dev->driver->name);
-		else
-			dprintf("[%x:%x:%x]\n", pci_dev->vendor, pci_dev->device, pci_dev->func);
+        for(int j=0;j< PCI_VENDOR_TABLE_LEN ; j++){
+            if(pci_dev->vendor == lookupTable[j].ven_ID){
+                if(pci_dev->driver){
+                    dprintf("Vendor Name: %s\n",lookupTable[j].ven_full);
+                    dprintf("[%x:%x:%x] => %s\n", pci_dev->vendor, pci_dev->device, pci_dev->func, pci_dev->driver->name);
+                 }   
+                else{
+                    dprintf("Vendor Name: %s\n",lookupTable[j].ven_full);
+                    //dprintf("[%x:%x:%x]\n", pci_dev->vendor, pci_dev->device, pci_dev->func);
+                }
+                
+            }
+        }
 	}
 }
