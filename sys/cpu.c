@@ -1,16 +1,6 @@
 #include <sys/cpu.h>
 #define cpuid_simple(in, a, b, c, d) asm("cpuid": "=a" (a), "=b" (b), "=c" (c), "=d" (d) : "a" (in));
 
-/*
-struct CPU_FEATURE cpu.cpu_features;
-struct CPU_INSTRUCTION cpu.cpu_instructions;
-struct cpu.processor_signature cpu.processor_signature;
-struct cpu.cpu_misc_info cpu.cpu_misc_info;
-struct PROCESSOR_SERIAL_NUMBER processor_serial_number;
-struct cpu.det_cache_params cpu.det_cache_params;
-struct cpu.monitor cpu.monitor;
-*/
-CPU_TOPOLOGY cpu;
 
 
 uint32_t highest_std_info, highest_ext_info;
@@ -70,11 +60,8 @@ void intel_init(){
 		&ebx, &ecx, &edx);
 
 	get_vendor_string(cpu.cpu_vendor_string);
-	
 	cpu.highest_std_info = highest_std_info;
 	cpu.highest_ext_info = highest_ext_info;
-
-	
 
 	/** Processor Serial Number **/
 	cpuid(0x03,&eax, &ebx, &ecx, &edx);
@@ -95,7 +82,6 @@ void intel_init(){
 	cpu.det_cache_params.NO_OF_SETS = ecx;
 	cpu.det_cache_params.WBINVD_COMPACT = edx;
 
-
 	/** cpu.monitor Features **/
 	cpuid(0x05,&eax, &ebx, &ecx, &edx);
 	cpu.monitor.MIN_MONS_SIZE = (eax & 0xFFFF);
@@ -103,7 +89,6 @@ void intel_init(){
 	cpu.monitor.EMX = (ecx & 0x1);
 	cpu.monitor.INTR_BRK_EVENT = (ecx & 0x2);
 	cpu.monitor.C0_C7 = edx;
-
 	/** Function 0x01 **/
 	if (highest_std_info >= 0x01){
 	    cpuid(0x01, &eax, &ebx, &ecx, &edx);
@@ -185,13 +170,13 @@ void intel_init(){
 	    cpu.cpu_misc_info.BRAND_ID = (ebx & 0xFF);
 	    cpu.cpu_misc_info.CLFLUSH_SIZE = (ebx & 0xF00);
 	    cpu.cpu_misc_info.LOCAL_APIC_ID = (ebx & 0xFF000000);
-
-	  if(highest_ext_info >= 0x80000004)
-	  	get_processor_name(cpu.processor_name);
+	    if(highest_ext_info >= 0x80000004)
+	    	get_processor_name(cpu.processor_name);
 	}
 }
 
 
 void amd_init(){
 	// TODO - Implment AMD things.
+	return;
 }

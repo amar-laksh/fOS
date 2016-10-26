@@ -3,6 +3,43 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#define FB_COMMAND_PORT 0x3D4
+#define FB_DATA_PORT 0x3D5
+#define FB_HIGH_BYTE_COMMAND 14
+#define FB_LOW_BYTE_COMMAND 15
+#define PIC1_PORT_A 0x20
+#define PIC2_PORT_A 0xA0
+#define PIC1_START_INTERRUPT 0x20
+#define PIC2_START_INTERRUPT 0x28
+#define PIC2_END_INTERRUPT PIC2_START_INTERRUPT + 7
+#define PIC_ACK 0x20
+#define KBD_DATA_PORT 0x60
+#define PORT 0x40   /* COM1 */
+#define KEY_DEVICE    0x60
+#define KEY_PENDING   0x64
+#define KEYBOARD_NOTICES 0
+#define KEYBOARD_IRQ 1
+
+
+
+typedef struct {
+    char *frame_buffer;
+    char buffer[100];
+    int8_t offset;
+    int cursor;
+} console;
+
+console *term;
+
+typedef struct {
+	char* keyboard_buffer;
+	int keyboard_offset;
+	char* mouse_buffer;
+} io_buffer;
+
+
+io_buffer *io_buff;
+
 
 static inline void outb(uint16_t port, uint8_t val) {
 	__asm__ __volatile__( "out %1, %0" : : "Nd"(port), "a"(val) );
@@ -36,18 +73,15 @@ static inline uint32_t ins(uint16_t port) {
 
 
 
-void kbd_set_leds (bool num, bool caps, bool scroll);
+void keyboard_install();
 
-void pic_acknowledge(uint32_t interrupt);
+void keyboard_reset_ps2();
 
-int8_t read_scan_code(void);
+void keyboard_wait();
 
-int8_t readb(int8_t port);
-
-void move_cursor(int32_t pos);
-
-int8_t get_kbd();
+void getASCII(unsigned char c);
 
 
+char readb(unsigned char c);
 
 #endif

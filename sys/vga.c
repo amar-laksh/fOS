@@ -10,57 +10,36 @@
 #define PORT 0x09
 #define RTC_PORT 0x70
 
-int32_t x=1,y=2;
-int32_t curpos=162;
-int8_t cmd = 6;
-
-char* commands[6] = {
-	"clear",
-	"exit",
-	"whoami",
-	"game",
-	"mem",
-	"serial"
-};
-
-typedef struct {
-	char *frame_buffer;
-	char buffer[100];
-	int8_t offset;
-} console;
-
-console *term;
-
 uint64_t get_register(int number)
 {
 	uint64_t ret=0;
 	switch(number){
 		case 0:
-			asm volatile ( "mov %%eax, %0" 
+			__asm__ __volatile__ ( "mov %%eax, %0" 
 					: "=r"(ret));
 			break;
 		case 1:
-			asm volatile ( "mov %%ebx, %0" 
+			__asm__ __volatile__ ( "mov %%ebx, %0" 
 					: "=r"(ret));
 			break;
 		case 2:
-			asm volatile ( "mov %%ecx, %0" 
+			__asm__ __volatile__ ( "mov %%ecx, %0" 
 					: "=r"(ret));
 			break;
 		case 3:
-			asm volatile ( "mov %%edx, %0" 
+			__asm__ __volatile__ ( "mov %%edx, %0" 
 					: "=r"(ret));
 			break;
 		case 4:
-			asm volatile ("1: movl $1b, %0" 
+			__asm__ __volatile__ ("1: movl $1b, %0" 
 					: "=r" (ret));
 			break;	
 		case 5:
-			asm volatile ("mov %%cs, %0"
+			__asm__ __volatile__ ("mov %%cs, %0"
 					: "=r"(ret));
 			break;
 		case 6:
-			asm volatile ("mov %%ds, %0"
+			__asm__ __volatile__ ("mov %%ds, %0"
 					: "=r"(ret));
 			break;
 	}
@@ -98,7 +77,7 @@ void draw_char(uint32_t p, char ch, uint8_t fg, uint8_t bg) {
 
 void clear_screen(){
 	memset(VIDMEM,0,VIDMEM_SIZE);
-	curpos = 2;
+	//term->cursor = 2;
 }
 
 void scroll_down(){
@@ -116,7 +95,7 @@ void scroll_down(){
 			vidmemptr[i * 160 + m] = term->frame_buffer[i*160 + m];
 		}
 	}
-	draw_char(curpos,'#',0,15); 	
+	draw_char(term->cursor,'#',0,15); 	
 }
 
 int32_t draw_str(char string[], int32_t r, int32_t c){
@@ -140,43 +119,40 @@ void delay(int64_t t){
 
 void write_char(char ascii){
 	if(ascii == '\b'){
-		if(curpos%160>3){
-			curpos = curpos - 2;
-			draw_char(curpos,' ',0,15);
-			move_cursor(curpos/2);
+		if(term->cursor%160>3){
+			term->cursor = term->cursor - 2;
+			draw_char(term->cursor,' ',0,15);
+			move_cursor(term->cursor/2);
 		}
 	}
 	else if(ascii == '\r'){	
-		if(curpos >= 3842){
-			int tmp = curpos;
-			draw_char(curpos,'#',0,15);
-			draw_char(curpos+2,' ',0,15);
-			//curpos += 2;
-			move_cursor(curpos/2);
-			curpos = tmp;
-		}
-		else{
-			while(curpos%160>0){
-				curpos = curpos + 2;
+			while(term->cursor%160>0){
+				term->cursor = term->cursor + 2;
 			}
-			draw_char(curpos,'#',0,15);
-			draw_char(curpos+2,' ',0,15);
-			curpos +=2;
-			move_cursor(curpos/2);
+			draw_char(term->cursor,'#',0,15);
+			draw_char(term->cursor+2,' ',0,15);
+			term->cursor +=2;
+			move_cursor(term->cursor/2);
+	}
+	else if(ascii == '\t'){
+		for(int i=0;i<8;i++){
+			draw_char(term->cursor+2,' ',0,15);
+			term->cursor += 2;
 		}
+		move_cursor(term->cursor/2);
 	}
 	else if(ascii == '\n'){
-		while(curpos%160>0){
-			curpos = curpos + 2;
+		while(term->cursor%160>0){
+			term->cursor = term->cursor + 2;
 		}
-		move_cursor(curpos/2);
-		curpos += 2;
+		move_cursor(term->cursor/2);
+		term->cursor += 2;
 	}
 	else{
-		draw_char(curpos,ascii,0,15);
-		draw_char(curpos+2,' ',0,15);
-		curpos += 2;
-		move_cursor(curpos/2);
+		draw_char(term->cursor,ascii,0,15);
+		draw_char(term->cursor+2,' ',0,15);
+		term->cursor += 2;
+		move_cursor(term->cursor/2);
 	}
 }
 
@@ -233,70 +209,13 @@ void null_buffer(){
 
 }
 
-void append_buffer(char l){
-	if(l == '\b')
-		term->buffer[--term->offset] = 0;
-	else if(l !='\r'){
-		term->buffer[term->offset++] = l;
-	}
-}
-
-int process_buffer(){
-	char b[2];
-	int8_t c=0;
-	itoa(term->offset,10,b);
-	draw_str("Console offset: ",12,50);
-	draw_str(b,13,50);
-	for(int i=0; i<cmd;i++){
-		if(equals(commands[i],term->buffer) == 0){
-				exec_cmd(i, term->buffer);
-				null_buffer();
-				c++;
-		}
-	}
-	if(c == 0){
-		exec_cmd(cmd+1, term->buffer);
-		null_buffer();
-	}
-
-	return 0;
-}
-
-
-
 void vga_init(){
-	int code=0;
-	curpos=162;
+	uint64_t ret = 0;
+	term->cursor = 162;
 	clear_screen();
 	draw_str("f.O.S. - Made By Amar Lakshya",0,20);
-	write_str("\nHello World!\nThe console provides the following commands:\n whoami, hello, exit, clear \n");
-	null_buffer();
-	write_str("\r");
-	while(read_scan_code()){
-			print_registers();
-			char l = get_kbd();
-			if(l == '\xDEAD'){
-				scroll_down();
-				draw_char(curpos-2,'#',0,15);
-				continue;
-			}
-			if(l == 'z'){
-				char *fp = (char*)VIDMEM;
-				for(int i=VIDMEM_SIZE*4;i<VIDMEM_SIZE*;i++){
-					if(i % 10 == 0)
-						sprintf("%c",fp[i]);
-				}
-				continue;
-			}
-			draw_str("f.O.S. - Made By Amar Lakshya",0,20);
-			append_buffer(l);
-			if(l=='\r')
-				code = process_buffer();
-			if(code == -999)
-				break;
-			draw_str("Console Buffer: ",10,50);
-			draw_str(term->buffer,11,50);
-			write_char(l);
-		}
-
+    write_str("\nHello World!\nThe console provides the following commands:\n whoami, hello, exit, clear \n");
+    null_buffer();
+    write_str("\r");
+	keyboard_install();
 }

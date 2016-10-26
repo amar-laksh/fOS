@@ -262,7 +262,7 @@ typedef struct {
 	struct EXT_CPU_FEATURE extended_cpu_features;
 
 	// Function 0x8000_0002, 0x8000_0003, 0x800_0004
-	char processor_name[15];	
+	char processor_name[41];	
 
 	// Function 0x8000_0006 
 	struct EXT_L2_CACHE extended_L2_cache;
@@ -277,9 +277,12 @@ typedef struct {
 } CPU_TOPOLOGY;
 
 
+
+CPU_TOPOLOGY cpu;
+
 static inline void cpuid(uint32_t reg, uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t *edx)
 {
-    __asm__ volatile("cpuid"
+    __asm__ __volatile__("cpuid"
         : "=a" (*eax), "=b" (*ebx), "=c" (*ecx), "=d" (*edx)
         : "0" (reg));
 }
