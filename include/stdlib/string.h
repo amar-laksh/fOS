@@ -8,4 +8,6 @@ void itoa(uint64_t i,uint32_t base, char* buf);
 
 int8_t equals(char* first, char* second);
 
+char *str_tok(char *str, const char *delim);
+
 #endif

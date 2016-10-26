@@ -6,7 +6,7 @@ char* commands[6] = {
     "clear",
     "exit",
     "whoami",
-    "game",
+    "cowsay",
     "mem",
     "serial"
 };
@@ -18,6 +18,7 @@ io_buffer *io_buff;
 
 int process_buffer(){
     char b[2];
+    char* argv[5];
     int8_t c=0;
     itoa(term->offset,10,b);
     draw_str("Console offset: ",12,50);
@@ -93,7 +94,7 @@ void getASCII(unsigned char c) {
         //io_buff->keyboard_buffer[io_buff->keyboard_offset] = keytable[c-1].key_value;
         //io_buff->keyboard_offset += 1;
         int code=0;
-        print_registers();
+        //print_registers();
         char l = keytable[c-1].key_value;
         draw_str("f.O.S. - Made By Amar Lakshya",0,20);
         append_buffer(l);
@@ -101,8 +102,8 @@ void getASCII(unsigned char c) {
             code = process_buffer();
         if(code == -999)
             return;
-        draw_str("Console Buffer: ",10,50);
-        draw_str(term->buffer,11,50);
+        //draw_str("Console Buffer: ",10,50);
+        //draw_str(term->buffer,11,50);
         write_char(l);
     }
 

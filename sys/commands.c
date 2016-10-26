@@ -17,42 +17,40 @@ void create(char* args,int x, int y){
 	}
 }
 
-void start_game(){
-			clear_screen();
-			int x = 10, y = 10;
-			create("player",x,y);
-			while( readb(inb(0x60))){
-				char l = readb(inb(0x60));
-				if(l == 'w'){
-					create("nothing",x,y);
-					create("player",x,y-=1);
-				}
-				else if(l == 'a'){
-					create("nothing",x,y);
-					create("player",x-=2,y);
-					
-				}
-				else if(l == 'd'){
-					create("nothing",x,y);
-					create("player",x+=2,y);
-					
-				}
-				else if(l == 's'){
-					create("nothing",x,y);
-					create("player",x,y+=1);
-				}
-				else if(l == '\r'){
-					while(readb(inb(0x60)) != '\b'){
-					char w = readb(inb(0x60));
-						if(w == '\b')
-							break;
-						int b = y - 1;
-						draw_char((b*160)+(x*2),w,COLOR_BLACK,COLOR_RED);
-					}
-				}
-			}
-}
+void cowsay(char buff[]){
+	dprintf("\n");
+	int length = strlen(buff);
+	for(int i=1;i<length;i++){
+		dprintf("-");
+	}
+	dprintf("\n<  %s  >\n",buff);
+	for(int i=1;i<length;i++){
+		dprintf("-");
+	}
+	dprintf("\n");
 
+	for (int i = 0; i <length; i++){
+		dprintf(" ");
+	}
+	dprintf("\\    ^___^\n");
+	for (int i = 0; i <length+1; i++){
+		dprintf(" ");
+	}
+	dprintf("\\  (o o) \\________\n");
+	for (int i = 0; i <length+1; i++){
+		dprintf(" ");
+	}
+	dprintf("   (___)\\         )\\/\\\n");
+	for (int i = 0; i <length+1; i++){
+		dprintf(" ");
+	}
+	dprintf("         ||----w |\n");
+	for (int i = 0; i <length+1; i++){
+		dprintf(" ");
+	}
+	dprintf("         ||     ||");
+
+}
 void exec_cmd(int n, char buff[]){
 	switch(n){
 
@@ -69,7 +67,7 @@ void exec_cmd(int n, char buff[]){
 			dprintf("\nWell my name is:\n %s",cpu.processor_name);
 			break;
 		case 3:
-			start_game();
+			cowsay(buff);
 			break;
 		case 4:
 			dprintf("\n");

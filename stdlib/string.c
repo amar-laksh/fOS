@@ -56,3 +56,56 @@ int8_t equals(char* first, char* second){
 	else
 		return 1;
 }
+
+
+char *str_tok(char *str, const char *delim) {
+    static char *static_str=0;      /* var to store last address */
+    int index=0, strlength=0;           /* integers for indexes */
+    int found = 0;                  /* check if delim is found */
+
+    /* delimiter cannot be NULL
+    * if no more char left, return NULL as well
+    */
+    if (delim==0 || (str == 0 && static_str == 0))
+        return 0;
+
+    if (str == 0)
+        str = static_str;
+
+    /* get length of string */
+    strlength = strlen(str);
+    /* find the first occurance of delim */
+    for (index=0;index<strlength;index++)
+        if (str[index]==delim[0]) {
+            found=1;
+            break;
+        }
+
+    /* if delim is not contained in str, return str */
+    if (!found) {
+        static_str = 0;
+        return str;
+    }
+
+    /* check for consecutive delimiters
+    *if first char is delim, return delim
+    */
+    if (str[0]==delim[0]) {
+        static_str = (str + 1);
+        return (char *)delim;
+    }
+
+    /* terminate the string
+    * this assignmetn requires char[], so str has to
+    * be char[] rather than *char
+    */
+    str[index] = '\0';
+
+    /* save the rest of the string */
+    if ((str + index + 1)!=0)
+        static_str = (str + index + 1);
+    else
+        static_str = 0;
+
+        return str;
+}
