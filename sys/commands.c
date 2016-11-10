@@ -53,6 +53,61 @@ void cowsay(char buff[]){
 
 }
 
+void some_tune(){
+
+	play_note('G',1,1);
+	play_note('G',1,1);
+	play_note('A',1,1);
+	play_note('G',1,1);
+	play_note('C',1,1);
+	play_note('B',1,1);
+
+	play_note('G',1,1);
+	play_note('G',1,1);
+	play_note('A',1,1);
+	play_note('G',1,1);
+	play_note('D',1,1);
+	play_note('C',1,1);
+}
+
+void splash(){
+		char notes[7] = {
+		'A','B','C','D','E','F','G'
+	};
+	for (int i = 0; i < 8; ++i)
+	{
+		play_note(notes[i],1,0.1);
+	}
+	for (int i = 7; i >= 0 ; --i)
+	{
+		play_note(notes[i],1,0.1);
+	}
+}
+void note_test(){
+	char notes[12] = {
+		'A','B','C','D','E','F','G',
+		'a','c','d','f','g'
+	};
+	for (int i = 0; i < 13; ++i){
+		play_note(notes[i],1,1);
+	}
+
+	for (int i = 12; i >= 0; --i){
+		play_note(notes[i],1,1);
+	}
+}
+
+void marry_song(){
+	char notes[26] = {'E','D','C','D','E','E','E'
+					,'D','D','D','E','E','E'
+					,'E','D','C','D','E','E','E'
+					,'E','D','D','E','D','C'
+					};
+	for (int i = 0; i < 27; ++i){
+		play_note(notes[i],1,1);
+	}
+}
+
 void exec_cmd(int n, char buff[]){
 	char* argv[5];
     int argc = 0;
@@ -102,6 +157,15 @@ void exec_cmd(int n, char buff[]){
 			write_serial("\n");
 			write_serial(buff);
 			write_serial("\n");
+			break;
+		case 6:
+			note_test();
+			delay(10000);
+			some_tune();
+			delay(10000);
+			marry_song();
+			delay(10000);
+			splash();
 			break;
 		default:
 			if(strlen(buff) > 1){

@@ -3,6 +3,8 @@
 
 #include <sys/io.h>
 
+
+void play_note(char note, int octave, int time);
 //Play sound using built in speaker
 void play_sound(uint32_t nFrequence);
 

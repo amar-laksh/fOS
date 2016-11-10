@@ -1,14 +1,15 @@
 #include <sys/io.h>
 #include <sys/io_list.h>
 #include <sys/commands.h>
-int8_t cmd = 6;
-char* commands[6] = {
+int8_t cmd = 7;
+char* commands[7] = {
     "clear",
     "beep",
     "whoami",
     "cowsay",
     "lspci",
-    "serial"
+    "serial",
+    "tunes"
 };
 
 
