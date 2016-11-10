@@ -8,6 +8,8 @@ struct __pci_driver;
 typedef struct {
 	uint32_t vendor;
 	uint32_t device;
+	uint16_t class;
+	uint16_t subClass;
 	uint32_t func;
 	struct __pci_driver *driver;
 } pci_device;

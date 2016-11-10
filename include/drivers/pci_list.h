@@ -8,7 +8,7 @@ typedef struct
 	char*		ven_full ;
 } PCI_VENDOR_TABLE;
 
-PCI_VENDOR_TABLE	lookupTable [] =
+PCI_VENDOR_TABLE	vendor_table[] =
 {
 	{ 0x0033, "", "Paradyne Corp." } ,
 	{ 0x003D, "well", "master" } ,
@@ -6870,19 +6870,19 @@ PCI_DEVTABLE	PciDevTable [] =
 
 
 // Use this value for loop control during searching:
-#define	PCI_VENDOR_TABLE_LEN	(sizeof(lookupTable)/sizeof(PCI_VENDOR_TABLE))
+#define	PCI_VENDOR_TABLE_LEN	(sizeof(vendor_table)/sizeof(PCI_VENDOR_TABLE))
 
 typedef struct
 {
-	unsigned char	BaseClass ;
-	unsigned char	SubClass ;
-	unsigned char	ProgIf ;
-	const char *		BaseDesc ;
-	const char *		SubDesc ;
-	const char *		ProgDesc ;
+	unsigned char	base_class ;
+	unsigned char	sub_class ;
+	unsigned char	prog_IF ;
+	const char *		base_desc ;
+	const char *		sub_desc ;
+	const char *		prog_desc ;
 }  PCI_CLASSCODETABLE ;
 
-PCI_CLASSCODETABLE PciClassCodeTable [] =
+PCI_CLASSCODETABLE class_code_table [] =
 {
 	{ 0x00, 0x00, 0x00, "Pre-2.0 PCI Specification Device", "Non-VGA","" } ,
 	{ 0x00, 0x01, 0x00, "Pre-2.0 PCI Specification Device", "VGA Compatible", "" } ,
@@ -6969,7 +6969,7 @@ PCI_CLASSCODETABLE PciClassCodeTable [] =
 } ;
 
 // Use this value for loop control during searching:
-#define	PCI_CLASSCODETABLE_LEN	(sizeof(PciClassCodeTable)/sizeof(PCI_CLASSCODETABLE))
+#define	PCI_CLASS_CODE_TABLE_LEN	(sizeof(class_code_table)/sizeof(PCI_CLASSCODETABLE))
 
 const char *	PciCommandFlags [] =
 {

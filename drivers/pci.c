@@ -40,13 +40,13 @@ uint16_t getDeviceID(uint16_t bus, uint16_t device, uint16_t function)
         return r0;
 }
 
-uint16_t getClassId(uint16_t bus, uint16_t device, uint16_t function)
+uint16_t getClassID(uint16_t bus, uint16_t device, uint16_t function)
 {
         uint32_t r0 = pci_read_word(bus,device,function,0xA);
         return (r0 & ~0x00FF) >> 8;
 }
 
-uint16_t getSubClassId(uint16_t bus, uint16_t device, uint16_t function)
+uint16_t getSubClassID(uint16_t bus, uint16_t device, uint16_t function)
 {
         uint32_t r0 = pci_read_word(bus,device,function,0xA);
         return (r0 & ~0xFF00);
@@ -61,11 +61,15 @@ void pci_probe()
             for(uint32_t function = 0; function < 8; function++)
             {
                     uint16_t vendor = getVendorID(bus, slot, function);
-                    if(vendor == 0xffff) continue;
+                    if(vendor == 0xFFFF) continue;
                     uint16_t device = getDeviceID(bus, slot, function);
+                    uint16_t class = getClassID(bus, slot, function);
+                    uint16_t subClass = getSubClassID(bus, slot, function);
                     //dprintf("vendor|device = %d | %d\n",vendor,device);
                     pci_device *pdev = (pci_device *)malloc(sizeof(pci_device));
                     pdev->vendor = vendor;
+                    pdev->class =  class;
+                    pdev->subClass = subClass;
                     pdev->device = device;
                     pdev->func = function;
                     pdev->driver = 0;
@@ -101,23 +105,29 @@ void pci_register_driver(pci_driver *driv)
 	return;
 }
 
-void pci_proc_dump()
+void pci_proc_dump(int start)
 {
-	for(int i = 0; i < devs; i++)
+	for(int i = start; i < devs; i++)
 	{
 		pci_device *pci_dev = pci_devices[i];
         for(int j=0;j< PCI_VENDOR_TABLE_LEN ; j++){
-            if(pci_dev->vendor == lookupTable[j].ven_ID){
+            if(pci_dev->vendor == vendor_table[j].ven_ID){
                 if(pci_dev->driver){
-                    dprintf("Vendor Name: %s\n",lookupTable[j].ven_full);
+                    dprintf("Vendor Name: %s\n",vendor_table[j].ven_full);
                     dprintf("[%x:%x:%x] => %s\n", pci_dev->vendor, pci_dev->device, pci_dev->func, pci_dev->driver->name);
                  }   
                 else{
-                    dprintf("Vendor Name: %s\n",lookupTable[j].ven_full);
-                    //dprintf("[%x:%x:%x]\n", pci_dev->vendor, pci_dev->device, pci_dev->func);
+                    dprintf("\nVendor Name: %s",vendor_table[j].ven_full);
+                    for (int k = 0; k < PCI_CLASS_CODE_TABLE_LEN; k++){
+                        if(pci_dev->class == class_code_table[k].base_class 
+                            && pci_dev->subClass == class_code_table[k].sub_class)
+                            dprintf("\n%s\n%s\n",class_code_table[k].base_desc, class_code_table[j].sub_desc);
+                    }
+                    dprintf("[%x:%x:%x]\n", pci_dev->vendor, pci_dev->device, pci_dev->func);
                 }
                 
             }
         }
 	}
+    return;
 }

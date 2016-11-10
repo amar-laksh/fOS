@@ -38,7 +38,7 @@ int32_t get_point(uint32_t r, uint32_t c);
 
 void clear_screen();
 
-void delay(int64_t t);
+void delay(int t);
 
 char get_char_cell(int r, int c);
 

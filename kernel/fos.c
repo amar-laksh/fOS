@@ -31,7 +31,7 @@ void * memmove(void * restrict dest, const void * restrict src, size_t count) {
 void kmain(){
 	mm_init(&endKernel);
 	pci_install();
-	serial_install();
+	serial_install(COM1_PORT,0x03);
 	gdt_install();
 	idt_install();
 	isrs_install();
@@ -39,7 +39,6 @@ void kmain(){
 	timer_install();
 	poll_init();
 	vga_init();
-	for(;;)
-		asm("hlt");
+	asm("hlt");
 
 }

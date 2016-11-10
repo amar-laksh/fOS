@@ -9,4 +9,5 @@ void play_sound(uint32_t nFrequence);
 //make it shutup
 void nosound();
 
+void beep_it(int freq,int interval);
 #endif

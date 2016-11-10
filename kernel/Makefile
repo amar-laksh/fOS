@@ -46,4 +46,4 @@ debug: os.iso
 	$(AS) $< -o $@
 
 clean:
-	rm -rf *. ../drivers/*.o ../sys/*.o ../stdlib/*.o ../include/*.o *.o ./boot/fos.bin ./boot/fos.elf ./*.iso ./*.elf
+	rm -rf *. ../drivers/*.o ../mm/*.o ../sys/*.o ../stdlib/*.o ../include/*.o *.o ./boot/fos.bin ./boot/fos.elf ./*.iso ./*.elf

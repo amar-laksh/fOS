@@ -107,7 +107,7 @@ int32_t draw_str(char string[], int32_t r, int32_t c){
 	return PASS_CODE;
 }
 
-void delay(int64_t t){
+void delay(int t){
 	int c=0,i=0;
 	while(c <= t){
 		for(i=0;i<999;i++)

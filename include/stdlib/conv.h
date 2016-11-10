@@ -7,4 +7,6 @@
 
 void itoi(uint64_t i,uint32_t base, uint64_t* buf);
 
+int atoi(char str[]);
+
 #endif
