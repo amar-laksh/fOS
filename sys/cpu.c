@@ -6,7 +6,7 @@
 uint32_t highest_std_info, highest_ext_info;
 uint32_t eax, ebx, ecx, edx,crap;
 
-char *vendor_strings[] ={
+char* vendor_strings[3] ={
 	"AuthenticAMD",
 	"AMDisbetter!",
 	"GenuineIntel"

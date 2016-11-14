@@ -54,20 +54,14 @@ void cowsay(char buff[]){
 }
 
 void some_tune(){
-
-	play_note('G',1,1);
-	play_note('G',1,1);
-	play_note('A',1,1);
-	play_note('G',1,1);
-	play_note('C',1,1);
-	play_note('B',1,1);
-
-	play_note('G',1,1);
-	play_note('G',1,1);
-	play_note('A',1,1);
-	play_note('G',1,1);
-	play_note('D',1,1);
-	play_note('C',1,1);
+	char notes[12] = {
+		'G','G','A','G','C','B'
+		,'G','G','A','G','D','C'
+	};
+	for (int i = 0; i < 12; ++i)
+	{
+		play_note(notes[i],0,1);
+	}
 }
 
 void splash(){
@@ -76,11 +70,11 @@ void splash(){
 	};
 	for (int i = 0; i < 8; ++i)
 	{
-		play_note(notes[i],1,0.1);
+		play_note(notes[i],0,4);
 	}
 	for (int i = 7; i >= 0 ; --i)
 	{
-		play_note(notes[i],1,0.1);
+		play_note(notes[i],0,4);
 	}
 }
 void note_test(){

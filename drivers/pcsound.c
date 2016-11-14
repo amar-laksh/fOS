@@ -1,6 +1,7 @@
 #include <drivers/pcsound.h>
+#include <stdlib/conv.h>
 
-// TODO - Make the notes work for any octave, maybe try a formula?
+// TODO - Make the notes work for any octave, maybe try a formula? ( freqOfi = freqOfi-1 * ratio)
 //Play sound using built in speaker
 
 uint32_t return_freq(char note, int octave){
