@@ -123,10 +123,10 @@ void pci_proc_dump(int start)
                 else{
                     dprintf("\nVendor Name: %s"
                         ,vendor_table[j].ven_full);
-                    for (int i = 0; i < PCI_DEVICE_TABLE_LEN; i++){
-                        if(pci_dev->vendor == device_table[i].ven_ID
-                            && pci_dev->device == device_table[i].dev_ID)
-                            dprintf("\nDevice Name: %s",device_table[i].chip_desc);
+                    for (int m = 0; m < PCI_DEVICE_TABLE_LEN; m++){
+                        if(pci_dev->vendor == device_table[m].ven_ID
+                            && pci_dev->device == device_table[m].dev_ID)
+                            dprintf("\nDevice Name: %s",device_table[m].chip_desc);
                     }
 
                     for (int k = 0; k < PCI_CLASS_CODE_TABLE_LEN; k++){

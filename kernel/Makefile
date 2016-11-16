@@ -14,10 +14,10 @@ MEM 	   := $(shell find $(MEMDIR) -name '*.c')
 
 OBJECTS = $(patsubst %.c,$(INCLUDEDIR)/%.o,$(INCLUDE)) $(patsubst %.c,$(SYSDIR)/%.o,$(SYS)) $(patsubst %.c,$(STDLIBDIR)/%.o,$(STDLIB)) $(patsubst %.c,$(DRIVERSDIR)/%.o,$(DRIVERS)) $(patsubst %.c,$(KERNELDIR)/%.o,$(KERNEL)) $(patsubst %.c,$(MEMDIR)/%.o,$(MEM)) boot.o
 
-CC =  i686-elf-gcc
+CC =  /root/cross/bin/i686-elf-gcc
 CFLAGS = -I../include -std=gnu99 -ffreestanding -O2 -Wall -Wextra -c
 LDFLAGS = -T linker.ld -o fos.elf -ffreestanding -O2 -nostdlib 
-AS =  i686-elf-as
+AS =  /root/cross/bin/i686-elf-as
 
 all: kernel.elf
 

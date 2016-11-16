@@ -29,9 +29,9 @@ void * memmove(void * restrict dest, const void * restrict src, size_t count) {
 }
 
 void kmain(){
+	serial_install(COM1_PORT,0x03);
 	mm_init(&endKernel);
 	pci_install();
-	serial_install(COM1_PORT,0x03);
 	gdt_install();
 	idt_install();
 	isrs_install();
