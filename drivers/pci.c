@@ -114,18 +114,30 @@ void pci_proc_dump(int start)
             if(pci_dev->vendor == vendor_table[j].ven_ID){
                 if(pci_dev->driver){
                     dprintf("Vendor Name: %s\n",vendor_table[j].ven_full);
-                    dprintf("[%x:%x:%x] => %s\n", pci_dev->vendor, pci_dev->device, pci_dev->func, pci_dev->driver->name);
+                    dprintf("[%x:%x:%x] => %s\n"
+                        ,pci_dev->vendor
+                        ,pci_dev->device
+                        ,pci_dev->func
+                        ,pci_dev->driver->name);
                  }   
                 else{
-                    dprintf("\nVendor Name: %s",vendor_table[j].ven_full);
+                    dprintf("\nVendor Name: %s"
+                        ,vendor_table[j].ven_full);
+                    for (int i = 0; i < PCI_DEVICE_TABLE_LEN; i++){
+                        if(pci_dev->vendor == device_table[i].ven_ID
+                            && pci_dev->device == device_table[i].dev_ID)
+                            dprintf("\nDevice Name: %s",device_table[i].chip_desc);
+                    }
+
                     for (int k = 0; k < PCI_CLASS_CODE_TABLE_LEN; k++){
                         if(pci_dev->class == class_code_table[k].base_class 
                             && pci_dev->subClass == class_code_table[k].sub_class)
-                            dprintf("\n%s\n%s\n",class_code_table[k].base_desc, class_code_table[j].sub_desc);
-                    }
-                    dprintf("[%x:%x:%x]\n", pci_dev->vendor, pci_dev->device, pci_dev->func);
+                            dprintf("\nBase Class: %s\nSub-Class: %s\n"
+                                ,class_code_table[k].base_desc
+                                ,class_code_table[k].sub_desc);
                 }
-                
+                dprintf("[%x:%x:%x]\n", pci_dev->vendor, pci_dev->device, pci_dev->func);
+            }
             }
         }
 	}

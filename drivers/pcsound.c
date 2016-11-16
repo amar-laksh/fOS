@@ -1,20 +1,47 @@
 #include <drivers/pcsound.h>
 #include <stdlib/conv.h>
 
-// TODO - Make the notes work for any octave, maybe try a formula? ( freqOfi = freqOfi-1 * ratio)
+// TODO - Make the sound api available in floating-point integers.
 //Play sound using built in speaker
-
 uint32_t return_freq(char note, int octave){
 	uint8_t magic = (uint8_t)note;
-	int32_t notes[14] = {
-					440, 493, 523, 587, 659, 698, 783, 466, 11, 554, 622, 11, 739, 830
+	float notes[14] = {
+					 13.75000000000000
+					,15.43385316425387
+					,16.35159783128741
+					,18.35404799483797
+					,20.60172230705437
+					,21.82676446456275
+					,24.49971474885934
+
+					,14.56761754744031
+					,11.00000000000000
+					,17.32391443605451
+					,19.44543648263006
+					,11.00000000000000
+					,23.12465141947715
+					,25.95654359874658
 				};
+	uint8_t normFreq = magic - 65;
+	uint8_t intFreq = (magic - 97) + 7;
 	if(magic >= 65 && magic < 72)
-		return notes[magic-65];
+		return (uint32_t)notes[normFreq]*pow(2, (octave-1) );
 	else if(magic >= 97 && magic < 104)
-		return notes[(magic-97)+7];
-	return 11;
+		return (uint32_t)notes[intFreq]*pow(2, (octave-1) );
+	return 11;	
 }
+
+// uint32_t return_freq(char note, int octave){
+// 	uint8_t magic = (uint8_t)note;
+// 	int32_t notes[14] = {
+// 					440, 493, 523, 587, 659, 698, 783, 466, 11, 554, 622, 11, 739, 830
+// 				};
+// 	if(magic >= 65 && magic < 72)
+// 		return notes[magic-65];
+// 	else if(magic >= 97 && magic < 104)
+// 		return notes[(magic-97)+7];
+// 	return 11;
+// }
 
 void play_note(char note, int octave, int time){
 	uint32_t freq = return_freq(note, octave);

@@ -48,7 +48,7 @@ PCI_VENDOR_TABLE	vendor_table[] =
 	{ 0x1021, "OKI", "Oki Electric Industry" } ,
 	{ 0x1022, "AMD", "Advanced Micro Devices" } ,
 	{ 0x1023, "machdo", "TRIDENT MICRO" } ,
-	{ 0x1025, "Acer", "Acer Incorporated" } ,
+	{ 0x1025, "Acer", "Acer Incorporat-ed" } ,
 	{ 0x1028, "Dell", "Dell Computer Corporation" } ,
 	{ 0x102A, "LSI", "LSI Logic Headland Division" } ,
 	{ 0x102B, "Matrox", "Matrox Electronic Systems Ltd." } ,
@@ -1512,18 +1512,15 @@ PCI_VENDOR_TABLE	vendor_table[] =
 } ;
 
 
-// Use this value for loop control during searching:
-#define	PCI_VENTABLE_LEN	(sizeof(PciVenTable)/sizeof(PCI_VENTABLE))
-
 typedef struct _PCI_DEVTABLE
 {
-	unsigned short	VenId ;
-	unsigned short	DevId ;
-	const char *	Chip ;
-	const char *	ChipDesc ;
-}  PCI_DEVTABLE, *PPCI_DEVTABLE ;
+	unsigned short	ven_ID ;
+	unsigned short	dev_ID ;
+	const char *	chip ;
+	const char *	chip_desc ;
+}  PCI_DEVTABLE;
 
-PCI_DEVTABLE	PciDevTable [] =
+PCI_DEVTABLE	device_table [] =
 {
 	{ 0x165C, 0x0002, "FT232BL", "FT232BL" } ,
 	{ 0x16AE, 0x1141, "SafeXcel-1141", "???" } ,
@@ -6872,6 +6869,8 @@ PCI_DEVTABLE	PciDevTable [] =
 // Use this value for loop control during searching:
 #define	PCI_VENDOR_TABLE_LEN	(sizeof(vendor_table)/sizeof(PCI_VENDOR_TABLE))
 
+#define PCI_DEVICE_TABLE_LEN (sizeof(device_table)/sizeof(PCI_DEVTABLE))
+
 typedef struct
 {
 	unsigned char	base_class ;
@@ -6970,6 +6969,7 @@ PCI_CLASSCODETABLE class_code_table [] =
 
 // Use this value for loop control during searching:
 #define	PCI_CLASS_CODE_TABLE_LEN	(sizeof(class_code_table)/sizeof(PCI_CLASSCODETABLE))
+
 
 const char *	PciCommandFlags [] =
 {

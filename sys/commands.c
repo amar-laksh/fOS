@@ -82,12 +82,8 @@ void note_test(){
 		'A','B','C','D','E','F','G',
 		'a','c','d','f','g'
 	};
-	for (int i = 0; i < 13; ++i){
-		play_note(notes[i],1,1);
-	}
-
-	for (int i = 12; i >= 0; --i){
-		play_note(notes[i],1,1);
+	for (int i = 1; i < 13; ++i){
+		play_note('C',i,1);
 	}
 }
 
