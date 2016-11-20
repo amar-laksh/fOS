@@ -23,13 +23,12 @@
 #include <irq.h>
 #include <timer.h>
 
+
 #include <sys/poll.h>
 #include <sys/vga.h>
 #include <sys/io.h>
 #include <sys/print.h>
-
 #include <drivers/serial.h>
-
 #include <drivers/pcsound.h>
 
 #define IRQ_OFF { asm volatile ("cli"); }
@@ -47,6 +46,7 @@ struct regs {
     uint32_t int_no, err_code;    /* our 'push byte #' and ecodes do this */
     uint32_t eip, cs, eflags, useresp, ss;   /* pushed by the processor automatically */ 
 };
+
 
 void *memset(void *dest, char val, size_t count);
 

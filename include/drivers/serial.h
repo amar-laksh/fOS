@@ -1,6 +1,7 @@
 #ifndef SERIAL_H
 #define SERIAL_H
 #include <sys/io.h>
+#include <sys/print.h>
 #define COM1_PORT 0x3F8
 #define COM2_PORT 0x2F8
 #define COM3_PORT 0x3E8

@@ -5,7 +5,6 @@
 #include <sys/io.h>
 #include <drivers/serial.h>
 #include <stdlib/string.h>
-#include <sys/commands.h>
 #include <timer.h>
 #include <drivers/pcsound.h>
 

@@ -79,6 +79,8 @@ void keyboard_reset_ps2();
 
 void keyboard_wait();
 
+void move_cursor(int32_t pos);
+
 void getASCII(unsigned char c);
 
 

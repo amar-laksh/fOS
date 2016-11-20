@@ -1,8 +1,4 @@
 #include <sys/commands.h>
-#include <sys/cpu.h>
-#include <drivers/pcsound.h>
-#include <stdlib/conv.h>
-#include <timer.h>
 
 /* TODO- The case 3 is temperory. Create a text-based graphics engine.*/
 void create(char* args,int x, int y){
@@ -60,7 +56,7 @@ void some_tune(){
 	};
 	for (int i = 0; i < 12; ++i)
 	{
-		play_note(notes[i],0,1);
+		play_note(notes[i],6,1);
 	}
 }
 
@@ -70,18 +66,14 @@ void splash(){
 	};
 	for (int i = 0; i < 8; ++i)
 	{
-		play_note(notes[i],0,4);
+		play_note(notes[i],6,4);
 	}
 	for (int i = 7; i >= 0 ; --i)
 	{
-		play_note(notes[i],0,4);
+		play_note(notes[i],6,4);
 	}
 }
 void note_test(){
-	char notes[12] = {
-		'A','B','C','D','E','F','G',
-		'a','c','d','f','g'
-	};
 	for (int i = 1; i < 13; ++i){
 		play_note('C',i,1);
 	}
@@ -94,7 +86,7 @@ void marry_song(){
 					,'E','D','D','E','D','C'
 					};
 	for (int i = 0; i < 27; ++i){
-		play_note(notes[i],1,1);
+		play_note(notes[i],6,1);
 	}
 }
 

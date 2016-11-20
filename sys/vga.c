@@ -7,8 +7,6 @@
 #define MAX_COLUMNS 79
 #define ERROR_CODE -12321
 #define PASS_CODE 32123
-#define PORT 0x09
-#define RTC_PORT 0x70
 
 uint64_t get_register(int number)
 {
@@ -76,7 +74,7 @@ void draw_char(uint32_t p, char ch, uint8_t fg, uint8_t bg) {
 }
 
 void clear_screen(){
-	memset(VIDMEM,0,VIDMEM_SIZE);
+	memset((void*)VIDMEM,0,VIDMEM_SIZE);
 	//term->cursor = 2;
 }
 
@@ -210,7 +208,6 @@ void null_buffer(){
 }
 
 void vga_init(){
-	uint64_t ret = 0;
 	term->cursor = 162;
 	clear_screen();
 	draw_str("f.O.S. - Made By Amar Lakshya",0,20);

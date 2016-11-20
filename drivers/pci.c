@@ -1,5 +1,4 @@
-// TODO - add full support for pci_list
-#include <kernel/fos.h>
+// TODO - add full support for pci_list.h
 #include <drivers/pci.h>
 pci_device **pci_devices = 0;
 uint32_t devs = 0;
@@ -126,9 +125,9 @@ void pci_proc_dump(int start)
                     for (int m = 0; m < PCI_DEVICE_TABLE_LEN; m++){
                         if(pci_dev->vendor == device_table[m].ven_ID
                             && pci_dev->device == device_table[m].dev_ID)
-                            dprintf("\nDevice Name: %s",device_table[m].chip_desc);
+                            dprintf("\nDevice Name: %s"
+                                ,device_table[m].chip_desc);
                     }
-
                     for (int k = 0; k < PCI_CLASS_CODE_TABLE_LEN; k++){
                         if(pci_dev->class == class_code_table[k].base_class 
                             && pci_dev->subClass == class_code_table[k].sub_class)

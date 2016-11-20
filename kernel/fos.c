@@ -30,7 +30,7 @@ void * memmove(void * restrict dest, const void * restrict src, size_t count) {
 
 void kmain(){
 	serial_install(COM1_PORT,0x03);
-	mm_init(&endKernel);
+	mm_init((uint32_t)&endKernel);
 	pci_install();
 	gdt_install();
 	idt_install();
