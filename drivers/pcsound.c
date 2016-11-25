@@ -31,19 +31,7 @@ uint32_t return_freq(char note, int octave){
 	return 11;	
 }
 
-// uint32_t return_freq(char note, int octave){
-// 	uint8_t magic = (uint8_t)note;
-// 	int32_t notes[14] = {
-// 					440, 493, 523, 587, 659, 698, 783, 466, 11, 554, 622, 11, 739, 830
-// 				};
-// 	if(magic >= 65 && magic < 72)
-// 		return notes[magic-65];
-// 	else if(magic >= 97 && magic < 104)
-// 		return notes[(magic-97)+7];
-// 	return 11;
-// }
-
-void play_note(char note, int octave, int time){
+uint32_t play_note(char note, int octave, int time){
 	uint32_t freq = return_freq(note, octave);
 	if(freq != 11){
 		play_sound(freq);
@@ -51,6 +39,7 @@ void play_note(char note, int octave, int time){
 		nosound();
 		sprintf("\n%d\n",freq);
 	}
+	return freq;
 }
 
 void play_sound(uint32_t nFrequency) {

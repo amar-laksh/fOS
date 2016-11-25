@@ -1,18 +1,17 @@
 #include <sys/io.h>
 #include <sys/io_list.h>
 #include <sys/commands.h>
-int8_t cmd = 7;
-char* commands[7] = {
+#define cmd  8
+char* commands[cmd] = {
     "clear",
     "beep",
     "whoami",
     "cowsay",
     "lspci",
     "serial",
-    "tunes"
+    "tunes",
+    "help"
 };
-
-
 console *term;
 io_buffer *io_buff;
 
@@ -22,27 +21,29 @@ int process_buffer(){
     itoa(term->offset,10,b);
     draw_str("Console offset: ",12,50);
     draw_str(b,13,50);
-    char tmp[6];
-    for (int i = 0; i < 5; ++i)
-    {
-        tmp[i] = term->buffer[i];
+    char* argv[5];
+    int argc = 0;
+    int count;
+    count = term->offset;
+    for (int i = 0; i < count; ++i){
+        if(term->buffer[i] == ' ')
+            argc++;
     }
-    tmp[6] = '\0';
+    argv[0] = str_tok(term->buffer," ");
+    for (int i = 1; i < argc+1; i++){
+        argv[i] = str_tok(NULL," ");
+    }
+
     for(int i=0; i<cmd;i++){
-        if(equals("beep ",tmp) == 0){
-            exec_cmd(1,term->buffer);
-            null_buffer();
+        if(equals(commands[cmd-1],argv[0]) == 0){
+            dprintf("\nThese are the following available commands:\n\n");
+            for (int i = 0; i < cmd; ++i)
+                dprintf("%s\n",commands[i]);
             c++;
-            break;
-        }
-        else if(equals("lspci",tmp) == 0){
-            exec_cmd(4,term->buffer);
             null_buffer();
-            c++;
-            break;
         }
-        else if(equals(commands[i],term->buffer) == 0){
-                exec_cmd(i, term->buffer);
+        else if(equals(commands[i],argv[0]) == 0){
+                exec_cmd(i, argv);
                 null_buffer();
                 c++;
         }

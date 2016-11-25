@@ -90,55 +90,28 @@ void marry_song(){
 	}
 }
 
-void exec_cmd(int n, char buff[]){
-	char* argv[5];
-    int argc = 0;
-	int count;
-    count = strlen(buff);
+void exec_cmd(int n, char* buff[5]){
 	switch(n){
 
 		case 0:
 			clear_screen();
-			term->cursor =2;
+			term->cursor = 2;
 			break;
 		case 1:
-		    for (int i = 0; i < count; ++i)
-		    {
-		        if(buff[i] == ' ')
-		            argc++;
-		    }
-		    argv[0] = str_tok(buff," ");
-		    for (int i = 1; i < argc+1; i++)
-		    {
-		        argv[i] = str_tok(NULL," ");
-		    }
-			dprintf("\nHere's a beep at: %dHz with delay of: %d\n",atoi(argv[1]),atoi(argv[2]));
-			beep_it(atoi(argv[1]), atoi(argv[2]));
+			dprintf("\nHere's a beep at: %dHz with delay of: %d\n",atoi(buff[1]),atoi(buff[2]));
+			beep_it(atoi(buff[1]), atoi(buff[2]));
 			break;
 		case 2:
 			dprintf("\nWell my name is:\n %s",cpu.processor_name);
 			break;
 		case 3:
-			cowsay(buff);
+			cowsay(buff[1]);
 			break;
 		case 4:
-		    for (int i = 0; i < count; ++i)
-		    {
-		        if(buff[i] == ' ')
-		            argc++;
-		    }
-		    argv[0] = str_tok(buff," ");
-		    for (int i = 1; i < argc+1; i++)
-		    {
-		        argv[i] = str_tok(NULL," ");
-		    }
-			//mm_print_out();
-			pci_proc_dump(atoi(argv[1]));
+			pci_proc_dump(atoi(buff[1]));
 			break;
 		case 5:
-			write_serial("\n");
-			write_serial(buff);
-			write_serial("\n");
+		    sprintf("\n%s\n",buff[1]);
 			break;
 		case 6:
 			note_test();
@@ -149,6 +122,8 @@ void exec_cmd(int n, char buff[]){
 			delay(10000);
 			splash();
 			break;
+		case 7:
+
 		default:
 			if(strlen(buff) > 1){
 				kprintf("\n%s: not found!\n",buff);
