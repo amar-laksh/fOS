@@ -51,3 +51,17 @@ int atoi(char str[]){
 	}
 	return digit;
 }
+
+
+char* join(char* buff[5]){
+	char* msg="";
+	int k=0;
+	for (int i = 0; i < 5; ++i) {
+		for (int j = 0; j < strlen(buff[i]); ++j) {
+			msg[k] = buff[i][j];
+			k++;
+		}
+	}
+	msg[k] = '\0';
+	return msg;
+}

@@ -45,6 +45,5 @@ void idt_install()
 
     /* Points the processor's internal register to the new IDT */
     idt_load();
-    dprintf("IDT installed at:   0x%x\n",idtp.base);
 }
 

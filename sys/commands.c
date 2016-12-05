@@ -17,11 +17,11 @@ void create(char* args,int x, int y){
 void cowsay(char buff[]){
 	dprintf("\n");
 	int length = strlen(buff);
-	for(int i=1;i<length;i++){
+	for(int i=1;i<length;i+=2){
 		dprintf("-");
 	}
 	dprintf("\n<  %s  >\n",buff);
-	for(int i=1;i<length;i++){
+	for(int i=1;i<length+3;i+=2){
 		dprintf("-");
 	}
 	dprintf("\n");
@@ -122,10 +122,8 @@ void exec_cmd(int n, char* buff[5]){
 			delay(10000);
 			splash();
 			break;
-		case 7:
-
 		default:
-			if(strlen(buff) > 1){
+			if(strlen((const char*)buff) > 1){
 				kprintf("\n%s: not found!\n",buff);
 			}
 			

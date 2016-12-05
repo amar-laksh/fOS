@@ -10,7 +10,7 @@ void mm_init(uint32_t kernel_end)
 {
 	last_alloc = kernel_end + 0x1000;
 	heap_begin = last_alloc;
-	heap_end = 0x400000;
+	heap_end = 0x400000;  // TODO - Implement multiboot_info with GRUB to detect memory
 	memset((char *)heap_begin, 0, heap_end - heap_begin);
 	kprintf("Kernel heap starts at 0x%x\n", last_alloc);
 }

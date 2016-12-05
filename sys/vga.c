@@ -68,7 +68,7 @@ char get_char_cell(int r, int c){
 }
 
 void draw_char(uint32_t p, char ch, uint8_t fg, uint8_t bg) {
-	char *fb = (char *) VIDMEM;
+	char *fb = (char *)  0x000B8000;
 	fb[p] = ch;
 	fb[p + 1] = ((fg & 0x0F) << 4) | (bg & 0x0F);
 }

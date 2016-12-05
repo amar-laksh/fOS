@@ -29,6 +29,14 @@ int process_buffer(){
         if(term->buffer[i] == ' ')
             argc++;
     }
+
+    // If arguments & offset are equal we have all spaces
+    // So we skip the command.
+    if(argc == term->offset){
+        null_buffer();
+        return;
+    }
+
     argv[0] = str_tok(term->buffer," ");
     for (int i = 1; i < argc+1; i++){
         argv[i] = str_tok(NULL," ");
@@ -58,7 +66,9 @@ int process_buffer(){
 
 void append_buffer(char l){
     if(l == '\b')
-        term->buffer[--term->offset] = 0;
+        term->buffer[
+            (term->offset > 0)?--term->offset:0
+            ] = 0;
     else if(l !='\r'){
         term->buffer[term->offset++] = l;
     }
@@ -110,8 +120,6 @@ void getASCII(unsigned char c) {
     if(c & 0x80){  
     }
     else{
-        //io_buff->keyboard_buffer[io_buff->keyboard_offset] = keytable[c-1].key_value;
-        //io_buff->keyboard_offset += 1;
         int code=0;
         print_registers();
         char l = keytable[c-1].key_value;

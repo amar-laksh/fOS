@@ -12,7 +12,6 @@ void serial_install(int com_port, int baud_rate) {
    outb(com_port + 4, 0x0B);    // IRQs enabled, RTS/DSR set
    serial.COM_PORT = com_port;
    serial.BAUD_RATE = baud_rate;
-   sprintf("\033c\nHello World from the fOS\nI will now be talking to you over Serial!\n");
 }
 
 

@@ -91,7 +91,6 @@ void gdt_install() {
 	write_tss(5, 0x10, 0x0);
 	gdt_flush();
 	tss_flush();
-	dprintf("GDT installed at:	0x%x\n",gp.base);
 }
 
 /**

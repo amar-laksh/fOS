@@ -30,14 +30,24 @@ void * memmove(void * restrict dest, const void * restrict src, size_t count) {
 
 void kmain(){
 	mm_init((uint32_t)&endKernel);
+	draw_str("MM initiated",1,1);
 	serial_install(COM1_PORT,0x03);
+	draw_str("SERIAL initiated",2,1);
 	pci_install();
+	draw_str("PCI initiated",3,1);
 	gdt_install();
+	draw_str("GDT initiated",4,1);
 	idt_install();
+	draw_str("IDT initiated",5,1);
 	isrs_install();
+	draw_str("ISRS initiated",6,1);
 	irq_install();
+	draw_str("IRQ initiated",7,1);
 	timer_install();
+	draw_str("TIMER initiated",8,1);
 	poll_init();
+	draw_str("POLL initiated",9,1);
+	delay(10);
 	vga_init();
 	asm("hlt");
 

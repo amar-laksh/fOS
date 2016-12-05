@@ -1,5 +1,5 @@
-#ifndef IO_H
-#define IO_H
+#ifndef KEYMAP_H
+#define KEYMAP_H
 #include <stdint.h>
 #include <stdbool.h>
 
