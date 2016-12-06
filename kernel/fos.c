@@ -1,6 +1,5 @@
 #include <kernel/fos.h>
 /*
-*	TODO - differentiate properly between CR NL LF etc.
 *	TODO - try to refactor timer_wait, to see why it doesn't work
 */
 
@@ -47,7 +46,6 @@ void kmain(){
 	draw_str("TIMER initiated",8,1);
 	poll_init();
 	draw_str("POLL initiated",9,1);
-	delay(10);
 	vga_init();
 	asm("hlt");
 
