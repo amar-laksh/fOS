@@ -14,13 +14,16 @@ void add_pci_device(pci_device *pdev)
 	return;
 }
 
-uint16_t pci_read_word(uint16_t bus, uint16_t slot, uint16_t func, uint16_t offset){
-	uint64_t address;
-	uint64_t lbus = (uint64_t)bus;
-	uint64_t lslot = (uint64_t)slot;
-	uint64_t lfunc = (uint64_t)func;
+uint16_t pci_read_word(uint16_t bus
+                        , uint16_t slot
+                        , uint16_t func
+                        , uint16_t offset){
+	uint32_t address;
+	uint32_t lbus = (uint32_t)bus;
+	uint32_t lslot = (uint32_t)slot;
+	uint32_t lfunc = (uint32_t)func;
 	uint16_t tmp = 0;
-	address = (uint64_t)((lbus << 16) | (lslot << 11) |
+	address = (uint32_t)((lbus << 16) | (lslot << 11) |
 			(lfunc << 8) | (offset & 0xfc) | ((uint32_t)0x80000000));
 	outl (0xCF8, address);
 	tmp = (uint16_t)((inl (0xCFC) >> ((offset & 2) * 8)) & 0xffff);
@@ -29,25 +32,25 @@ uint16_t pci_read_word(uint16_t bus, uint16_t slot, uint16_t func, uint16_t offs
 
 uint16_t getVendorID(uint16_t bus, uint16_t device, uint16_t function)
 {
-        uint32_t r0 = pci_read_word(bus,device,function,0);
+        uint32_t r0 = pci_read_word(bus,device,function,0x0);
         return r0;
 }
 
 uint16_t getDeviceID(uint16_t bus, uint16_t device, uint16_t function)
 {
-        uint32_t r0 = pci_read_word(bus,device,function,2);
+        uint16_t r0 = pci_read_word(bus,device,function,0x2);
         return r0;
 }
 
 uint16_t getClassID(uint16_t bus, uint16_t device, uint16_t function)
 {
-        uint32_t r0 = pci_read_word(bus,device,function,0xA);
+        uint16_t r0 = pci_read_word(bus,device,function,0xA);
         return (r0 & ~0x00FF) >> 8;
 }
 
 uint16_t getSubClassID(uint16_t bus, uint16_t device, uint16_t function)
 {
-        uint32_t r0 = pci_read_word(bus,device,function,0xA);
+        uint16_t r0 = pci_read_word(bus,device,function,0xA);
         return (r0 & ~0xFF00);
 }
 
@@ -64,7 +67,6 @@ void pci_probe()
                     uint16_t device = getDeviceID(bus, slot, function);
                     uint16_t class = getClassID(bus, slot, function);
                     uint16_t subClass = getSubClassID(bus, slot, function);
-                    //dprintf("vendor|device = %d | %d\n",vendor,device);
                     pci_device *pdev = (pci_device *)malloc(sizeof(pci_device));
                     pdev->vendor = vendor;
                     pdev->class =  class;
@@ -72,22 +74,17 @@ void pci_probe()
                     pdev->device = device;
                     pdev->func = function;
                     pdev->driver = 0;
+                    sprintf("[%x:%x:%x]::[%x:%x]\n"
+                    , pdev->vendor
+                    , pdev->device
+                    , pdev->func
+                    , pdev->class
+                    , pdev->subClass);
                     add_pci_device(pdev);
             }
         }
     }
 }
-
- uint16_t pciCheckVendor(uint16_t bus, uint16_t slot)
- {
-    uint16_t vendor,device;
-        /* check if device is valid */
-    if ((vendor = pci_read_word(bus,slot,0,0)) != 0xFFFF) {
-       device = pci_read_word(bus,slot,0,2);
-       /* valid device */
-    } return (vendor);
- }
-
 
 void pci_install()
 {
@@ -104,15 +101,50 @@ void pci_register_driver(pci_driver *driv)
 	return;
 }
 
+
+void getVendorName(pci_device *pci_dev){
+    for(uint32_t j=0;j< PCI_VENDOR_TABLE_LEN ; j++){
+        if(pci_dev->vendor == vendor_table[j].ven_ID){
+            dprintf("\nVendor Name: %s"
+                ,vendor_table[j].ven_full);
+            break;
+        }
+    }
+}
+
+void getDeviceName(pci_device *pci_dev){
+    for (unsigned long m = 0; m < PCI_DEVICE_TABLE_LEN; m++){
+        if(pci_dev->vendor == device_table[m].ven_ID
+            && pci_dev->device == device_table[m].dev_ID){
+            dprintf("\nDevice Name: %s"
+                ,device_table[m].chip_desc);
+            break;
+        }
+    }
+}
+
+void getClasses(pci_device *pci_dev){
+    for (unsigned long k = 0; k < PCI_CLASS_CODE_TABLE_LEN; k++){
+        if(pci_dev->class == class_code_table[k].base_class 
+            && pci_dev->subClass == class_code_table[k].sub_class){
+            dprintf("\nBase Class: %s\nSub-Class: %s"
+                ,class_code_table[k].base_desc
+                ,class_code_table[k].sub_desc);
+            break;
+        }
+    }
+}
 void pci_proc_dump(int start)
 {
-	for(int i = start; i < devs; i++)
+    dprintf("\nTotal Devices found: %d\n",devs);
+	for(uint32_t i = start; i < devs; i++)
 	{
 		pci_device *pci_dev = pci_devices[i];
-        for(int j=0;j< PCI_VENDOR_TABLE_LEN ; j++){
-            if(pci_dev->vendor == vendor_table[j].ven_ID){
+    
                 if(pci_dev->driver){
-                    dprintf("Vendor Name: %s\n",vendor_table[j].ven_full);
+                    getVendorName(pci_dev);
+                    getDeviceName(pci_dev);
+                    getClasses(pci_dev);
                     dprintf("[%x:%x:%x] => %s\n"
                         ,pci_dev->vendor
                         ,pci_dev->device
@@ -120,25 +152,14 @@ void pci_proc_dump(int start)
                         ,pci_dev->driver->name);
                  }   
                 else{
-                    dprintf("\nVendor Name: %s"
-                        ,vendor_table[j].ven_full);
-                    for (int m = 0; m < PCI_DEVICE_TABLE_LEN; m++){
-                        if(pci_dev->vendor == device_table[m].ven_ID
-                            && pci_dev->device == device_table[m].dev_ID)
-                            dprintf("\nDevice Name: %s"
-                                ,device_table[m].chip_desc);
-                    }
-                    for (int k = 0; k < PCI_CLASS_CODE_TABLE_LEN; k++){
-                        if(pci_dev->class == class_code_table[k].base_class 
-                            && pci_dev->subClass == class_code_table[k].sub_class)
-                            dprintf("\nBase Class: %s\nSub-Class: %s\n"
-                                ,class_code_table[k].base_desc
-                                ,class_code_table[k].sub_desc);
-                }
-                dprintf("[%x:%x:%x]\n", pci_dev->vendor, pci_dev->device, pci_dev->func);
-            }
+                    getVendorName(pci_dev);
+                    getDeviceName(pci_dev);
+                    getClasses(pci_dev);
+                dprintf("\n[%x:%x:%x]\n"
+                    , pci_dev->vendor
+                    , pci_dev->device
+                    , pci_dev->func);
             }
         }
-	}
     return;
 }
