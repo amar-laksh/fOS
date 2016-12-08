@@ -11,7 +11,9 @@ void *memset(void *dest, char val, size_t count){
 	return dest;
 }
 
-void * memmove(void * restrict dest, const void * restrict src, size_t count) {
+void * memmove(void * restrict dest
+				, const void * restrict src
+				, size_t count) {
 	size_t i;
 	unsigned char *a = dest;
 	const unsigned char *b = src;

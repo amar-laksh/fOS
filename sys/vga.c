@@ -8,8 +8,7 @@
 #define ERROR_CODE -12321
 #define PASS_CODE 32123
 
-uint64_t get_register(int number)
-{
+uint64_t get_register(int number){
 	uint64_t ret=0;
 	switch(number){
 		case 0:
@@ -67,7 +66,10 @@ char get_char_cell(int r, int c){
 	return fb[get_point(r,c)]; 
 }
 
-void draw_char(uint32_t p, char ch, uint8_t fg, uint8_t bg) {
+void draw_char(uint32_t p
+				, char ch
+				, uint8_t fg
+				, uint8_t bg) {
 	char *fb = (char *)  0x000B8000;
 	fb[p] = ch;
 	fb[p + 1] = ((fg & 0x0F) << 4) | (bg & 0x0F);
@@ -80,17 +82,21 @@ void clear_screen(){
 
 void scroll_down(){
 	char *vidmemptr = (char *) VIDMEM;
-	term->frame_buffer = memmove(term->frame_buffer, vidmemptr, VIDMEM_SIZE);
+	term->frame_buffer = memmove(term->frame_buffer
+								, vidmemptr
+								, VIDMEM_SIZE);
 	for(int i=0;i<25;i++){
 		for(int m=0;m<80;m++){
-			term->frame_buffer[i * 160 + m] = vidmemptr[(i+1)*160 + m];
+			term->frame_buffer[i * 160 + m] 
+			= vidmemptr[(i+1)*160 + m];
 		}
 	}
 	vidmemptr = memset(vidmemptr,0,VIDMEM_SIZE);
 	
 	for(int i=0;i<25;i++){
 		for(int m=0;m<80;m++){
-			vidmemptr[i * 160 + m] = term->frame_buffer[i*160 + m];
+			vidmemptr[i * 160 + m] 
+			= term->frame_buffer[i*160 + m];
 		}
 	}
 	draw_char(term->cursor,'#',0,15); 	
@@ -162,8 +168,10 @@ void write_str(char* string){
 }
 
 void print_registers(){
-		uint64_t eax_t, ebx_t, ecx_t, edx_t, eip_t, cs_t, ds_t;
-		char eax[16], ebx[16], ecx[16], edx[16], eip[16],cs[16],ds[16];
+		uint64_t eax_t, ebx_t, ecx_t, edx_t
+						, eip_t, cs_t, ds_t;
+		char eax[16], ebx[16], ecx[16], edx[16]
+						, eip[16],cs[16],ds[16];
 		eax_t = get_register(0);
 		itoa(eax_t,16,eax);
 		

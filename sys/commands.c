@@ -1,22 +1,20 @@
+/* TODO- The case 3 is temperory. Create a text-based graphics engine.*/
 #include <sys/commands.h>
-/* keyboard interface IO port: data and control
-   READ:   status port
-   WRITE:  control register */
 #define KBRD_INTRFC 0x64
  
 /* keyboard interface bits */
-#define KBRD_BIT_KDATA 0 /* keyboard data is in buffer (output buffer is empty) (bit 0) */
-#define KBRD_BIT_UDATA 1 /* user data is in buffer (command buffer is empty) (bit 1) */
+#define KBRD_BIT_KDATA 0 
+#define KBRD_BIT_UDATA 1 
  
-#define KBRD_IO 0x60 /* keyboard IO port */
-#define KBRD_RESET 0xFE /* reset CPU command */
+#define KBRD_IO 0x60 
+#define KBRD_RESET 0xFE 
  
-#define bit(n) (1<<(n)) /* Set bit n to 1 */
+#define bit(n) (1<<(n)) 
  
 /* Check if bit n in flags is set */
 #define check_flag(flags, n) ((flags) & bit(n))
 
-/* TODO- The case 3 is temperory. Create a text-based graphics engine.*/
+
 void create(char* args,int x, int y){
 	if(equals(args,"player") == 0){
 		draw_char(get_point(y,x-1),'=',0,COLOR_RED);
@@ -109,17 +107,16 @@ void marry_song(){
 
 void reboot(){
     uint8_t temp;
-    asm volatile ("cli"); /* disable all interrupts */
-    /* Clear all keyboard buffers (output and command buffers) */
+    asm volatile ("cli"); 
     do{
-        temp = inb(KBRD_INTRFC); /* empty user data */
+        temp = inb(KBRD_INTRFC);
         if (check_flag(temp, KBRD_BIT_KDATA) != 0)
-            inb(KBRD_IO); /* empty keyboard data */
+            inb(KBRD_IO); 
     } while (check_flag(temp, KBRD_BIT_UDATA) != 0);
-    outb(KBRD_INTRFC, KBRD_RESET); /* pulse CPU reset line */
+    outb(KBRD_INTRFC, KBRD_RESET); 
 loop:
-    asm volatile ("hlt"); /* if that didn't work, halt the CPU */
-    goto loop; /* if a NMI is received, halt again */
+    asm volatile ("hlt");
+    goto loop; 
 }
 
 void exec_cmd(int n, char* buff[5]){
@@ -130,7 +127,8 @@ void exec_cmd(int n, char* buff[5]){
 			term->cursor = 2;
 			break;
 		case 1:
-			dprintf("\nHere's a beep at: %dHz with delay of: %d\n",atoi(buff[1]),atoi(buff[2]));
+			dprintf("\nHere's a beep at: %dHz with delay of: %d\n"
+									,atoi(buff[1]),atoi(buff[2]));
 			beep_it(atoi(buff[1]), atoi(buff[2]));
 			break;
 		case 2:

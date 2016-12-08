@@ -8,7 +8,9 @@ static void print_hex(unsigned int value, unsigned int width, char * buf, int * 
 /*
  * Integer to string
  */
-static void print_dec(unsigned int value, unsigned int width, char * buf, int * ptr ) {
+static void print_dec(unsigned int value
+						, unsigned int width
+						, char * buf, int * ptr ) {
 	unsigned int n_width = 1;
 	unsigned int i = 9;
 	while (value > i && i < UINT32_MAX) {
@@ -38,7 +40,9 @@ static void print_dec(unsigned int value, unsigned int width, char * buf, int * 
 /*
  * Hexadecimal to string
  */
-static void print_hex(unsigned int value, unsigned int width, char * buf, int * ptr) {
+static void print_hex(unsigned int value
+						, unsigned int width
+						, char * buf, int * ptr) {
 	int i = width;
 
 	if (i == 0) i = 8;
@@ -65,7 +69,9 @@ static void print_hex(unsigned int value, unsigned int width, char * buf, int * 
 }
 
 
-size_t vasprintf(char * buf, const char *fmt, va_list args) {
+size_t vasprintf(char * buf
+				, const char *fmt
+				, va_list args) {
 	int i = 0;
 	char *s;
 	int ptr = 0;
@@ -94,10 +100,12 @@ size_t vasprintf(char * buf, const char *fmt, va_list args) {
 				buf[ptr++] = (char)va_arg(args, int);
 				break;
 			case 'x': /* Hexadecimal number */
-				print_hex((unsigned long)va_arg(args, unsigned long), arg_width, buf, &ptr);
+				print_hex((unsigned long)va_arg(args, unsigned long)
+											, arg_width, buf, &ptr);
 				break;
 			case 'd': /* Decimal number */
-				print_dec((unsigned long)va_arg(args, unsigned long), arg_width, buf, &ptr);
+				print_dec((unsigned long)va_arg(args, unsigned long)
+											, arg_width, buf, &ptr);
 				break;
 			case '%': /* Escape */
 				buf[ptr++] = '%';

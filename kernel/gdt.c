@@ -58,8 +58,7 @@ extern void tss_flush();
 
 /* Setup a descriptor in the Global Descriptor Table */
 void gdt_set_gate(int num, uint64_t base, uint64_t limit,
-		uint8_t access, uint8_t gran)
-{
+		uint8_t access, uint8_t gran){
     /* Setup the descriptor base address */
     gdt[num].base_low = (base & 0xFFFF);
     gdt[num].base_middle = (base >> 16) & 0xFF;
