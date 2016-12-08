@@ -21,11 +21,16 @@ AS =  /root/cross/bin/i686-elf-as
 
 all: kernel.elf
 
+clean:
+	rm -rf *. ../drivers/*.o ../mm/*.o ../sys/*.o ../stdlib/*.o ../include/*.o *.o ./boot/fos.bin ./boot/fos.elf ./*.iso ./*.elf
+
 os.iso: kernel.elf
 	mkdir -p iso/boot/grub
 	cp fos.elf iso/boot/fos.elf
 	cp grub.cfg iso/boot/grub/grub.cfg
 	grub-mkrescue -o fos.iso iso
+	rm -rf *. ../drivers/*.o ../mm/*.o ../sys/*.o ../stdlib/*.o ../include/*.o *.o ./boot/fos.bin ./boot/fos.elf ./*.elf
+
 
 bootable:
 	genisoimage -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -o fos_bootable.iso iso
@@ -45,5 +50,4 @@ debug: os.iso
 %.o: %.s
 	$(AS) $< -o $@
 
-clean:
-	rm -rf *. ../drivers/*.o ../mm/*.o ../sys/*.o ../stdlib/*.o ../include/*.o *.o ./boot/fos.bin ./boot/fos.elf ./*.iso ./*.elf
+

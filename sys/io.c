@@ -1,7 +1,7 @@
 #include <sys/io.h>
 #include <sys/io_list.h>
 #include <sys/commands.h>
-#define cmd  8
+#define cmd  9
 char* commands[cmd] = {
     "clear",
     "beep",
@@ -10,6 +10,7 @@ char* commands[cmd] = {
     "lspci",
     "serial",
     "tunes",
+    "reboot",
     "help"
 };
 console *term;
