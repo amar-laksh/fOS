@@ -31,8 +31,8 @@ int process_buffer(){
             argc++;
     }
 
-    // If arguments & offset are equal we have all spaces
-    // So we skip the command.
+    /* If arguments & offset are equal we have all spaces
+    /* So we skip the command.*/
     if(argc == term->offset){
         null_buffer();
         return;
@@ -85,9 +85,9 @@ void keyboard_handler(struct regs *r) {
 
 
 void keyboard_install() {
-    
     //io_buff->keyboard_offset = 0;
     //io_buff->keyboard_buffer = malloc(sizeof(double));
+    keyboard_reset_ps2();
     irq_install_handler(KEYBOARD_IRQ, keyboard_handler);
     sprintf("Initializing PS/2 keyboard driver");
 }
@@ -118,7 +118,7 @@ void keyboard_wait() {
  * Add a character to the device buffer.
  */
 void getASCII(unsigned char c) {
-    if(c & 0x80){  
+    if(c & 0x80){
     }
     else{
         int code=0;
@@ -135,11 +135,4 @@ void getASCII(unsigned char c) {
         write_char(l);
     }
 
-}
-
-char readb(unsigned char c){
-    if(c & 0x80){ return '\0';}
-    else{
-        return keytable[c-1].key_value;
-    }
 }
