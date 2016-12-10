@@ -67,9 +67,9 @@ int process_buffer(){
 
 void append_buffer(char l){
     if(l == '\b')
-        term->buffer[
-            (term->offset > 0)?--term->offset:0
-            ] = 0;
+        term->buffer
+        [(term->offset > 0)?--term->offset:0]
+        = 0;
     else if(l !='\r'){
         term->buffer[term->offset++] = l;
     }
@@ -85,8 +85,6 @@ void keyboard_handler(struct regs *r) {
 
 
 void keyboard_install() {
-    //io_buff->keyboard_offset = 0;
-    //io_buff->keyboard_buffer = malloc(sizeof(double));
     keyboard_reset_ps2();
     irq_install_handler(KEYBOARD_IRQ, keyboard_handler);
     sprintf("Initializing PS/2 keyboard driver");
@@ -103,7 +101,7 @@ void keyboard_reset_ps2() {
 void move_cursor(int32_t pos) {
         outb(FB_COMMAND_PORT, FB_HIGH_BYTE_COMMAND);
         outb(FB_DATA_PORT, ((pos >> 8) & 0x00FF));
-       outb(FB_COMMAND_PORT, FB_LOW_BYTE_COMMAND);
+        outb(FB_COMMAND_PORT, FB_LOW_BYTE_COMMAND);
         outb(FB_DATA_PORT, pos & 0x00FF);
     }
 

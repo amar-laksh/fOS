@@ -1,4 +1,32 @@
 // TODO - add full support for pci_list.h
+/*
+FIRST STEP - PARSE ALL REQUIRED CONFIG FIELDS
+
+VENDOR_D, DEVICE_ID, REVISION_ID. HEADER TYPE
+, CLASS CODE
+
+
+SECOND STEP - (HEADER TYPE)IDENTIFY IF DEVICE IS-
+(BY BITS 6-0)
+    (00H)AN ENDPOINT
+    (01H)A PCI-TO-PCI BRIDGE
+    (02H)A CARDBUS BRIDGE
+
+THIRD STEP - IDENTIFY IF DEVICE IS MULTI OR
+SINGLE FUNCITON
+
+IF BIT-7 == 0= SINGLE FUNCTION
+ELSE MULTI FUNCITON
+
+FOURTH STEP - PARSE APPROPRIATE CONFIG HEADER FOR
+DISCOVERD DEVICE.
+
+
+
+
+
+
+*/
 #include <drivers/pci.h>
 pci_device **pci_devices = 0;
 uint32_t devs = 0;
@@ -57,24 +85,33 @@ uint16_t getSubClassID(uint16_t bus
         return (pci_read_word(bus,device,function,0xA) & ~0xFF00);
 }
 
+uint16_t getHeaderType(uint16_t bus
+                        , uint16_t device
+                        , uint16_t function){
+        return pci_read_word(bus,device,function,0x0E);
+}
 void pci_probe(){
 	for(uint32_t bus = 0; bus < 256; bus++){
         for(uint32_t slot = 0; slot < 32; slot++){
             for(uint32_t function = 0; function < 8; function++){
                 uint16_t vendor = getVendorID(bus, slot, function);
                 if(vendor == 0xFFFF) continue;
+                uint16_t headertype = getHeaderType(bus, slot, function);
                 uint16_t device = getDeviceID(bus, slot, function);
                 uint16_t class = getClassID(bus, slot, function);
                 uint16_t subClass = getSubClassID(bus, slot, function);
+                
                 pci_device *pdev = (pci_device *)
                                     malloc(sizeof(pci_device));
                 pdev->vendor = vendor;
+                pdev->device = device;
+                pdev->headerType = headertype;
                 pdev->class =  class;
                 pdev->subClass = subClass;
-                pdev->device = device;
                 pdev->func = function;
                 pdev->driver = 0;
-                sprintf("[%x:%x:%x]::[%x:%x]\n"
+                sprintf("%x-->[%x:%x:%x]::[%x:%x]\n"
+                , pdev->headerType
                 , pdev->vendor
                 , pdev->device
                 , pdev->func
@@ -151,7 +188,8 @@ void pci_proc_dump(int start){
                     getVendorName(pci_dev);
                     getDeviceName(pci_dev);
                     getClasses(pci_dev);
-                dprintf("\n[%x:%x:%x]\n"
+                dprintf("\n%x==>%x:%x:%x]\n"
+                    , pci_dev->headerType
                     , pci_dev->vendor
                     , pci_dev->device
                     , pci_dev->func);
