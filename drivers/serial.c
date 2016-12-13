@@ -1,3 +1,4 @@
+// TODO - Optimize the serial_install() code
 #include <drivers/serial.h>
 #include <drivers/serial_list.h>
 serial_buffer serial;
@@ -21,11 +22,11 @@ int8_t serial_enable(int com_port, int baud_rate){
    outb(com_port + 3, 0x03);
    outb(com_port + 2, 0xC7);
    outb(com_port + 4, 0x0B);
-   serial.COM_PORT = com_port;
-   serial.BAUD_RATE = baud_rate;
    if(loopback_test(com_port) < 0){
       return -1;
    }
+   serial.COM_PORT = com_port;
+   serial.BAUD_RATE = baud_rate;
    return 0;
 }
 
