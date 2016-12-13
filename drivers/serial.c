@@ -1,6 +1,5 @@
-// TODO - Add loopback test for serial connection checking.
 #include <drivers/serial.h>
-
+#include <drivers/serial_list.h>
 serial_buffer serial;
 
 
@@ -14,7 +13,7 @@ int8_t loopback_test(int com_port){
       return -1;
 }
 
-void serial_install(int com_port, int baud_rate) {
+int8_t serial_enable(int com_port, int baud_rate){
    outb(com_port + 1, 0x00);
    outb(com_port + 3, 0x80);
    outb(com_port + 0, (baud_rate >> 8));
@@ -25,7 +24,25 @@ void serial_install(int com_port, int baud_rate) {
    serial.COM_PORT = com_port;
    serial.BAUD_RATE = baud_rate;
    if(loopback_test(com_port) < 0){
-      kprintf("Error for %x port: (loopback test failed)\n", com_port);
+      return -1;
+   }
+   return 0;
+}
+
+
+void serial_install() {
+   int8_t f = 12, c = 0;
+   for(unsigned long i=0;i<4;i++){
+      f = serial_enable(serial_table[i].COM_PORT, 0x03);
+      if(f == -1)
+         serial_table[i].STATUS = 0x00;
+      else{
+         serial_table[i].STATUS = 0xFF;
+         c++;
+      }
+   }
+   if(c == 0){
+      kprintf("Error: no Serial port detected (loopback test failed)\n");
       for(;;);
       asm ("hlt");
    }

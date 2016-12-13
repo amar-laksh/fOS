@@ -34,7 +34,7 @@ void kmain(){
 	clear_screen();
 	mm_init((uint32_t)&endKernel);
 	kprintf("MM initiated.\n");
-	serial_install(COM1_PORT,0x03);
+	serial_install();
 	kprintf("SERIAL initiated.\n");
 	pci_install();
 	kprintf("PCI initiated.\n");
