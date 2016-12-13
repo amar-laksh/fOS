@@ -12,7 +12,7 @@ void mm_init(uint32_t kernel_end){
 	heap_begin = last_alloc;
 	heap_end = 0x400000;  
 	memset((char *)heap_begin, 0, heap_end - heap_begin);
-	kprintf("Kernel heap starts at 0x%x\n", last_alloc);
+	//kprintf("Kernel heap starts at 0x%x\n", last_alloc);
 }
 void mm_print_out(){
 	dprintf("Kernel heap starts at 0x%x\n", last_alloc);

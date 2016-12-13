@@ -100,7 +100,7 @@ void pci_probe(){
                 uint16_t device = getDeviceID(bus, slot, function);
                 uint16_t class = getClassID(bus, slot, function);
                 uint16_t subClass = getSubClassID(bus, slot, function);
-                
+
                 pci_device *pdev = (pci_device *)
                                     malloc(sizeof(pci_device));
                 pdev->vendor = vendor;
@@ -110,6 +110,7 @@ void pci_probe(){
                 pdev->subClass = subClass;
                 pdev->func = function;
                 pdev->driver = 0;
+                /**
                 sprintf("%x-->[%x:%x:%x]::[%x:%x]\n"
                 , pdev->headerType
                 , pdev->vendor
@@ -117,6 +118,7 @@ void pci_probe(){
                 , pdev->func
                 , pdev->class
                 , pdev->subClass);
+                **/
                 add_pci_device(pdev);
             }
         }

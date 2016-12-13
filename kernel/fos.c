@@ -30,24 +30,26 @@ void * memmove(void * restrict dest
 }
 
 void kmain(){
+	term->cursor = 162;
+	clear_screen();
 	mm_init((uint32_t)&endKernel);
-	draw_str("MM initiated",1,1);
+	kprintf("MM initiated.\n");
 	serial_install(COM1_PORT,0x03);
-	draw_str("SERIAL initiated",2,1);
+	kprintf("SERIAL initiated.\n");
 	pci_install();
-	draw_str("PCI initiated",3,1);
+	kprintf("PCI initiated.\n");
 	gdt_install();
-	draw_str("GDT initiated",4,1);
+	kprintf("GDT initiated.\n");
 	idt_install();
-	draw_str("IDT initiated",5,1);
+	kprintf("IDT initiated.\n");
 	isrs_install();
-	draw_str("ISRS initiated",6,1);
+	kprintf("ISRS initiated.\n");
 	irq_install();
-	draw_str("IRQ initiated",7,1);
+	kprintf("IRQ initiated.\n");
 	timer_install();
-	draw_str("TIMER initiated",8,1);
+	kprintf("TIMER initiated.\n");
 	poll_init();
-	draw_str("POLL initiated",9,1);
+	kprintf("POLL initiated.\n");
 	vga_init();
 	asm("hlt");
 
