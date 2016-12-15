@@ -21,18 +21,21 @@ int timer_ticks = 0;
 void timer_handler(struct regs *r){
     /* Increment our 'tick count' */
     timer_ticks++;
+    cycles++;
 
     /* Every 18 clocks (approximately 1 second), we will
     *  display a message on the screen */
-    if (timer_ticks % 18 == 0){
-        dprintf("One second has passed\n");
+    if (timer_ticks % 100 == 0){
     }
+    irq_ack(TIMER_IRQ);
 }
 
 /* Sets up the system clock by installing the timer handler
 *  into IRQ0 */
 void timer_install(){
     /* Installs 'timer_handler' to IRQ0 */
-    // irq_install_handler(TIMER_IRQ, timer_handler);
+    timer_phase(100);
+    cycles = 0;
+    irq_install_handler(TIMER_IRQ, timer_handler);
 }
     

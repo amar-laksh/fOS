@@ -121,7 +121,6 @@ loop:
 
 void exec_cmd(int n, char* buff[5]){
 	switch(n){
-
 		case 0:
 			clear_screen();
 			term->cursor = 2;
@@ -154,6 +153,10 @@ void exec_cmd(int n, char* buff[5]){
 			break;
 		case 7:
 			reboot();
+			break;
+		case 8:
+			kprintf("\nUPTIME: the system has been up for %d seconds.\n", (cycles/100));
+			break;
 		default:
 			if(strlen((const char*)buff) > 1){
 				kprintf("\n%s: not found!\n",buff);
