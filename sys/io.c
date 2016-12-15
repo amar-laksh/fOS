@@ -121,7 +121,7 @@ void getASCII(unsigned char c) {
     }
     else{
         int code=0;
-        print_registers();
+        //print_registers();
         char l = keytable[c-1].key_value;
         draw_str("f.O.S. - Made By Amar Lakshya",0,20);
         append_buffer(l);

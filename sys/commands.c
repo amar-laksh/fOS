@@ -155,7 +155,7 @@ void exec_cmd(int n, char* buff[5]){
 			reboot();
 			break;
 		case 8:
-			kprintf("\nUPTIME: the system has been up for %d seconds.\n", (cycles/100));
+			kprintf("\nUPTIME: the system has been up for %d cycles.\n", cycles);
 			break;
 		default:
 			if(strlen((const char*)buff) > 1){
