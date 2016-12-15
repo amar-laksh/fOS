@@ -1,7 +1,4 @@
 #include <kernel/fos.h>
-/*
-*	TODO - try to refactor timer_wait, to see why it doesn't work
-*/
 
 extern void*  endKernel;
 
