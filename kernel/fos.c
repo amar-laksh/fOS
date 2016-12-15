@@ -29,8 +29,10 @@ void * memmove(void * restrict dest
 	return dest;
 }
 
+
 void kmain(){
 	term->cursor = 162;
+	set_clock();
 	clear_screen();
 	mm_init((uint32_t)&endKernel);
 	kprintf("MM initiated.\n");

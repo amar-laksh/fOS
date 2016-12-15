@@ -119,6 +119,14 @@ loop:
     goto loop; 
 }
 
+void set_clock(int h, int m, int s){
+	seconds = s;
+	minutes = m;
+	hours = h;
+	cycles = 0;
+	cycles = ( (s*100) + (m*6000) + (h*360000) );
+	return;
+}
 void exec_cmd(int n, char* buff[5]){
 	switch(n){
 		case 0:
@@ -156,6 +164,9 @@ void exec_cmd(int n, char* buff[5]){
 			break;
 		case 8:
 			kprintf("\nUPTIME: the system has been up for %d cycles.\n", cycles);
+			break;
+		case 9:
+			set_clock(atoi(buff[1]), atoi(buff[2]), atoi(buff[3]));
 			break;
 		default:
 			if(strlen((const char*)buff) > 1){

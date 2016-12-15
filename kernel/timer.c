@@ -18,25 +18,22 @@ int timer_ticks = 0;
 *  timer fires. By default, the timer fires 18.222 times
 *  per second. Why 18.222Hz? Some engineer at IBM must've
 *  been smoking something funky */
-long long seconds = 0;
-long long minutes = 0;
-long long hours = 0;
 char* buff;
 void timer_handler(struct regs *r){
     /* Increment our 'tick count' */
 
     timer_ticks++;
     cycles++;
-    draw_str("Time elapsed:",0, 55);
+    draw_str("Time: ",0, 55);
     /* Every 100 clocks (approximately 1 second), we will
     *  display a message on the screen */
-    if(timer_ticks % 100 == 0){
+    if(cycles % 100 == 0){
         seconds++;
     }
-    if(timer_ticks % 6000 == 0){
+    if(cycles % 6000 == 0){
         minutes++;
     }
-    if(timer_ticks % 36000 == 0){
+    if(cycles % 360000 == 0){
         hours++;
     }   
     if(seconds % 60 == 0){
@@ -48,14 +45,14 @@ void timer_handler(struct regs *r){
     if(hours % 24 == 0){
         hours = 0;
     }
-        itoa(hours, 10, buff);
-        draw_str(buff,0,70);
-        draw_str(":",0,71);
-        itoa(minutes, 10, buff);
-        draw_str(buff,0,72);
-        draw_str(":",0,73);
-        itoa(seconds, 10, buff);
-        draw_str(buff,0,74);
+    itoa(hours, 10, buff);
+    draw_str(buff,0,69);
+    draw_str(":",0,71);
+    itoa(minutes, 10, buff);
+    draw_str(buff,0,72);
+    draw_str(":",0,74);
+    itoa(seconds, 10, buff);
+    draw_str(buff,0,75);
     irq_ack(TIMER_IRQ);
 }
 
@@ -65,6 +62,9 @@ void timer_install(){
     /* Installs 'timer_handler' to IRQ0 */
     timer_phase(100);
     cycles = 0;
+    seconds = 0;
+    minutes = 0;
+    hours = 0;
     irq_install_handler(TIMER_IRQ, timer_handler);
 }
     

@@ -39,6 +39,9 @@
 
 
 long long cycles;
+long long seconds;
+long long minutes;
+long long hours;
 struct regs {
     uint32_t gs, fs, es, ds;      /* pushed the segs last */
     uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax;  /* pushed by 'pusha' */
