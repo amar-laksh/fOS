@@ -142,7 +142,7 @@ void pci_register_driver(pci_driver *driv){
 void getVendorName(pci_device *pci_dev){
     for(uint32_t j=0;j< PCI_VENDOR_TABLE_LEN ; j++){
         if(pci_dev->vendor == vendor_table[j].ven_ID){
-            dprintf("\nVendor Name: %s"
+            kprintf("\nVendor Name: %s"
                 ,vendor_table[j].ven_full);
             break;
         }
@@ -153,7 +153,7 @@ void getDeviceName(pci_device *pci_dev){
     for (unsigned long m = 0; m < PCI_DEVICE_TABLE_LEN; m++){
         if(pci_dev->vendor == device_table[m].ven_ID
             && pci_dev->device == device_table[m].dev_ID){
-            dprintf("\nDevice Name: %s"
+            kprintf("\nDevice Name: %s"
                 ,device_table[m].chip_desc);
             break;
         }
@@ -164,7 +164,7 @@ void getClasses(pci_device *pci_dev){
     for (unsigned long k = 0; k < PCI_CLASS_CODE_TABLE_LEN; k++){
         if(pci_dev->class == class_code_table[k].base_class 
             && pci_dev->subClass == class_code_table[k].sub_class){
-            dprintf("\nBase Class: %s\nSub-Class: %s"
+            kprintf("\nBase Class: %s\nSub-Class: %s"
                 ,class_code_table[k].base_desc
                 ,class_code_table[k].sub_desc);
             break;
@@ -172,7 +172,7 @@ void getClasses(pci_device *pci_dev){
     }
 }
 void pci_proc_dump(int start){
-    dprintf("\nTotal Devices found: %d\n",devs);
+    kprintf("\nTotal Devices found: %d\n",devs);
 	for(uint32_t i = start; i < devs; i++)
 	{
 		pci_device *pci_dev = pci_devices[i];
@@ -180,7 +180,7 @@ void pci_proc_dump(int start){
                     getVendorName(pci_dev);
                     getDeviceName(pci_dev);
                     getClasses(pci_dev);
-                    dprintf("[%x:%x:%x] => %s\n"
+                    kprintf("[%x:%x:%x] => %s\n"
                         ,pci_dev->vendor
                         ,pci_dev->device
                         ,pci_dev->func
@@ -190,7 +190,7 @@ void pci_proc_dump(int start){
                     getVendorName(pci_dev);
                     getDeviceName(pci_dev);
                     getClasses(pci_dev);
-                dprintf("\n%x==>%x:%x:%x]\n"
+                kprintf("\n%x==>%x:%x:%x]\n"
                     , pci_dev->headerType
                     , pci_dev->vendor
                     , pci_dev->device

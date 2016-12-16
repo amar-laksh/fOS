@@ -13,6 +13,7 @@ char* commands[cmd] = {
     "reboot",
     "uptime",
     "settime",
+    "lscpu",
     "help"
 };
 console *term;
@@ -47,9 +48,9 @@ int process_buffer(){
 
     for(int i=0; i<cmd;i++){
         if(equals(commands[cmd-1],argv[0]) == 0){
-            dprintf("\nThese are the following available commands:\n\n");
+            kprintf("\nThese are the following available commands:\n\n");
             for (int i = 0; i < cmd; ++i)
-                dprintf("%s\n",commands[i]);
+                kprintf("%s\n",commands[i]);
             c++;
             null_buffer();
         }

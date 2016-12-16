@@ -29,37 +29,37 @@ void create(char* args,int x, int y){
 }
 
 void cowsay(char buff[]){
-	dprintf("\n");
+	kprintf("\n");
 	int length = strlen(buff);
 	for(int i=1;i<length;i+=2){
-		dprintf("-");
+		kprintf("-");
 	}
-	dprintf("\n<  %s  >\n",buff);
+	kprintf("\n<  %s  >\n",buff);
 	for(int i=1;i<length+3;i+=2){
-		dprintf("-");
+		kprintf("-");
 	}
-	dprintf("\n");
+	kprintf("\n");
 
 	for (int i = 0; i <length; i++){
-		dprintf(" ");
+		kprintf(" ");
 	}
-	dprintf("\\    ^___^\n");
+	kprintf("\\    ^___^\n");
 	for (int i = 0; i <length+1; i++){
-		dprintf(" ");
+		kprintf(" ");
 	}
-	dprintf("\\  (o o) \\________\n");
+	kprintf("\\  (o o) \\________\n");
 	for (int i = 0; i <length+1; i++){
-		dprintf(" ");
+		kprintf(" ");
 	}
-	dprintf("   (___)\\         )\\/\\\n");
+	kprintf("   (___)\\         )\\/\\\n");
 	for (int i = 0; i <length+1; i++){
-		dprintf(" ");
+		kprintf(" ");
 	}
-	dprintf("         ||----w |\n");
+	kprintf("         ||----w |\n");
 	for (int i = 0; i <length+1; i++){
-		dprintf(" ");
+		kprintf(" ");
 	}
-	dprintf("         ||     ||");
+	kprintf("         ||     ||");
 
 }
 
@@ -127,6 +127,7 @@ void set_clock(int h, int m, int s){
 	cycles = ( (s*100) + (m*6000) + (h*360000) );
 	return;
 }
+
 void exec_cmd(int n, char* buff[5]){
 	switch(n){
 		case 0:
@@ -134,12 +135,12 @@ void exec_cmd(int n, char* buff[5]){
 			term->cursor = 2;
 			break;
 		case 1:
-			dprintf("\nHere's a beep at: %dHz with delay of: %d\n"
+			kprintf("\nHere's a beep at: %dHz with delay of: %d\n"
 									,atoi(buff[1]),atoi(buff[2]));
 			beep_it(atoi(buff[1]), atoi(buff[2]));
 			break;
 		case 2:
-			dprintf("\nWell my name is:\n %s",cpu.processor_name);
+			kprintf("\nWell my name is:\n %s",cpu.processor_name);
 			break;
 		case 3:
 			cowsay(buff[1]);

@@ -44,8 +44,8 @@ void serial_install() {
    }
    if(c == 0){
       kprintf("Error: no Serial port detected (loopback test failed)\n");
-      for(;;);
-      asm ("hlt");
+      for (int i = 0; i < 999999999; ++i)
+      {}
    }
 }
 

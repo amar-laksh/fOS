@@ -24,7 +24,7 @@ void timer_handler(struct regs *r){
 
     timer_ticks++;
     cycles++;
-    draw_str("Time: ",0, 55);
+    draw_str("Time: ",2, 55);
     /* Every 100 clocks (approximately 1 second), we will
     *  display a message on the screen */
     if(cycles % 100 == 0){
@@ -46,13 +46,13 @@ void timer_handler(struct regs *r){
         hours = 0;
     }
     itoa(hours, 10, buff);
-    draw_str(buff,0,69);
-    draw_str(":",0,71);
+    draw_str(buff,2,69);
+    draw_str(":",2,71);
     itoa(minutes, 10, buff);
-    draw_str(buff,0,72);
-    draw_str(":",0,74);
+    draw_str(buff,2,72);
+    draw_str(":",2,74);
     itoa(seconds, 10, buff);
-    draw_str(buff,0,75);
+    draw_str(buff,2,75);
     irq_ack(TIMER_IRQ);
 }
 
