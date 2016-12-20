@@ -37,8 +37,6 @@ int32_t get_point(uint32_t r, uint32_t c);
 
 void clear_screen();
 
-void delay(int t);
-
 char get_char_cell(int r, int c);
 
 void draw_char(uint32_t p, char ch, uint8_t fg, uint8_t bg);

@@ -3,6 +3,6 @@
 #include <kernel/fos.h>
 
 void timer_install();
-void timer_wait(int ticks);
+void delay(int t);
 void timer_phase(int hz);
 #endif

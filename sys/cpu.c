@@ -96,12 +96,12 @@ void intel_init(){
 
 	    /** Processor Signature **/
 	    cpuid(0x01, &eax, &ebx, &ecx, &edx);
-	    cpu.processor_signature.STEPPING_ID = (eax & 0xF);
-	    cpu.processor_signature.MODEL_NUMBER = (eax & 0xF0);
-	    cpu.processor_signature.FAMILY_CODE = (eax & 0xF00);
-	    cpu.processor_signature.PROCESSOR_TYPE = (eax & 0x6000);
-	    cpu.processor_signature.EXTENDED_MODEL_ID = (eax & 0xF0000);
-	    cpu.processor_signature.EXTENDED_FAMILY_ID = (eax & 0xFF00000);
+	    cpu.processor_signature[4] = (eax & 0xF);
+	    cpu.processor_signature[3] = (eax & 0xF0);
+	    cpu.processor_signature[1] = (eax & 0xF00);
+	    cpu.processor_signature[5] = (eax & 0x6000);
+	    cpu.processor_signature[2] = (eax & 0xF0000);
+	    cpu.processor_signature[0] = (eax & 0xFF00000);
 	    /** CPU Features **/
 	    if (edx & (1<<0) )		cpu.cpu_features.FPU = 1;
 	    if (edx & (1<<1) )		cpu.cpu_features.VME = 1;
@@ -168,9 +168,9 @@ void intel_init(){
 	    if (ecx & (1<<30) )		cpu.cpu_instructions.RDRAND = 1; 
 	    
 	    /** CPU Miscellaneous Information **/
-	    cpu.cpu_misc_info.BRAND_ID = (ebx & 0xFF);
-	    cpu.cpu_misc_info.CLFLUSH_SIZE = (ebx & 0xF00);
-	    cpu.cpu_misc_info.LOCAL_APIC_ID = (ebx & 0xFF000000);
+	    cpu.cpu_misc_info[2] = (ebx & 0xFF);
+	    cpu.cpu_misc_info[1] = (ebx & 0xF00);
+	    cpu.cpu_misc_info[0] = (ebx & 0xFF000000);
 	    if(highest_ext_info >= 0x80000004)
 	    	get_processor_name(cpu.processor_name);
 	}

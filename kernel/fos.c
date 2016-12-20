@@ -48,7 +48,9 @@ void kmain(){
 	timer_install();
 	kprintf("TIMER initiated.\n");
 	poll_init();
+	delay(500);
 	kprintf("POLL initiated.\n");
+	for(;;);
 	vga_init();
 	asm("hlt");
 

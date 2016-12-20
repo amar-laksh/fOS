@@ -56,6 +56,14 @@ void timer_handler(struct regs *r){
     irq_ack(TIMER_IRQ);
 }
 
+void delay(int t){
+    long long st = t + cycles;
+    while((cycles) < st){
+        draw_char(800,' ',0,0); //TODO-  This is really hacky, remove it
+    }
+    return;
+}
+
 /* Sets up the system clock by installing the timer handler
 *  into IRQ0 */
 void timer_install(){

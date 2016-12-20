@@ -73,15 +73,7 @@ struct CPU_FEATURE{
 
 };
 
-struct PROCESSOR_SIGNATURE{
-	int8_t EXTENDED_FAMILY_ID;
-	int8_t FAMILY_CODE;
-	int8_t EXTENDED_MODEL_ID;
-	int8_t MODEL_NUMBER;
-	int8_t STEPPING_ID;
-	int8_t PROCESSOR_TYPE;
 
-};
 
 struct CPU_INSTRUCTION{
 	int8_t FXSR;
@@ -115,13 +107,7 @@ struct CPU_INSTRUCTION{
 	int8_t RDTSCP;
 };
 
-struct CPU_MISC_INFO{
-	int8_t LOCAL_APIC_ID;
-	int8_t CLFLUSH_SIZE;
-	int8_t BRAND_ID;
-	// Probably AMD information
-	int8_t LOG_PRO_COUNT;
-};
+
 
 struct PROCESSOR_SERIAL_NUMBER{
 	int32_t UPPER_BITS;
@@ -224,10 +210,26 @@ typedef struct {
 	uint32_t highest_std_info;
 
 	// Function 0x01 | Function 0x01
-	struct PROCESSOR_SIGNATURE processor_signature;
+// struct PROCESSOR_SIGNATURE{
+// 	int8_t EXTENDED_FAMILY_ID;
+// 	int8_t FAMILY_CODE;
+// 	int8_t EXTENDED_MODEL_ID;
+// 	int8_t MODEL_NUMBER;
+// 	int8_t STEPPING_ID;
+// 	int8_t PROCESSOR_TYPE;
+// };
+	int16_t processor_signature[6];
+	
 	struct CPU_FEATURE  cpu_features;
 	struct CPU_INSTRUCTION cpu_instructions;
-	struct CPU_MISC_INFO cpu_misc_info;
+// struct CPU_MISC_INFO{
+// 	int8_t LOCAL_APIC_ID;
+// 	int8_t CLFLUSH_SIZE;
+// 	int8_t BRAND_ID;
+// 	// Probably AMD information
+// 	int8_t LOG_PRO_COUNT;
+// };
+	int16_t cpu_misc_info[4];
 
 	// Function 0x03 
 	struct PROCESSOR_SERIAL_NUMBER processor_serial_number;
@@ -275,7 +277,6 @@ typedef struct {
 
 
 } CPU_TOPOLOGY;
-
 
 
 CPU_TOPOLOGY cpu;

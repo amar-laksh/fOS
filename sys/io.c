@@ -1,7 +1,7 @@
 #include <sys/io.h>
 #include <sys/io_list.h>
 #include <sys/commands.h>
-#define cmd  11
+#define cmd  12
 char* commands[cmd] = {
     "clear",
     "beep",

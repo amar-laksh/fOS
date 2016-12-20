@@ -68,8 +68,7 @@ void some_tune(){
 		'G','G','A','G','C','B'
 		,'G','G','A','G','D','C'
 	};
-	for (int i = 0; i < 12; ++i)
-	{
+	for (int i = 0; i < 12; ++i){
 		play_note(notes[i],6,1);
 	}
 }
@@ -128,6 +127,16 @@ void set_clock(int h, int m, int s){
 	return;
 }
 
+void lscpu(){
+	kprintf("\nPrinting CPU misc info:\n");
+	for (int i = 0; i < 4; ++i){
+		kprintf("%d\t",cpu.cpu_misc_info[i]);
+	}
+	kprintf("\nPrinting Processor signature:\n");
+	for (int i = 0; i < 5; ++i){
+		kprintf("%d\t",cpu.processor_signature[i]);
+	}
+}
 void exec_cmd(int n, char* buff[5]){
 	switch(n){
 		case 0:
@@ -153,21 +162,24 @@ void exec_cmd(int n, char* buff[5]){
 			break;
 		case 6:
 			note_test();
-			delay(10000);
+			delay(200);
 			some_tune();
-			delay(10000);
+			delay(200);
 			marry_song();
-			delay(10000);
+			delay(200);
 			splash();
 			break;
 		case 7:
 			reboot();
 			break;
 		case 8:
-			kprintf("\nUPTIME: the system has been up for %d cycles.\n", cycles);
+			kprintf("\nThe system has been up for %d cycles.\n", cycles);
 			break;
 		case 9:
 			set_clock(atoi(buff[1]), atoi(buff[2]), atoi(buff[3]));
+			break;
+		case 10:
+			lscpu();
 			break;
 		default:
 			if(strlen((const char*)buff) > 1){

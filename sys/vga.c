@@ -111,15 +111,6 @@ int32_t draw_str(char string[], int32_t r, int32_t c){
 	return PASS_CODE;
 }
 
-void delay(int t){
-	int c=0,i=0;
-	while(c <= t){
-		for(i=0;i<999;i++)
-			draw_str("",0,100);
-		c++;
-	}
-}
-
 
 void write_char(char ascii){
 	if(ascii == '\b'){
