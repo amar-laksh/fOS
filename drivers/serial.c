@@ -1,7 +1,6 @@
 // TODO - Optimize the serial_install() code
 #include <drivers/serial.h>
 #include <drivers/serial_list.h>
-serial_buffer serial;
 
 
 int8_t loopback_test(int com_port){
@@ -44,8 +43,10 @@ void serial_install() {
    }
    if(c == 0){
       kprintf("Error: no Serial port detected (loopback test failed)\n");
-      for (int i = 0; i < 999999999; ++i)
-      {}
+      serial.works = -1;
+   }
+   else{
+	   serial.works = 13;
    }
 }
 

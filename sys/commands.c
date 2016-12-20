@@ -127,15 +127,41 @@ void set_clock(int h, int m, int s){
 	return;
 }
 
+void cpu_t_set(){
+	if(cpu.extended_cpu_features[3] & (1<<29))
+		cpu_t.arc = "x86_64";
+	else
+		cpu_t.arc = "x86";
+	
+	if(equals(cpu_t.arc, "x86_64") == 0 
+		|| equals(cpu_t.arc, "x86") == 0){
+			if(equals(cpu_t.arc, "x86_64") == 0)
+				cpu_t.op_modes = "32-bit, 64-bit";
+			else
+				cpu_t.op_modes = "32-bit";
+			cpu_t.byte_order = "Little Endian";
+	}
+
+
+}
+
 void lscpu(){
-	kprintf("\nPrinting CPU misc info:\n");
-	for (int i = 0; i < 4; ++i){
-		kprintf("%d\t",cpu.cpu_misc_info[i]);
-	}
-	kprintf("\nPrinting Processor signature:\n");
-	for (int i = 0; i < 5; ++i){
-		kprintf("%d\t",cpu.processor_signature[i]);
-	}
+	cpu_t_set();
+	kprintf("\n");
+	kprintf("Architecture:\t\t%s\n", cpu_t.arc);
+	kprintf("CPU op-mode(s):\t\t%s\n", cpu_t.op_modes);
+	kprintf("Byte order:\t\t%s\n", cpu_t.byte_order);
+	kprintf("CPU(s):\t\t%s\n", cpu_t.cpus);
+	kprintf("On-line CPU(s) list:\t\t%s\n", cpu_t.online_cpu_list);
+	kprintf("Thread(s) per core:\t\t%s\n", cpu_t.threads_per_core);
+	kprintf("Core(s) per socket:\t\t%s\n", cpu_t.cores_per_socket);
+	kprintf("Socket(s):\t\t%s\n", cpu_t.sockets);
+	kprintf("NUMA node(s):\t\t%s\n", cpu_t.NUMA_nodes);
+	kprintf("Vendor ID:\t\t%s\n", cpu_t.vendor_id);
+	kprintf("CPU Family:\t\t%s\n", cpu_t.cpu_family);
+	kprintf("Model:\t\t%s\n", cpu_t.model);
+	kprintf("Model Name:\t\t%s\n", cpu_t.model_name);
+	
 }
 void exec_cmd(int n, char* buff[5]){
 	switch(n){

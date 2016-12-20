@@ -6,8 +6,10 @@
 typedef struct {
 	int COM_PORT;
 	int BAUD_RATE;
+	int8_t works;
 } serial_buffer;
 
+serial_buffer serial;
 void serial_install();
 
 int serial_received();

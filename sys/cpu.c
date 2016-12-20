@@ -66,42 +66,44 @@ void intel_init(){
 
 	/** Processor Serial Number **/
 	cpuid(0x03,&eax, &ebx, &ecx, &edx);
-	cpu.processor_serial_number.LOWER_BITS = ecx;
-	cpu.processor_serial_number.UPPER_BITS = edx;
-
+	cpu.processor_serial_number[0] = edx;
+	cpu.processor_serial_number[1] = ecx;
+	
 	/** Deterministic Cache Parameters **/
 	cpuid(0x04,&eax, &ebx, &ecx, &edx);
-	cpu.det_cache_params.CACHE_TYPE = (eax & 0x1F);
-	cpu.det_cache_params.CACHE_LEVEL = (eax & 0xE0);
-	cpu.det_cache_params.SINIT_CACHE_LVL = (eax & 0x100);
-	cpu.det_cache_params.FULLY_ASSOC_CACHE = (eax & 0x200);
-	cpu.det_cache_params.MAX_IDS_LOG_PRO = (eax & 0x3FFC000);
-	cpu.det_cache_params.MAX_IDS_PRO_CORES = (eax & 0xFC000000);
-	cpu.det_cache_params.SYS_COH_LINE_SIZE = (ebx & 0xFFF);
-	cpu.det_cache_params.PHY_LINE_PART = (ebx & 0x3FF000);
-	cpu.det_cache_params.WAYS_OF_ASSOC = (ebx & 0xFFC00000);
-	cpu.det_cache_params.NO_OF_SETS = ecx;
-	cpu.det_cache_params.WBINVD_COMPACT = edx;
+	cpu.det_cache_params[0] = (eax & 0x1F);
+	cpu.det_cache_params[1] = (eax & 0xE0);
+	cpu.det_cache_params[2] = (eax & 0x100);
+	cpu.det_cache_params[3] = (eax & 0x200);
+	cpu.det_cache_params[4] = (eax & 0x3FFC000);
+	cpu.det_cache_params[5] = (eax & 0xFC000000);
+	cpu.det_cache_params[6] = (ebx & 0xFFF);
+	cpu.det_cache_params[7] = (ebx & 0x3FF000);
+	cpu.det_cache_params[8] = (ebx & 0xFFC00000);
+	cpu.det_cache_params[9] = ecx;
+	cpu.det_cache_params[10] = edx;
 
 	/** cpu.monitor Features **/
 	cpuid(0x05,&eax, &ebx, &ecx, &edx);
-	cpu.monitor.MIN_MONS_SIZE = (eax & 0xFFFF);
-	cpu.monitor.MAX_MONS_SIZE = (ebx & 0xFFFF);
-	cpu.monitor.EMX = (ecx & 0x1);
-	cpu.monitor.INTR_BRK_EVENT = (ecx & 0x2);
-	cpu.monitor.C0_C7 = edx;
+	cpu.monitor[0] = (eax & 0xFFFF);
+	cpu.monitor[1] = (ebx & 0xFFFF);
+	cpu.monitor[2] = (ecx & 0x1);
+	cpu.monitor[3] = (ecx & 0x2);
+	cpu.monitor[4] = edx;
 	/** Function 0x01 **/
 	if (highest_std_info >= 0x01){
 	    cpuid(0x01, &eax, &ebx, &ecx, &edx);
 
 	    /** Processor Signature **/
 	    cpuid(0x01, &eax, &ebx, &ecx, &edx);
-	    cpu.processor_signature[4] = (eax & 0xF);
-	    cpu.processor_signature[3] = (eax & 0xF0);
-	    cpu.processor_signature[1] = (eax & 0xF00);
-	    cpu.processor_signature[5] = (eax & 0x6000);
-	    cpu.processor_signature[2] = (eax & 0xF0000);
 	    cpu.processor_signature[0] = (eax & 0xFF00000);
+	    cpu.processor_signature[1] = (eax & 0xF00);
+	    cpu.processor_signature[2] = (eax & 0xF0000);
+	    cpu.processor_signature[3] = (eax & 0xF0);
+	    cpu.processor_signature[4] = (eax & 0xF);
+	    cpu.processor_signature[5] = (eax & 0x6000);
+	    
+	    
 	    /** CPU Features **/
 	    if (edx & (1<<0) )		cpu.cpu_features.FPU = 1;
 	    if (edx & (1<<1) )		cpu.cpu_features.VME = 1;
@@ -168,14 +170,19 @@ void intel_init(){
 	    if (ecx & (1<<30) )		cpu.cpu_instructions.RDRAND = 1; 
 	    
 	    /** CPU Miscellaneous Information **/
-	    cpu.cpu_misc_info[2] = (ebx & 0xFF);
-	    cpu.cpu_misc_info[1] = (ebx & 0xF00);
 	    cpu.cpu_misc_info[0] = (ebx & 0xFF000000);
+	    cpu.cpu_misc_info[1] = (ebx & 0xF00);
+	    cpu.cpu_misc_info[2] = (ebx & 0xFF);
+
+	    /* Extended Function CPUID Information */
+	    cpuid(0x80000001, &eax, &ebx, &ecx, &edx);
+	    if(edx & (1<<29) ) 
+	    	cpu.extended_cpu_features[3] |= 0x020000000;
+	    
 	    if(highest_ext_info >= 0x80000004)
 	    	get_processor_name(cpu.processor_name);
 	}
 }
-
 
 void amd_init(){
 	// TODO - Implment AMD things.

@@ -107,100 +107,6 @@ struct CPU_INSTRUCTION{
 	int8_t RDTSCP;
 };
 
-
-
-struct PROCESSOR_SERIAL_NUMBER{
-	int32_t UPPER_BITS;
-	int32_t LOWER_BITS;
-};
-
-struct DET_CACHE_PARAMS{
-	int8_t CACHE_TYPE;
-	int8_t CACHE_LEVEL;
-	int8_t SINIT_CACHE_LVL;
-	int8_t FULLY_ASSOC_CACHE;
-	int8_t MAX_IDS_LOG_PRO;
-	int8_t MAX_IDS_PRO_CORES;
-	int16_t SYS_COH_LINE_SIZE;
-	int16_t PHY_LINE_PART;
-	int16_t WAYS_OF_ASSOC;
-	int32_t NO_OF_SETS;
-	int8_t WBINVD_COMPACT;
-};
-
-struct MONITOR{
-	int16_t MIN_MONS_SIZE;
-	int16_t MAX_MONS_SIZE;
-	int8_t EMX;
-	int8_t INTR_BRK_EVENT;
-	int32_t C0_C7;
-};
-
-struct DIGTSPM{
-	int16_t THERMAL_COMPACT;
-	int8_t NO_INTR_THRESH;
-	int8_t HW_FEEDBACK_PERF_ENERGY_COMPACT;
-
-};
-
-struct DCA {
-	int32_t PLATFORM_DCA_CAP;
-};
-
-struct ARCH_PER_MON_FEATURES {
-	int8_t VERSION_ID;
-	int8_t NO_GP_PERF_COUNTER;
-	int8_t BITS_WIDTH_GP_PERF_COUNTER;
-	int8_t LEN_EBX_BIT_VECTOR;
-	int8_t CORE_CYCLE_COMPACT;
-	int16_t FIXED_FUNC_COMPACT; 
-};
-
-struct PROCESSOR_TOPOLOGY {
-	int8_t BITS_RS_APIC;
-	int8_t NO_FC_LOG_PRO;
-	int8_t LEVEL_NUMBER;
-	int8_t LEVEL_TYPE;
-	int32_t EXT_APIC_ID;	
-};
-
-struct XSAVE {
-	int32_t LOWER_32_BITS_XCR0;
-	int32_t MAX_BYTES_XCR0;
-	int32_t MAX_BYTES_XSAVE;
-	int32_t UPPER_32_BITS_XCR0;
-	int32_t XSAVE_STATES_SIZE;
-	int32_t LOWER_XSS_OFFSET;
-	int8_t IA32_XSS;
-	int32_t UPPER_XSS_OFFSET;
-	int32_t SAVE_AREA_SIZE;
-	int32_t BEGIN_XSAVE_OFFSET;
-	int8_t BIT0_SUB_LEAF_CHECK;
-
-};
-
-
-// Extended Functions 
-
-struct EXT_CPU_FEATURE{
-	int32_t EXT_FEATURES;
-};
-
-struct EXT_L2_CACHE {
-	int16_t L2_SIZE;
-	int8_t L2_ASSOC;
-	int8_t L2_LINE_SIZE;
-};
-
-struct ADV_POW_MANG{
-	int8_t TSC_INVAR;
-};
-
-struct VIR_PHY_ADDR_SIZE{
-	int8_t VIRT_ADDR_SIZE;
-	int8_t PHY_ADDR_SIZE;
-};
-
 typedef struct {
 	/* 				STANDARD FUNCTIONS 			*/
 
@@ -221,6 +127,7 @@ typedef struct {
 	int16_t processor_signature[6];
 	
 	struct CPU_FEATURE  cpu_features;
+
 	struct CPU_INSTRUCTION cpu_instructions;
 // struct CPU_MISC_INFO{
 // 	int8_t LOCAL_APIC_ID;
@@ -232,48 +139,122 @@ typedef struct {
 	int16_t cpu_misc_info[4];
 
 	// Function 0x03 
-	struct PROCESSOR_SERIAL_NUMBER processor_serial_number;
+// struct PROCESSOR_SERIAL_NUMBER{
+// 	int32_t UPPER_BITS;
+// 	int32_t LOWER_BITS;
+// };
+	int32_t processor_serial_number[2];
 
 	// Funciton 0x04
-	struct DET_CACHE_PARAMS det_cache_params;
+// struct DET_CACHE_PARAMS{
+// 	int8_t CACHE_TYPE;
+// 	int8_t CACHE_LEVEL;
+// 	int8_t SINIT_CACHE_LVL;
+// 	int8_t FULLY_ASSOC_CACHE;
+// 	int8_t MAX_IDS_LOG_PRO;
+// 	int8_t MAX_IDS_PRO_CORES;
+// 	int16_t SYS_COH_LINE_SIZE;
+// 	int16_t PHY_LINE_PART;
+// 	int16_t WAYS_OF_ASSOC;
+// 	int32_t NO_OF_SETS;
+// 	int8_t WBINVD_COMPACT;
+// };
+	int32_t det_cache_params[11];
 
 	// Function 0x05 | Function 0x05
-	struct MONITOR monitor;
+// struct MONITOR{
+// 	int16_t MIN_MONS_SIZE;
+// 	int16_t MAX_MONS_SIZE;
+// 	int8_t EMX;
+// 	int8_t INTR_BRK_EVENT;
+// 	int32_t C0_C7;
+// };
+	int32_t monitor[5];
 
 	// Function 0x06 | Function 0x06
-	struct DIGTSPM dig_sensor_pm;
+// struct DIGTSPM{
+// 	int16_t THERMAL_COMPACT;
+// 	int8_t NO_INTR_THRESH;
+// 	int8_t HW_FEEDBACK_PERF_ENERGY_COMPACT;
+// };
+	int16_t dig_sensor_pm[3];
 
-	// Function 0x09 
-	struct DCA direct_cache;
+	// Function 0x09
+// struct DCA {
+// 	int32_t PLATFORM_DCA_CAP;
+// };
+	int32_t direct_cache[1];
 
 	// Function 0x0A
-	struct ARCH_PER_MON_FEATURES  arcpmf;
+// struct ARCH_PER_MON_FEATURES {
+// 	int8_t VERSION_ID;
+// 	int8_t NO_GP_PERF_COUNTER;
+// 	int8_t BITS_WIDTH_GP_PERF_COUNTER;
+// 	int8_t LEN_EBX_BIT_VECTOR;
+// 	int8_t CORE_CYCLE_COMPACT;
+// 	int16_t FIXED_FUNC_COMPACT; 
+// };
+	int16_t arcpmf[6];
 
 	// Function 0x0B
-	struct PROCESSOR_TOPOLOGY processor_topology;
+// struct PROCESSOR_TOPOLOGY {
+// 	int8_t BITS_RS_APIC;
+// 	int8_t NO_FC_LOG_PRO;
+// 	int8_t LEVEL_NUMBER;
+// 	int8_t LEVEL_TYPE;
+// 	int32_t EXT_APIC_ID;	
+// };
+	int32_t processor_topology[5];
 
 	// Function 0x0D | Function 0x0D
-	struct XSAVE processor_ext_state_enum;
-
+// struct XSAVE {
+// 	int32_t LOWER_32_BITS_XCR0;
+// 	int32_t MAX_BYTES_XCR0;
+// 	int32_t MAX_BYTES_XSAVE;
+// 	int32_t UPPER_32_BITS_XCR0;
+// 	int32_t XSAVE_STATES_SIZE;
+// 	int32_t LOWER_XSS_OFFSET;
+// 	int8_t IA32_XSS;
+// 	int32_t UPPER_XSS_OFFSET;
+// 	int32_t SAVE_AREA_SIZE;
+// 	int32_t BEGIN_XSAVE_OFFSET;
+// 	int8_t BIT0_SUB_LEAF_CHECK;
+// };
+	int32_t processor_ext_state_enum[11];
 
 	/* 				EXTENDED FUNCTIONS 			*/
 
 	uint32_t highest_ext_info;	
 
 	// Function 0x8000_0001 | Function 0x0000_0007
-	struct EXT_CPU_FEATURE extended_cpu_features;
+// struct EXT_CPU_FEATURE{
+// 	int32_t EXT_FEATURES;
+// };
+	int32_t extended_cpu_features[4];
 
 	// Function 0x8000_0002, 0x8000_0003, 0x800_0004
 	char processor_name[41];	
 
-	// Function 0x8000_0006 
-	struct EXT_L2_CACHE extended_L2_cache;
+	// Function 0x8000_0006
+// struct EXT_L2_CACHE {
+// 	int16_t L2_SIZE;
+// 	int8_t L2_ASSOC;
+// 	int8_t L2_LINE_SIZE;
+// };
+	int16_t extended_L2_cache[3];
 
 	// Function 0x8000_0007
-	struct ADV_POW_MANG advance_power_management;
+// struct ADV_POW_MANG{
+// 	int8_t TSC_INVAR;
+// };
+	int8_t advance_power_management[1];
 
 	// Function 0x8000_Z0008
-	struct VIR_PHY_ADDR_SIZE virtual_physcial_address;
+// struct VIR_PHY_ADDR_SIZE{
+// 	int8_t VIRT_ADDR_SIZE;
+// 	int8_t PHY_ADDR_SIZE;
+// };
+	int8_t virtual_physcial_address[2];
 
 
 } CPU_TOPOLOGY;
@@ -281,6 +262,36 @@ typedef struct {
 
 CPU_TOPOLOGY cpu;
 
+
+
+typedef struct {
+	char* arc;
+	char* op_modes;
+	char* byte_order;
+	char* cpus;
+	char* online_cpu_list;
+	char* threads_per_core;
+	char* cores_per_socket;
+	char* sockets;
+	char* NUMA_nodes;
+	char* vendor_id;
+	char* cpu_family;
+	char* model;
+	char* model_name;
+	char* stepping;
+	char* cpu_mhz;
+	char* cpu_max_mhz;
+	char* cpu_min_mhz;
+	char* bogo_MIPS;
+	char* virtualization;
+	char* l1d_cache;
+	char* l1i_cache;
+	char* l2_cache;
+	char* l3_cache;
+	char* flags[100];
+} LSCPU;
+
+LSCPU cpu_t;
 static inline void cpuid(uint32_t reg, uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t *edx)
 {
     __asm__ __volatile__("cpuid"
