@@ -141,10 +141,16 @@ void cpu_t_set(){
 				cpu_t.op_modes = "32-bit";
 			cpu_t.byte_order = "Little Endian";
 	}
-
-
 }
 
+void lsmem(){
+	kprintf("\n");
+	kprintf("Total Memory:%d MB\n", memory_t.total_mem);
+	kprintf("Used Memory:%d Kb\n", memory_t.used_mem);
+	kprintf("Un-Used Memory:%d Kb\n", memory_t.unused_mem);
+	kprintf("Kernel Start at:0x%x\n", memory_t.kernel_start);
+	kprintf("Kernel End at:0x%x\n", memory_t.kernel_end);
+}
 void lscpu(){
 	cpu_t_set();
 	kprintf("\n");
@@ -206,6 +212,9 @@ void exec_cmd(int n, char* buff[5]){
 			break;
 		case 10:
 			lscpu();
+			break;
+		case 11:
+			lsmem();
 			break;
 		default:
 			if(strlen((const char*)buff) > 1){

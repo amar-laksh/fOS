@@ -40,7 +40,7 @@ void kmain(multiboot_info_t* mbd, unsigned int magic){
 	}
 	// TODO - This is a hacky solution, change it
 	unsigned long total_mem = (mbd->mem_upper+mbd->mem_lower)+1;
-	kprintf("total mem:%x",total_mem);
+	memory_t.mem_db = mbd;
 	mm_init((uint32_t)&endKernel, total_mem);
 	kprintf("MM initiated.\n");
 	

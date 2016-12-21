@@ -52,6 +52,17 @@ struct regs {
 };
 
 
+typedef struct{
+	multiboot_info_t* mem_db;
+	unsigned long total_mem;
+	unsigned long unused_mem;
+	unsigned long used_mem;
+	unsigned long kernel_start;
+	unsigned long kernel_end;
+} memory;
+
+memory memory_t;
+
 void *memset(void *dest, char val, size_t count);
 
 void * memmove(void * restrict dest, const void * restrict src, size_t count);

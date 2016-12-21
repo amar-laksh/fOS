@@ -12,6 +12,11 @@ void mm_init(uint32_t kernel_end, unsigned long total_mem){
 	heap_begin = last_alloc;
 	heap_end = 0x400000;  
 	memset((char *)heap_begin, 0, heap_end - heap_begin);
+	memory_t.total_mem = total_mem/1024;
+	memory_t.kernel_end = kernel_end;
+	memory_t.kernel_start = last_alloc;
+	memory_t.used_mem = (last_alloc-0x000000)/1024;
+	memory_t.unused_mem = (memory_t.total_mem*1024 - memory_t.used_mem);
 	//kprintf("Kernel heap starts at 0x%x\n", last_alloc);
 }
 void mm_print_out(){
@@ -75,5 +80,7 @@ char* malloc(size_t size){
 	//kprintf("Allocated %d bytes from 0x%x to 0x%x\n", size, (uint32_t)alloc + sizeof(alloc_t), last_alloc);
 	memory_used += size + 4 + sizeof(alloc_t);
 	memset((char *)((uint32_t)alloc + sizeof(alloc_t)), 0, size);
+	memory_t.used_mem = (last_alloc-0x000000)/1024;
+	memory_t.unused_mem = (memory_t.total_mem*1024 - memory_t.used_mem);
 	return (char *)((uint32_t)alloc + sizeof(alloc_t));
 }
