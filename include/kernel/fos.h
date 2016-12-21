@@ -16,6 +16,7 @@
 #error "This kernel needs to be compiled with a ix86-elf compiler"
 #endif
 
+#include <kernel/multiboot.h>
 #include <mm/malloc.h>
 #include <gdt.h>
 #include <idt.h>

@@ -43,9 +43,9 @@ void draw_char(uint32_t p, char ch, uint8_t fg, uint8_t bg);
 
 int32_t draw_str(char string[], int32_t r, int32_t c);
 
-void write_char(char ascii);
+void write_char(char ascii, int fg, int bg);
 
-void write_str(char* string);
+void write_str(char* string, int fg, int bg);
 
 void vga_init();
 

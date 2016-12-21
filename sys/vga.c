@@ -3,8 +3,8 @@
 #define	VIDMEM 0x000B8000
 #define VIDMEM_END 0x00BFFFF
 #define VIDMEM_SIZE 32767
-#define MAX_ROWS 24
-#define MAX_COLUMNS 79
+#define MAX_ROWS 24//767//639//24
+#define MAX_COLUMNS 79//1023//479//79
 #define ERROR_CODE -12321
 #define PASS_CODE 32123
 
@@ -48,7 +48,7 @@ uint64_t get_register(int number){
 int32_t get_row(uint32_t p){
 	if(p>MAX_ROWS)
 		return ERROR_CODE;
-    return p*160;
+    return p*((MAX_COLUMNS+1)*2);
 }
 
 int32_t get_column(uint32_t p){
@@ -70,7 +70,7 @@ void draw_char(uint32_t p
 				, char ch
 				, uint8_t fg
 				, uint8_t bg) {
-	char *fb = (char *)  0x000B8000;
+	char *fb = (char *)  VIDMEM;
 	fb[p] = ch;
 	fb[p + 1] = ((fg & 0x0F) << 4) | (bg & 0x0F);
 }
@@ -85,18 +85,18 @@ void scroll_down(){
 	term->frame_buffer = memmove(term->frame_buffer
 								, vidmemptr
 								, VIDMEM_SIZE);
-	for(int i=0;i<25;i++){
-		for(int m=0;m<80;m++){
-			term->frame_buffer[i * 160 + m] 
-			= vidmemptr[(i+1)*160 + m];
+	for(int i=0;i<(MAX_ROWS+1);i++){
+		for(int m=0;m<(MAX_COLUMNS+1);m++){
+			term->frame_buffer[i * ((MAX_COLUMNS+1)*2) + m] 
+			= vidmemptr[(i+1) * ((MAX_COLUMNS+1)*2) + m];
 		}
 	}
 	vidmemptr = memset(vidmemptr,0,VIDMEM_SIZE);
 	
-	for(int i=0;i<25;i++){
-		for(int m=0;m<80;m++){
-			vidmemptr[i * 160 + m] 
-			= term->frame_buffer[i*160 + m];
+	for(int i=0;i<(MAX_ROWS+1);i++){
+		for(int m=0;m<(MAX_COLUMNS+1);m++){
+			vidmemptr[i * ((MAX_COLUMNS+1)*2) + m] 
+			= term->frame_buffer[i * ((MAX_COLUMNS+1)*2) + m];
 		}
 	}
 	draw_char(term->cursor,'#',0,15); 	
@@ -112,49 +112,49 @@ int32_t draw_str(char string[], int32_t r, int32_t c){
 }
 
 
-void write_char(char ascii){
+void write_char(char ascii, int fg, int bg){
 	if(ascii == '\b'){
-		if(term->cursor%160>3){
+		if(term->cursor%((MAX_COLUMNS+1)*2)>3){
 			term->cursor = term->cursor - 2;
-			draw_char(term->cursor,' ',0,15);
+			draw_char(term->cursor,' ',fg, bg);
 			move_cursor(term->cursor/2);
 		}
 	}
 	else if(ascii == '\r'){	
-			while(term->cursor%160>0){
+			while(term->cursor%((MAX_COLUMNS+1)*2)>0){
 				term->cursor = term->cursor + 2;
 			}
-			draw_char(term->cursor,'#',0,15);
-			draw_char(term->cursor+2,' ',0,15);
+			draw_char(term->cursor,'#',fg,bg);
+			draw_char(term->cursor+2,' ',COLOR_BLACK,bg);
 			term->cursor +=2;
 			move_cursor(term->cursor/2);
 	}
 	else if(ascii == '\t'){
 		for(int i=0;i<8;i++){
-			draw_char(term->cursor+2,' ',0,15);
+			draw_char(term->cursor+2,' ',COLOR_BLACK,bg);
 			term->cursor += 2;
 		}
 		move_cursor(term->cursor/2);
 	}
 	else if(ascii == '\n'){
-		while(term->cursor%160>0){
+		while(term->cursor%((MAX_COLUMNS+1)*2)>0){
 			term->cursor = term->cursor + 2;
 		}
 		move_cursor(term->cursor/2);
 		term->cursor += 2;
 	}
 	else{
-		draw_char(term->cursor,ascii,0,15);
-		draw_char(term->cursor+2,' ',0,15);
+		draw_char(term->cursor,ascii,fg,bg);
+		draw_char(term->cursor+2,' ',COLOR_BLACK,bg);
 		term->cursor += 2;
 		move_cursor(term->cursor/2);
 	}
 }
 
-void write_str(char* string){
+void write_str(char* string, int fg, int bg){
 	int32_t i=0;
 	for(i=0;i<strlen(string);i++){
-		write_char(string[i]);
+		write_char(string[i], fg, bg);
 	}
 }
 
@@ -206,12 +206,14 @@ void null_buffer(){
 
 }
 
+void cover_screen(){
+	memset((void*)VIDMEM,1,VIDMEM_SIZE);
+}
 void vga_init(){
 	term->cursor = 162;
 	clear_screen();
 	draw_str("f.O.S. - Made By Amar Lakshya",0,20);
-    write_str("\nHello World!\nThe console provides the following commands:\n whoami, hello, exit, clear \n");
     null_buffer();
-    write_str("\r");
+    write_str("\r",COLOR_BLACK, COLOR_GREEN);
 	keyboard_install();
 }

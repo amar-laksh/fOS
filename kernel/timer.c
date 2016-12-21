@@ -7,8 +7,6 @@ void timer_phase(int hz)
     outb(0x40, divisor & 0xFF);   /* Set low byte of divisor */
     outb(0x40, divisor >> 8);     /* Set high byte of divisor */
 }
-
-
 /* This will keep track of how many ticks that the system
 *  has been running for */
 int timer_ticks = 0;
@@ -18,10 +16,10 @@ int timer_ticks = 0;
 *  timer fires. By default, the timer fires 18.222 times
 *  per second. Why 18.222Hz? Some engineer at IBM must've
 *  been smoking something funky */
+
 char* buff;
 void timer_handler(struct regs *r){
     /* Increment our 'tick count' */
-
     timer_ticks++;
     cycles++;
     draw_str("Time: ",2, 55);

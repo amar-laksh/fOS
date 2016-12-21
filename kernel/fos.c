@@ -1,5 +1,4 @@
 #include <kernel/fos.h>
-
 extern void*  endKernel;
 
 void *memset(void *dest, char val, size_t count){
@@ -27,14 +26,22 @@ void * memmove(void * restrict dest
 }
 
 
-void kmain(){
+void kmain(multiboot_info_t* mbd, unsigned int magic){
 	term->cursor = 162;
-	set_clock();
 	clear_screen();
-	mm_init((uint32_t)&endKernel);
-	kprintf("MM initiated.\n");
 	serial_install();
 	kprintf("SERIAL initiated.\n");
+	int value = multiboot_check(mbd, magic);
+	if(value == -1){
+		kprintf("FAILURE: MULTIBOOT INFO DIDN'T CHECK");
+		return;
+	}
+	// TODO - This is a hacky solution, change it
+	unsigned long total_mem = (mbd->mem_upper+mbd->mem_lower)+1;
+	kprintf("total mem:%x",total_mem);
+	for(;;);
+	mm_init((uint32_t)&endKernel, total_mem);
+	kprintf("MM initiated.\n");
 	pci_install();
 	kprintf("PCI initiated.\n");
 	gdt_install();

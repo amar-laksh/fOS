@@ -7,10 +7,10 @@ uint32_t heap_end = 0;
 uint32_t heap_begin = 0;
 uint32_t memory_used = 0;
 
-void mm_init(uint32_t kernel_end){
+void mm_init(uint32_t kernel_end, unsigned long total_mem){
 	last_alloc = kernel_end + 0x1000;
 	heap_begin = last_alloc;
-	heap_end = 0x400000;  
+	heap_end = total_mem;  
 	memset((char *)heap_begin, 0, heap_end - heap_begin);
 	//kprintf("Kernel heap starts at 0x%x\n", last_alloc);
 }

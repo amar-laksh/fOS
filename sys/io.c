@@ -133,7 +133,7 @@ void getASCII(unsigned char c) {
             return;
         draw_str("Console Buffer: ",10,50);
         draw_str(term->buffer,11,50);
-        write_char(l);
+        write_char(l, COLOR_BLACK, COLOR_GREEN);
     }
 
 }

@@ -1,4 +1,3 @@
-// TODO - Optimize the serial_install() code
 #include <drivers/serial.h>
 #include <drivers/serial_list.h>
 

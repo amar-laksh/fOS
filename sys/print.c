@@ -133,8 +133,8 @@ int kprintf(
 	/* We're done with our arguments */
 	va_end(args);
 	/* Print that sucker */
-	write_str(buf);
-	if(serial.works = 13)
+	write_str(buf, COLOR_BLACK, COLOR_GREEN);
+	if(serial.works == 13)
 		write_serial(buf);
 	return out;
 }
@@ -163,7 +163,7 @@ int dprintf(
 	va_start(args, fmt);
 	int out = vasprintf(buf, fmt, args);
 	va_end(args);
-	write_str(buf);
+	write_str(buf, COLOR_BLACK, COLOR_GREEN);
 	write_serial(buf);
 	return out;
 }

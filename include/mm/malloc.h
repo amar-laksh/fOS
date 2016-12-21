@@ -8,7 +8,7 @@ typedef struct {
 	uint32_t size;
 } alloc_t;
 
- void mm_init(uint32_t end);
+ void mm_init(uint32_t end, unsigned long total_mem);
  void mm_print_out();
 
  char* malloc(size_t size);
