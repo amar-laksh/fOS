@@ -1,3 +1,4 @@
+// TODO- REMEMBER DELAY DOESN'T WORK ON PCSOUND API (INTERUPT PRIORITY)
 #include <timer.h>
 #define TIMER_IRQ 0
 void timer_phase(int hz)
