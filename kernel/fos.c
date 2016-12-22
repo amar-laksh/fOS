@@ -30,7 +30,7 @@ void write(int fd, const void* buf, size_t count){
 	__asm__ __volatile__ ("mov %0,%%edx"::"d"(count));
 	__asm__ __volatile__ ("mov %0,%%ecx"::"c"(buf));
 	__asm__ __volatile__ ("mov %0,%%ebx"::"b"(fd));
-	__asm__ __volatile__ ("mov $11,%%eax"::"a"(11));
+	__asm__ __volatile__ ("mov %0,%%eax"::"a"(11));
 	__asm__ __volatile__("int $69");
 }
 

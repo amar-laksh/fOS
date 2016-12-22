@@ -1,4 +1,3 @@
-// TODO - Implement multiboot_info with GRUB to detect memory
 #include <mm/malloc.h>
 #include <sys/print.h>
 
