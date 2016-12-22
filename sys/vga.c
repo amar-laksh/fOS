@@ -8,43 +8,6 @@
 #define ERROR_CODE -12321
 #define PASS_CODE 32123
 
-uint64_t get_register(int number){
-	uint64_t ret=0;
-	switch(number){
-		case 0:
-			__asm__ __volatile__ ( "mov %%eax, %0" 
-					: "=r"(ret));
-			break;
-		case 1:
-			__asm__ __volatile__ ( "mov %%ebx, %0" 
-					: "=r"(ret));
-			break;
-		case 2:
-			__asm__ __volatile__ ( "mov %%ecx, %0" 
-					: "=r"(ret));
-			break;
-		case 3:
-			__asm__ __volatile__ ( "mov %%edx, %0" 
-					: "=r"(ret));
-			break;
-		case 4:
-			__asm__ __volatile__ ("1: movl $1b, %0" 
-					: "=r" (ret));
-			break;	
-		case 5:
-			__asm__ __volatile__ ("mov %%cs, %0"
-					: "=r"(ret));
-			break;
-		case 6:
-			__asm__ __volatile__ ("mov %%ds, %0"
-					: "=r"(ret));
-			break;
-	}
-    return ret;
-}
-
-
-
 int32_t get_row(uint32_t p){
 	if(p>MAX_ROWS)
 		return ERROR_CODE;
