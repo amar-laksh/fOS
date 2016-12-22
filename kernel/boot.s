@@ -17,7 +17,7 @@
 
 .section .bootstrap_stack, "aw", @nobits
 stack_bottom:
-.skip 2*1024*1024#16384 # 16 KiB
+.skip 16384#2*1024*1024#16384 # 16 KiB
 stack_top:
 
 .section .text

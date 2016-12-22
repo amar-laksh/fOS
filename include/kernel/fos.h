@@ -76,8 +76,8 @@ Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA. */
 /* The magic number passed by a Multiboot-compliant boot loader. */
 #define MULTIBOOT_BOOTLOADER_MAGIC      0x2BADB002
 
-/* The size of our stack (2MiB). */
-#define STACK_SIZE                      0x200000
+/* The size of our stack (16KiB). */
+#define STACK_SIZE                      0x4000
 
 /* C symbol format. HAVE_ASM_USCORE is defined by configure. */
 #ifdef HAVE_ASM_USCORE
