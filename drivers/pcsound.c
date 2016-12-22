@@ -35,7 +35,7 @@ uint32_t play_note(char note, int octave, int time){
 	uint32_t freq = return_freq(note, octave);
 	if(freq != 11){
 		play_sound(freq);
-		delay(time*1000);
+		delay(time);
 		nosound();
 		sprintf("\n%d\n",freq);
 	}

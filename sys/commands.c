@@ -167,7 +167,6 @@ void lscpu(){
 	kprintf("CPU Family:\t\t%s\n", cpu_t.cpu_family);
 	kprintf("Model:\t\t%s\n", cpu_t.model);
 	kprintf("Model Name:\t\t%s\n", cpu_t.model_name);
-	
 }
 void exec_cmd(int n, char* buff[5]){
 	switch(n){

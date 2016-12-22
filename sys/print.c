@@ -134,8 +134,8 @@ int kprintf(
 	va_end(args);
 	/* Print that sucker */
 	write_str(buf, COLOR_BLACK, COLOR_GREEN);
-	if(serial.works == 13)
-		write_serial(buf);
+	//if(serial.works == 13)
+	//	write_serial(buf);
 	return out;
 }
 
