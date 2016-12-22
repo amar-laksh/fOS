@@ -37,7 +37,6 @@ uint32_t play_note(char note, int octave, int time){
 		play_sound(freq);
 		delay(time);
 		nosound();
-		sprintf("\n%d\n",freq);
 	}
 	return freq;
 }
@@ -55,7 +54,6 @@ void play_sound(uint32_t nFrequency) {
  	}
  }
 
- //make it shutup
 void nosound() {
  	uint8_t tmp = inb(0x61) & 0xFC;
  	outb(0x61, tmp);

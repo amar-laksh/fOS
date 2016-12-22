@@ -32,9 +32,9 @@ extern void isr28();
 extern void isr29();
 extern void isr30();
 extern void isr31();
+extern void isr69();
 
-
-static irq_handler_t isrs_routines[32] = { NULL };
+static irq_handler_t isrs_routines[33] = { NULL };
 
 void isrs_install_handler(
 		int isrs,
@@ -124,26 +124,60 @@ void isrs_install(){
 	idt_set_gate(29,(unsigned)isr29,0x08,0x8E);
 	idt_set_gate(30,(unsigned)isr30,0x08,0x8E);
 	idt_set_gate(31,(unsigned)isr31,0x08,0x8E);
+	idt_set_gate(69,(unsigned)isr69,0x08,0x8E);
 }
 
 
-void fault_handler(struct regs *r) {
-	if (r->int_no == 8) {
-		STOP;
-	}
-	if (r->int_no >= 32 ) {
-		STOP;
-	}
-	IRQ_OFF;
-	void (*handler)(struct regs *r);
-	handler = isrs_routines[r->int_no];
-	if (handler) {
-		handler(r);
-	} else {
+size_t sys_write(int fd, const void *buf, size_t count){
+	if(fd == 0){
+		const char* buffer = buf;
 		clear_screen();
-		draw_str("Unhandled exception: ",0,1);
-		draw_str(exception_messages[r->int_no],0,30);
-		for(;;);
+		term->cursor = 162;
+		for (unsigned long i = 0 ; i < count; i++){
+			write_char(buffer[i], COLOR_BLACK, COLOR_GREEN);
+		}
 	}
-	IRQ_RES;
+	else{
+		write_serial(buf);
+	}
+	return 0;
+} 
+void syscall_handler(struct regs* r){
+	kprintf("The parameters:\n%d\n%d\n%d\n%d\n"
+		,r->eax
+		,r->ebx
+		,r->ecx
+		,r->edx);
+	if(r->eax == 11){
+		sys_write(r->ebx, r->ecx, r->edx);
+	}
+}
+
+void fault_handler(struct regs *r) {
+	if (r->int_no == 69){
+		IRQ_OFF;
+		syscall_handler(r);
+		IRQ_RES;
+	}
+	else{
+		if (r->int_no == 8) {
+			STOP;
+		}
+		if (r->int_no >= 32 && r->int_no != 69) {
+			STOP;
+		}
+		IRQ_OFF;
+		void (*handler)(struct regs *r);
+		handler = isrs_routines[r->int_no];
+		if (handler) {
+			handler(r);
+		} else {
+			clear_screen();
+			draw_str("Unhandled exception: ",0,1);
+			draw_str(exception_messages[r->int_no],0,30);
+			for(;;);
+		}
+		IRQ_RES;
+	}
+	return;
 }

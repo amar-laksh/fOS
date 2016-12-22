@@ -1,3 +1,4 @@
+// TODO - Write unit tests for the entire kernel
 #include <kernel/fos.h>
 extern void*  endKernel;
 
@@ -25,6 +26,13 @@ void * memmove(void * restrict dest
 	return dest;
 }
 
+void write(int fd, const void* buf, size_t count){
+	__asm__ __volatile__ ("mov %0,%%edx"::"d"(count));
+	__asm__ __volatile__ ("mov %0,%%ecx"::"c"(buf));
+	__asm__ __volatile__ ("mov %0,%%ebx"::"b"(fd));
+	__asm__ __volatile__ ("mov $11,%%eax"::"a"(11));
+	__asm__ __volatile__("int $69");
+}
 
 void kmain(multiboot_info_t* mbd, unsigned int magic){
 	term->cursor = 162;
@@ -44,7 +52,6 @@ void kmain(multiboot_info_t* mbd, unsigned int magic){
 	
 	mm_init((uint32_t)&endKernel, total_mem);
 	kprintf("MM initiated.\n");
-	
 	pci_install();
 	kprintf("PCI initiated.\n");
 	
@@ -62,7 +69,7 @@ void kmain(multiboot_info_t* mbd, unsigned int magic){
 	
 	timer_install();
 	kprintf("TIMER initiated.\n");
-	
+	//write(0, "New Duniya", strlen("New Duniya"));
 	poll_init();
 	kprintf("POLL initiated.\n");
 	

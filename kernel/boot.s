@@ -17,7 +17,7 @@
 
 .section .bootstrap_stack, "aw", @nobits
 stack_bottom:
-.skip 16384 # 16 KiB
+.skip 2*1024*1024#16384 # 16 KiB
 stack_top:
 
 .section .text
@@ -78,6 +78,15 @@ idt_load:
 		jmp isr_common
 .endm
 
+.macro ISR_SYSCALL x
+	.global isr\x
+	isr\x:
+		cli
+		pushl $0
+		pushl $\x
+		jmp isr_common
+.endm
+
 .macro IRQ_ENTRY x, y
 	.global  irq\x
 	irq\x:
@@ -120,8 +129,11 @@ ISR_NOERR 28
 ISR_NOERR 29
 ISR_NOERR 30
 ISR_NOERR 31
+ISR_SYSCALL 69
 
 .extern fault_handler
+.extern syscall
+
 
 isr_common:
 	pusha
@@ -135,8 +147,7 @@ isr_common:
 	movw %ax, %es
 	movw %ax, %fs
 	movw %ax, %gs
-	movl %esp, %eax 
-
+	movl %esp, %eax
 	pushl %eax
 	mov $fault_handler, %eax
 	call *%eax 

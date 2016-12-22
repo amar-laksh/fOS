@@ -4,6 +4,7 @@ STDLIBDIR = ../stdlib
 DRIVERSDIR = ../drivers
 KERNELDIR = ./
 MEMDIR = ../mm
+TESTDIR = ../test
 
 INCLUDE    := $(shell find $(INCLUDEDIR) -name '*.c')
 SYS	   := $(shell find $(SYSDIR) -name '*.c')
@@ -11,6 +12,7 @@ STDLIB     := $(shell find $(STDLIBDIR) -name '*.c')
 DRIVERS    := $(shell find $(DRIVERSDIR) -name '*.c')
 KERNEL     := $(shell find $(KERNELDIR) -name '*.c')
 MEM 	   := $(shell find $(MEMDIR) -name '*.c')
+TEST	   := $(shell find $(TESTDIR) -name '*.c')
 
 OBJECTS = $(patsubst %.c,$(INCLUDEDIR)/%.o,$(INCLUDE)) $(patsubst %.c,$(SYSDIR)/%.o,$(SYS)) $(patsubst %.c,$(STDLIBDIR)/%.o,$(STDLIB)) $(patsubst %.c,$(DRIVERSDIR)/%.o,$(DRIVERS)) $(patsubst %.c,$(KERNELDIR)/%.o,$(KERNEL)) $(patsubst %.c,$(MEMDIR)/%.o,$(MEM)) boot.o
 
@@ -20,6 +22,9 @@ LDFLAGS = -T linker.ld -o fos.elf -ffreestanding -O2 -nostdlib
 AS =  /root/cross/bin/i686-elf-as
 
 all: kernel.elf
+
+test:
+	 $(CC) $(TEST) -std=gnu99  -O2 -Wall -Wextra -lgcc
 
 clean:
 	rm -rf *. ../drivers/*.o ../mm/*.o ../sys/*.o ../stdlib/*.o ../include/*.o *.o ./boot/fos.bin ./boot/fos.elf ./*.iso ./*.elf

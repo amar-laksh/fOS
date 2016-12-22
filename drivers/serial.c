@@ -23,8 +23,6 @@ int8_t serial_enable(int com_port, int baud_rate){
    if(loopback_test(com_port) < 0){
       return -1;
    }
-   serial.COM_PORT = com_port;
-   serial.BAUD_RATE = baud_rate;
    return 0;
 }
 
@@ -38,6 +36,8 @@ void serial_install() {
       else{
          serial_table[i].STATUS = 0xFF;
          c++;
+         serial.COM_PORT = serial_table[i].COM_PORT;
+         serial.BAUD_RATE = 0x03;
       }
    }
    if(c == 0){
