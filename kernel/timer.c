@@ -23,6 +23,7 @@ void timer_handler(struct regs *r){
     /* Increment our 'tick count' */
     timer_ticks++;
     cycles++;
+    draw_str("f.O.S. - Made By Amar Lakshya",0,20);
     draw_str("Time: ",2, 55);
     /* Every 100 clocks (approximately 1 second), we will
     *  display a message on the screen */

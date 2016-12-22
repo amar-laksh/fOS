@@ -45,12 +45,12 @@ void kmain(multiboot_info_t* mbd, unsigned int magic){
 		kprintf("FAILURE: MULTIBOOT INFO DIDN'T CHECK");
 		return;
 	}
-	kprintf("multiboot checking done.");
+	kprintf("Multiboot check complete.\n");
 	// TODO - This is a hacky solution, change it
-	unsigned long total_mem = (mbd->mem_upper+mbd->mem_lower)+1;
 	memory_t.mem_db = mbd;
 	
-	mm_init((uint32_t)&endKernel, total_mem);
+	mm_init((uint32_t)&endKernel
+					,(mbd->mem_upper+mbd->mem_lower)+1);
 	kprintf("MM initiated.\n");
 	pci_install();
 	kprintf("PCI initiated.\n");
@@ -69,7 +69,7 @@ void kmain(multiboot_info_t* mbd, unsigned int magic){
 	
 	timer_install();
 	kprintf("TIMER initiated.\n");
-	//write(0, "New Duniya", strlen("New Duniya"));
+
 	poll_init();
 	kprintf("POLL initiated.\n");
 	

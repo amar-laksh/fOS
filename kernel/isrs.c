@@ -127,21 +127,6 @@ void isrs_install(){
 	idt_set_gate(69,(unsigned)isr69,0x08,0x8E);
 }
 
-
-size_t sys_write(int fd, const void *buf, size_t count){
-	if(fd == 0){
-		const char* buffer = buf;
-		clear_screen();
-		term->cursor = 162;
-		for (unsigned long i = 0 ; i < count; i++){
-			write_char(buffer[i], COLOR_BLACK, COLOR_GREEN);
-		}
-	}
-	else{
-		write_serial(buf);
-	}
-	return 0;
-} 
 void syscall_handler(struct regs* r){
 	kprintf("The parameters:\n%d\n%d\n%d\n%d\n"
 		,r->eax
@@ -168,7 +153,7 @@ void fault_handler(struct regs *r) {
 		}
 		IRQ_OFF;
 		void (*handler)(struct regs *r);
-		handler = isrs_routines[r->int_no];
+		handler = (void*)isrs_routines[r->int_no];
 		if (handler) {
 			handler(r);
 		} else {
