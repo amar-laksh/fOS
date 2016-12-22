@@ -1,4 +1,4 @@
-#include <stdlib/string.h>
+#include <kernel/fos.h>
 
 int32_t strlen(const char str[]){
 	int32_t len=0;

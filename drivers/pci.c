@@ -27,7 +27,8 @@ DISCOVERD DEVICE.
 
 
 */
-#include <drivers/pci.h>
+#include <kernel/fos.h>
+#include <drivers/pci_list.h>
 pci_device **pci_devices = 0;
 uint32_t devs = 0;
 

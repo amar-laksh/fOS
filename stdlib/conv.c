@@ -1,4 +1,4 @@
-#include <stdlib/conv.h>
+#include <kernel/fos.h>
 
 void itoi(uint64_t i,uint32_t base, uint64_t* buf) {
 	uint64_t tbuf[100];

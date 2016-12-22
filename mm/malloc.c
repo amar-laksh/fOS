@@ -1,5 +1,4 @@
-#include <mm/malloc.h>
-#include <sys/print.h>
+#include <kernel/fos.h>
 
 uint32_t last_alloc = 0;
 uint32_t heap_end = 0;

@@ -1,5 +1,5 @@
 // TODO - Completely refactor this shitty code
-#include <sys/vga.h>
+#include <kernel/fos.h>
 #define	VIDMEM 0x000B8000
 #define VIDMEM_END 0x00BFFFF
 #define VIDMEM_SIZE 32767

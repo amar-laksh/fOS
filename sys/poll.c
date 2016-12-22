@@ -1,4 +1,4 @@
-#include <sys/poll.h>
+#include <kernel/fos.h>
 
 uint64_t rdtsc() {
 	    uint64_t ret=0;

@@ -1,6 +1,5 @@
-#include <sys/io.h>
+#include <kernel/fos.h>
 #include <sys/io_list.h>
-#include <sys/commands.h>
 #define cmd  13
 char* commands[cmd] = {
     "clear",

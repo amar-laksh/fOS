@@ -1,5 +1,4 @@
-#include <drivers/pcsound.h>
-#include <stdlib/conv.h>
+#include <kernel/fos.h>
 
 // TODO - Make the sound api available in floating-point integers.
 //Play sound using built in speaker

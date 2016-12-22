@@ -1,4 +1,5 @@
-#include <kernel/multiboot.h>
+#include <kernel/fos.h>
+
 #define CHECK_FLAG(flag,bit) ((flag) & (1<<bit))
 int multiboot_check(multiboot_info_t* mbd, unsigned int magic){
    	if (magic != MULTIBOOT_BOOTLOADER_MAGIC){

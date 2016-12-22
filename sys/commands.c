@@ -1,5 +1,5 @@
 /* TODO- The case 3 is temperory. Create a text-based graphics engine.*/
-#include <sys/commands.h>
+#include <kernel/fos.h>
 #define KBRD_INTRFC 0x64
  
 /* keyboard interface bits */

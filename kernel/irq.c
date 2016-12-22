@@ -1,4 +1,4 @@
-#include <irq.h>
+#include <kernel/fos.h>
 
 /* These are own ISRs that point to our special IRQ handler
 *  instead of the regular 'fault_handler' function */
@@ -20,15 +20,12 @@ extern void irq14();
 extern void irq15();
 
 
-
 /* This array is actually an array of function pointers. We use
 *  this to handle custom IRQ handlers for a given IRQ */
 static irq_handler_t *irq_routines[16] = { NULL };
 
-
-void irq_install_handler(int irq
-                        , irq_handler_t handler) {
-    irq_routines[irq] = handler;
+void irq_install_handler(int irq, irq_handler_t handler) {
+    irq_routines[irq] = (void*)handler;
 }
 
 
@@ -87,7 +84,7 @@ void irq_handler(struct regs *r) {
     	if(r->int_no > 47 || r->int_no <32){
 		handler = NULL;
     	} else {
-		handler = irq_routines[r->int_no - 32];
+		handler = (void*)irq_routines[r->int_no - 32];
 	}
     	if (handler){
 		    handler(r);

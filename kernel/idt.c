@@ -1,4 +1,4 @@
-#include <idt.h>
+#include <kernel/fos.h>
 
 struct idt_entry
 {
