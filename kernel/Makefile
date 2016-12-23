@@ -43,11 +43,10 @@ kernel.elf: $(OBJECTS)
 	$(CC) $(LDFLAGS) $(OBJECTS) -lgcc
 
 run: os.iso
-	qemu-system-i386 -display sdl -serial stdio -cdrom fos.iso
+	qemu-system-i386 -D /tmp/current.log -display sdl -m 8G -serial stdio -cdrom fos.iso
 
 debug: os.iso
-	objcopy --only-keep-debug fos.elf fos.sym
-	qemu-system-i386 -s -kernel fos.elf
+	qemu-system-i386 -s -S fos.iso
 
 %.o: %.c
 	$(CC) $(CFLAGS) $< -o $@

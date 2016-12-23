@@ -20,7 +20,14 @@
 #include <sys/va_list.h>
 
 
-//------------------------------------------------CONV.H
+
+
+
+
+
+
+
+//------------------------------------------------STRNG.H
 
 int32_t strlen(const char str[]);
 
@@ -162,7 +169,7 @@ unsigned long length_high;
 unsigned long type;
 } memory_map_t;
 
-int multiboot_check(multiboot_info_t* mbd, unsigned int magic);
+unsigned long long multiboot_check(multiboot_info_t* mbd, unsigned int magic);
 
 #endif /* ! ASM */
 
@@ -225,8 +232,6 @@ void timer_phase(int hz);
 uint64_t rdtsc();
 
 uint64_t get_control_register(int number);
-
-void get_cpuid_string(int code, char* where);
 
 void poll_init();
 
@@ -438,99 +443,53 @@ void pci_proc_dump();
 
 
 //------------------------------------------------CPU.H
-struct CPU_FEATURE{
-	int8_t FPU;
-	int8_t VME;
-	int8_t DE; 
-	int8_t PSE;
-	int8_t PAE;
-	int8_t MCE;
-	int8_t APIC;
-	int8_t MTRR;
-	int8_t PGE; 
-	int8_t MCA; 
-	int8_t PAT; 
-	int8_t PSE36;
-	int8_t PSN;  
-	int8_t DS;     
-	int8_t ACPI;    
-	int8_t SS;   
-	int8_t HTT;  
-	int8_t TM;   
-	int8_t PBE;  
-	int8_t DTES64;
-	int8_t MONITOR; 
-	int8_t DS_CPL; 
-	int8_t VMX;    
-	int8_t SMX;    
-	int8_t EST;    
-	int8_t TM2;      
-	int8_t CNXT_ID;     
-	int8_t XTPR;  
-	int8_t PDCM;  
-	int8_t PCID;  
-	int8_t DCA;   
-	int8_t X2APIC; 
-	int8_t TSC;    
-	int8_t F16C;
-	// Probably AMD features 
-	int8_t TOPO_EXT;
-	int8_t NODE_ID;
-	int8_t LWP;
-	int8_t WDT;
-	int8_t SKINT;
-	int8_t XOP;
-	int8_t IBS;
-	int8_t OSVW;
-	int8_t MIS_SSE;
-	int8_t ABM;
-	int8_t ALT_MOV_CR8;
-	int8_t XAPIC_SPACE;
-	int8_t SVM;
-	int8_t CMP_LEGACY;
-	int8_t THREE_DNOW_EXT;
-	int8_t LM;
-	int8_t FFXSR;
-	int8_t MMX_EXT;
 
-};
+#define CHECK_RANGE_FOR_BIT(begin, count, reg, what) for(int i=begin;i<=count;i++){if(reg & (1<<i)) cpu.what[i].flag = 1;}
+typedef struct {
+		int8_t flag;
+		char* name;
+	}CPU_TABLE;
 
 
-
-struct CPU_INSTRUCTION{
-	int8_t FXSR;
-	int8_t MMX;
-	int8_t CLFLUSH;
-	int8_t FMA;
-	int8_t CX8;
-	int8_t CX16;
-	int8_t MSR;
-	int8_t SSE;
-	int8_t SSE2;
-	int8_t SSE3;
-	int8_t SSSE3;
-	int8_t SSE41;
-	int8_t SSE42;
-	int8_t AVX;
-	int8_t RDRAND;
-	int8_t CMOV;
-	int8_t XSAVE; 
-	int8_t OSXSAVE;
-	int8_t MOVBE;
-	int8_t POPCNT; 
-	int8_t AESNI;
-	int8_t PCLMUL;
-	int8_t SEP;
-	// Probably AMD Instructions
-	int8_t TBM;
-	int8_t THREE_DNOW_PRE;
-	int8_t SSE4A;
-	int8_t THREE_DNOW_INSTR;
-	int8_t RDTSCP;
-};
 
 typedef struct {
 	/* 				STANDARD FUNCTIONS 			*/
+
+	CPU_TABLE cpu_features[52];
+
+// struct CPU_INSTRUCTION{
+// 	int8_t FXSR;
+// 	int8_t MMX;
+// 	int8_t CLFLUSH;
+// 	int8_t FMA;
+// 	int8_t CX8;
+// 	int8_t CX16;
+// 	int8_t MSR;
+// 	int8_t SSE;
+// 	int8_t SSE2;
+// 	int8_t SSE3;
+// 	int8_t SSSE3;
+// 	int8_t SSE41;
+// 	int8_t SSE42;
+// 	int8_t AVX;
+// 	int8_t RDRAND;
+// 	int8_t CMOV;
+// 	int8_t XSAVE; 
+// 	int8_t OSXSAVE;
+// 	int8_t MOVBE;
+// 	int8_t POPCNT; 
+// 	int8_t AESNI;
+// 	int8_t PCLMUL;
+// 	int8_t SEP;
+// 	// Probably AMD Instructions
+// 	int8_t TBM;
+// 	int8_t THREE_DNOW_PRE;
+// 	int8_t SSE4A;
+// 	int8_t THREE_DNOW_INSTR;
+// 	int8_t RDTSCP;
+// };
+
+	CPU_TABLE cpu_instructions[23];
 
 	// Function 0x00 | Function 0x00
 	char cpu_vendor_string[12];
@@ -546,11 +505,8 @@ typedef struct {
 // 	int8_t STEPPING_ID;
 // 	int8_t PROCESSOR_TYPE;
 // };
-	int16_t processor_signature[6];
-	
-	struct CPU_FEATURE  cpu_features;
+	uint16_t processor_signature[6];
 
-	struct CPU_INSTRUCTION cpu_instructions;
 // struct CPU_MISC_INFO{
 // 	int8_t LOCAL_APIC_ID;
 // 	int8_t CLFLUSH_SIZE;
@@ -685,7 +641,6 @@ typedef struct {
 CPU_TOPOLOGY cpu;
 
 
-
 typedef struct {
 	char* arc;
 	char* op_modes;
@@ -721,11 +676,14 @@ static inline void cpuid(uint32_t reg, uint32_t *eax, uint32_t *ebx, uint32_t *e
         : "0" (reg));
 }
 
+void get_cpuid_string(int code, char* where);
+
 void cpu_init();
 
 void intel_init();
 
 void amd_init();
+
 
 
 //------------------------------------------------COMMANDS.H
@@ -737,6 +695,14 @@ void exec_cmd(int n, char* buff[5]);
 size_t sys_write(int fd, const void *buf, size_t count);
 
 
+
+
+
+
+
+
+
+//------------------FOS.H---------------------------------------------
 
 #define IRQ_OFF { asm volatile ("cli"); }
 #define IRQ_RES { asm volatile ("sti"); }

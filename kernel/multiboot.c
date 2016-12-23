@@ -1,7 +1,9 @@
 #include <kernel/fos.h>
 
 #define CHECK_FLAG(flag,bit) ((flag) & (1<<bit))
-int multiboot_check(multiboot_info_t* mbd, unsigned int magic){
+
+unsigned long long multiboot_check(multiboot_info_t* mbd, unsigned int magic){
+    unsigned long long total_mem_low = 0;
    	if (magic != MULTIBOOT_BOOTLOADER_MAGIC){
    		kprintf("Invalid magic number: 0x%x\n"
    							, (unsigned) magic);
@@ -9,12 +11,13 @@ int multiboot_check(multiboot_info_t* mbd, unsigned int magic){
    	}
    	
    	kprintf("\n\nFlags:%x\n\n", mbd->flags);
-   	if(CHECK_FLAG(mbd->flags,0)){
-		kprintf("Lower memory:%d KB\n"
-							,mbd->mem_lower);
-		kprintf("Upper memory:%d MB\n"
-							,mbd->mem_upper/1024);
-	}
+   	
+    if(CHECK_FLAG(mbd->flags,0)){
+  		kprintf("Lower memory:%d KB\n"
+  							,mbd->mem_lower);
+  		kprintf("Upper memory:%d MB\n"
+  							,mbd->mem_upper/1024);
+    }
 
 	if (CHECK_FLAG (mbd->flags, 1))
 		kprintf ("boot_device = 0x%x\n"
@@ -25,20 +28,16 @@ int multiboot_check(multiboot_info_t* mbd, unsigned int magic){
 			, (char *) mbd->cmdline);
 
 	if (CHECK_FLAG (mbd->flags, 3)){
-		module_t *mod;
 		int i;
 		kprintf ("mods_count = %d, mods_addr = 0x%x\n"
 			,(int) mbd->mods_count, (int) mbd->mods_addr);
 
-		for (i = 0
-			, mod = (module_t *) mbd->mods_addr
-          		;i < mbd->mods_count;i++
-            , mod++)
-            kprintf(" mod_start = 0x%x, mod_end = 0x%x, cmdline = %s\n"
-                 ,(unsigned) mod->mod_start
-                 ,(unsigned) mod->mod_end
-                 ,(char *) mod->string);
- 	}
+      for (i = 0; i < mbd->mods_count; ++i ) {
+        uint32_t module_start = *((uint32_t*)mbd->mods_addr + 8 * i);
+        uint32_t module_end   = *(uint32_t*)(mbd->mods_addr + 8 * i + 4);
+        kprintf("Module %d is at 0x%x:0x%x\n", i+1, module_start, module_end);
+      }
+    }
 
     if (CHECK_FLAG (mbd->flags, 4) && CHECK_FLAG (mbd->flags, 5)){
     	kprintf("Both bits 4 and 5 are set.\n");
@@ -71,19 +70,27 @@ int multiboot_check(multiboot_info_t* mbd, unsigned int magic){
            ,(unsigned) mbd->mmap_addr
            ,(unsigned) mbd->mmap_length);
 
-		for (mmap = (memory_map_t *) mbd->mmap_addr
-        	;(unsigned long) mmap < mbd->mmap_addr + mbd->mmap_length
-        	;mmap = (memory_map_t *) ((unsigned long) mmap
-        		+ mmap->size + sizeof (mmap->size)))
+    mmap = (memory_map_t *) mbd->mmap_addr;
+    while((unsigned long)mmap < mbd->mmap_addr + mbd->mmap_length){
+      kprintf (" size = 0x%x, base_addr = 0x%x,"
+         " length = 0x%x, type = 0x%x\n"
+         ,(unsigned) mmap->size
+         ,mmap->base_addr_low
+         //,mmap->base_addr_high
+         ,mmap->length_low
+         //,mmap->length_high
+         ,(unsigned) mmap->type);
+      
+      total_mem_low += mmap->length_low;
+      mmap = (memory_map_t *)((unsigned long) mmap 
+                              + mmap->size + sizeof(mmap->size));
 
-			kprintf (" size = 0x%x, base_addr = 0x%x%x,"
-             " length = 0x%x%x, type = 0x%x\n"
-             ,(unsigned) mmap->size
-             ,mmap->base_addr_low
-             ,mmap->base_addr_high
-             ,mmap->length_low
-             ,mmap->length_high
-             ,(unsigned) mmap->type);
-	}
-  return 0;
+    }
+    total_mem_low /= 1024;
+    total_mem_low /= 1024;
+    total_mem_low += 1;
+    kprintf("My best guess of the memory is:\nTotal:%d MiB\n"
+                    ,total_mem_low);
+        }
+  return total_mem_low;
 }

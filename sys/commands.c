@@ -167,6 +167,18 @@ void lscpu(){
 	kprintf("CPU Family:\t\t%s\n", cpu_t.cpu_family);
 	kprintf("Model:\t\t%s\n", cpu_t.model);
 	kprintf("Model Name:\t\t%s\n", cpu_t.model_name);
+
+	kprintf("CPU FEATURES:\n");
+	for (int i = 0; i < 52; ++i){
+		if(cpu.cpu_features[i].flag == 1)
+		kprintf("%s|",cpu.cpu_features[i].name);
+	}
+
+	kprintf("\n\nCPU INSTRUCTIONS:\n");
+	for (int i = 0; i < 23; ++i){
+		if(cpu.cpu_instructions[i].flag == 1)
+		kprintf("%s|",cpu.cpu_instructions[i].name);
+	}
 }
 void exec_cmd(int n, char* buff[5]){
 	switch(n){

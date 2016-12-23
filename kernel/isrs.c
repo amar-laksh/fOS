@@ -128,7 +128,7 @@ void isrs_install(){
 }
 
 void syscall_handler(struct regs* r){
-	kprintf("The parameters:\n%d\n%d\n%d\n%d\n"
+	sprintf("The parameters:\n%d\n%d\n%d\n%d\n"
 		,r->eax
 		,r->ebx
 		,r->ecx

@@ -40,8 +40,8 @@ void kmain(multiboot_info_t* mbd, unsigned int magic){
 
 	serial_install();
 	kprintf("SERIAL initiated.\n");
-	int value = multiboot_check(mbd, magic);
-	if(value == -1){
+	int total_mem = multiboot_check(mbd, magic);
+	if(total_mem == -1){
 		kprintf("FAILURE: MULTIBOOT INFO DIDN'T CHECK");
 		return;
 	}
@@ -49,8 +49,7 @@ void kmain(multiboot_info_t* mbd, unsigned int magic){
 	// TODO - This is a hacky solution, change it
 	memory_t.mem_db = mbd;
 	
-	mm_init((uint32_t)&endKernel
-					,(mbd->mem_upper+mbd->mem_lower)+1);
+	mm_init((uint32_t)&endKernel, total_mem);
 	kprintf("MM initiated.\n");
 	pci_install();
 	kprintf("PCI initiated.\n");
@@ -72,6 +71,8 @@ void kmain(multiboot_info_t* mbd, unsigned int magic){
 
 	poll_init();
 	kprintf("POLL initiated.\n");
+	clear_screen();
+	//__asm__ __volatile__("jmp %0"::"r"(mbd->mods_addr));
 	
 	vga_init();
 	asm("hlt");

@@ -1,8 +1,88 @@
-// TODO - TURN CPU STRUCT INTO ARRAY
+// TODO - SOLVE MESSED UP FEATURES TO ARRAY CONVERSION
 #include <kernel/fos.h>
 #define cpuid_simple(in, a, b, c, d) asm("cpuid": "=a" (a), "=b" (b), "=c" (c), "=d" (d) : "a" (in));
 
+CPU_TABLE cpu_fs[52] =
+	{
+		{0,"FPU"},
+		{0,"VME"},
+		{0,"DE"},
+		{0,"PSE"},
+		{0,"PAE"},
+		{0,"MCE"},
+		{0,"APIC"},
+		{0,"MTRR"},
+		{0,"PGE"},
+		{0,"MCA"},
+		{0,"PAT"},
+		{0,"PSE36"},
+		{0,"PSN"},
+		{0,"DS"},
+		{0,"ACPI"},
+		{0,"SS"},
+		{0,"HTT"},
+		{0,"TM"},
+		{0,"PBE"},
+		{0,"DTES64"},
+		{0,"MONITOR"},
+		{0,"DS_CPL"},
+		{0,"VMX"},
+		{0,"SMX"},
+		{0,"EST"},
+		{0,"TM2"},
+		{0,"CNXT_ID"},
+		{0,"XTPR"},
+		{0,"PDCM"},
+		{0,"PCID"},
+		{0,"DCA"},
+		{0,"X2APIC"},
+		{0,"TSC"},
+		{0,"F16C"},
+		{0,"TOPO_EXT"},
+		{0,"NODE_ID"},
+		{0,"LWP"},
+		{0,"WDT"},
+		{0,"SKINT"},
+		{0,"XOP"},
+		{0,"IBS"},
+		{0,"OSVW"},
+		{0,"MIS_SSE"},
+		{0,"ABM"},
+		{0,"ALT_MOV_CR8"},
+		{0,"XAPIC_SPACE"},
+		{0,"SVM"},
+		{0,"CMP_LEGACY"},
+		{0,"THREE_DNOW_EXT"},
+		{0,"LM"},
+		{0,"FFXSR"},
+		{0,"MMX_EXT"}
+	};
 
+CPU_TABLE cpu_ins[23] = {
+	{0,"MSR"},
+	{0,"CX8"},
+	{0,"SEP"},
+	{0,"CMOV"},
+	{0,"CLFLUSH"},
+	{0,"MMX"},
+	{0,"FFXSR"},
+	{0,"SSE"},
+	{0,"SSE2"},
+	{0,"SSE3"},
+	{0,"PCLMUL"},
+	{0,"SSSE3"},
+	{0,"FMA"},
+	{0,"CX16"},
+	{0,"SSE41"},
+	{0,"SSE42"},
+	{0,"MOVBE"},
+	{0,"POPCNT"},
+	{0,"AESNI"},
+	{0,"XSAVE"},
+	{0,"OSXSAVE"},
+	{0,"AVX"},
+	{0,"RDRAND"}
+};
 
 uint32_t highest_std_info, highest_ext_info;
 uint32_t eax, ebx, ecx, edx,crap;
@@ -53,6 +133,15 @@ void cpu_init(){
   }
 
 void intel_init(){
+	for (int i = 0; i < 52; ++i)
+	{
+		cpu.cpu_features[i] = cpu_fs[i];
+	}
+
+	for (int i = 0; i < 23; ++i)
+	{
+		cpu.cpu_instructions[i] = cpu_ins[i];
+	}
 	cpuid(0x80000000, 
 		&highest_ext_info,
 		&ebx, &ecx, &edx);
@@ -103,71 +192,41 @@ void intel_init(){
 	    cpu.processor_signature[4] = (eax & 0xF);
 	    cpu.processor_signature[5] = (eax & 0x6000);
 	    
-	    
 	    /** CPU Features **/
-	    if (edx & (1<<0) )		cpu.cpu_features.FPU = 1;
-	    if (edx & (1<<1) )		cpu.cpu_features.VME = 1;
-	    if (edx & (1<<2) )		cpu.cpu_features.DE = 1;
-	    if (edx & (1<<3) )		cpu.cpu_features.PSE = 1;
-	    if (edx & (1<<5) )		cpu.cpu_features.TSC = 1;
-	    if (edx & (1<<6) )		cpu.cpu_features.PAE = 1;
-	    if (edx & (1<<7) )		cpu.cpu_features.MCE = 1;
-	    if (edx & (1<<9) )		cpu.cpu_features.APIC = 1;
-	    if (edx & (1<<12) )		cpu.cpu_features.MTRR = 1;
-	    if (edx & (1<<13) )		cpu.cpu_features.PGE = 1;
-	    if (edx & (1<<14) )		cpu.cpu_features.MCA = 1;
 
-	    if (edx & (1<<16) )		cpu.cpu_features.PAT = 1;
-	    if (edx & (1<<17) )		cpu.cpu_features.PSE36 = 1;
-	    if (edx & (1<<18) )		cpu.cpu_features.PSN = 1;
-	    if (edx & (1<<21) )		cpu.cpu_features.DS = 1;
-	    if (edx & (1<<22) )		cpu.cpu_features.ACPI = 1;
-	    if (edx & (1<<27) )		cpu.cpu_features.SS = 1;
-	    if (edx & (1<<28) )		cpu.cpu_features.HTT = 1;
-	    if (edx & (1<<29) )		cpu.cpu_features.TM = 1;
-	    if (edx & (1<<31) )		cpu.cpu_features.PBE = 1;
+	    CHECK_RANGE_FOR_BIT(0,3, edx, cpu_features);
+	    CHECK_RANGE_FOR_BIT(5,7, edx, cpu_features);
+	    CHECK_RANGE_FOR_BIT(9,9, edx, cpu_features);
+	    CHECK_RANGE_FOR_BIT(12,14, edx, cpu_features);
+	    CHECK_RANGE_FOR_BIT(16,18, edx, cpu_features);
+	    CHECK_RANGE_FOR_BIT(21,22, edx, cpu_features);
+	    CHECK_RANGE_FOR_BIT(27,29, edx, cpu_features);
+	    CHECK_RANGE_FOR_BIT(31,31, edx, cpu_features);
+	    CHECK_RANGE_FOR_BIT(21,22, edx, cpu_features);
 
-	    if (ecx & (1<<2) )		cpu.cpu_features.DTES64 = 1;
-	    if (ecx & (1<<3) )		cpu.cpu_features.MONITOR = 1;
-	    if (ecx & (1<<4) )		cpu.cpu_features.DS_CPL = 1;
-	    if (ecx & (1<<5) )		cpu.cpu_features.VMX = 1;
-	    if (ecx & (1<<6) )		cpu.cpu_features.SMX = 1;
-	    if (ecx & (1<<7) )		cpu.cpu_features.EST = 1;
-	    if (ecx & (1<<8) )		cpu.cpu_features.TM2 = 1;
-	    if (ecx & (1<<10) )		cpu.cpu_features.CNXT_ID = 1;
-	    if (ecx & (1<<14) )		cpu.cpu_features.XTPR = 1;
-	    if (ecx & (1<<15) )		cpu.cpu_features.PDCM = 1;
 
-	    if (ecx & (1<<17) )		cpu.cpu_features.PCID = 1;
-	    if (ecx & (1<<18) )		cpu.cpu_features.DCA = 1;
-	    if (ecx & (1<<21) )		cpu.cpu_features.X2APIC = 1;
-	    if (ecx & (1<<29) )		cpu.cpu_features.F16C = 1;
+	    CHECK_RANGE_FOR_BIT(2,8, ecx, cpu_features);
+	    CHECK_RANGE_FOR_BIT(10,10, ecx, cpu_features);
+	    CHECK_RANGE_FOR_BIT(14,15, ecx, cpu_features);
+	    CHECK_RANGE_FOR_BIT(17,18, ecx, cpu_features);
+	    CHECK_RANGE_FOR_BIT(21,21, edx, cpu_features);
+	    CHECK_RANGE_FOR_BIT(29,29, edx, cpu_features);
 
 	    /** CPU Instructions **/
-	    if (edx & (1<<5) )		cpu.cpu_instructions.MSR = 1;
-	    if (edx & (1<<8) )		cpu.cpu_instructions.CX8 = 1;
-	    if (edx & (1<<11) )		cpu.cpu_instructions.SEP = 1;
-	    if (edx & (1<<15) )		cpu.cpu_instructions.CMOV = 1;
-	    if (edx & (1<<19) )		cpu.cpu_instructions.CLFLUSH = 1;
-	    if (edx & (1<<23) )		cpu.cpu_instructions.MMX = 1;
-	    if (edx & (1<<24) )		cpu.cpu_instructions.FXSR = 1;
-	    if (edx & (1<<25) )		cpu.cpu_instructions.SSE = 1;
-	    if (edx & (1<<26) )		cpu.cpu_instructions.SSE2 = 1;
+	    CHECK_RANGE_FOR_BIT(5,5, edx, cpu_instructions);
+	    CHECK_RANGE_FOR_BIT(8,8, edx, cpu_instructions);
+	    CHECK_RANGE_FOR_BIT(11,11, edx, cpu_instructions);
+	    CHECK_RANGE_FOR_BIT(15,15, edx, cpu_instructions);
+	    CHECK_RANGE_FOR_BIT(19,19, edx, cpu_instructions);
+	    CHECK_RANGE_FOR_BIT(23,26, edx, cpu_instructions);
 
-	    if (ecx & (1<<0) )		cpu.cpu_instructions.SSE3 = 1;
-	    if (ecx & (1<<1) )		cpu.cpu_instructions.PCLMUL = 1;
-	    if (ecx & (1<<9) )		cpu.cpu_instructions.SSSE3 = 1;
-	    if (ecx & (1<<12) )		cpu.cpu_instructions.FMA = 1;
-	    if (ecx & (1<<13) )		cpu.cpu_instructions.CX16 = 1;
-	    if (ecx & (1<<19) )		cpu.cpu_instructions.SSE41 = 1;
-	    if (ecx & (1<<20) )		cpu.cpu_instructions.SSE42 = 1;
-	    if (ecx & (1<<22) )		cpu.cpu_instructions.MOVBE = 1;
-	    if (ecx & (1<<23) )		cpu.cpu_instructions.POPCNT = 1;
-	    if (ecx & (1<<25) )		cpu.cpu_instructions.AESNI = 1;
-	    if (ecx & (1<<26) )		cpu.cpu_instructions.XSAVE = 1;
-	    if (ecx & (1<<27) )		cpu.cpu_instructions.OSXSAVE = 1;
-	    if (ecx & (1<<28) )		cpu.cpu_instructions.AVX = 1;
-	    if (ecx & (1<<30) )		cpu.cpu_instructions.RDRAND = 1; 
+	    CHECK_RANGE_FOR_BIT(0,1, ecx, cpu_instructions);
+	    CHECK_RANGE_FOR_BIT(9,9, ecx, cpu_instructions);
+	    CHECK_RANGE_FOR_BIT(12,13, ecx, cpu_instructions);
+	    CHECK_RANGE_FOR_BIT(19,20, ecx, cpu_instructions);
+	    CHECK_RANGE_FOR_BIT(22,23, ecx, cpu_instructions);
+	    CHECK_RANGE_FOR_BIT(25,28, ecx, cpu_instructions);
+	    CHECK_RANGE_FOR_BIT(30,30, ecx, cpu_instructions);
 	    
 	    /** CPU Miscellaneous Information **/
 	    cpu.cpu_misc_info[0] = (ebx & 0xFF000000);
