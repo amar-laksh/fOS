@@ -78,7 +78,7 @@ void append_buffer(char l){
     }
 }
 
-void keyboard_handler(struct regs *r) {
+void keyboard_handler(irq_handler_t handler) {
     unsigned char scancode;
     keyboard_wait();
     scancode = inb(KEY_DEVICE);

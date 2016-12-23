@@ -180,6 +180,8 @@ void lscpu(){
 		kprintf("%s|",cpu.cpu_instructions[i].name);
 	}
 }
+
+
 void exec_cmd(int n, char* buff[5]){
 	switch(n){
 		case 0:

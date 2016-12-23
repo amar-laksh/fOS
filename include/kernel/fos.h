@@ -1,3 +1,4 @@
+
 #ifndef FOS_H
 #define FOS_H
 #include <stdint.h>
@@ -354,6 +355,10 @@ static inline void outl(uint16_t port, uint32_t val) {
 	__asm__ __volatile__( "outl %%eax, %%dx" : : "Nd"(port), "a"(val) );
 }
 
+//typedef void (*irq_handler_t) (struct regs*);
+
+void keyboard_handler(irq_handler_t handler);
+
 void keyboard_install();
 
 void keyboard_reset_ps2();
@@ -693,12 +698,6 @@ void exec_cmd(int n, char* buff[5]);
 //------------------------------------------------SYSCALLS.H
 
 size_t sys_write(int fd, const void *buf, size_t count);
-
-
-
-
-
-
 
 
 
