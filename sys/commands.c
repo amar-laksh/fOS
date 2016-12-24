@@ -192,7 +192,7 @@ void exec_cmd(int n, char* buff[5]){
 			beep_it(atoi(buff[1]), atoi(buff[2]));
 			break;
 		case 2:
-			kprintf("\nWell my name is:\n %s",cpu.processor_name);
+			kprintf("\n II Well my name is:\n %s",cpu.processor_name);
 			break;
 		case 3:
 			cowsay(buff[1]);
@@ -226,6 +226,9 @@ void exec_cmd(int n, char* buff[5]){
 			break;
 		case 11:
 			lsmem();
+			break;
+		case 12:
+			play_pong();
 			break;
 		default:
 			if(strlen((const char*)buff) > 1){

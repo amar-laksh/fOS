@@ -221,12 +221,15 @@ void irq_install();
 void irq_ack(int irq_no);
 
 //------------------------------------------------TIMER.H
+#define TIMER_IRQ 0
 
 void timer_install();
 
 void delay(int t);
 
 void timer_phase(int hz);
+
+void timer_handler(irq_handler_t * handler);
 
 //------------------------------------------------POLL.H
 
@@ -697,6 +700,27 @@ void exec_cmd(int n, char* buff[5]);
 //------------------------------------------------SYSCALLS.H
 
 size_t sys_write(int fd, const void *buf, size_t count);
+
+//------------------------------------------------SYSCALLS.H
+
+struct {
+	int playing;
+	int x;
+	int y;
+	int dx;
+	int dy;
+} ball;
+
+
+typedef struct {
+	int moved;
+	int x;
+	int y;
+} pedal;
+void process_controls(unsigned char scancode);
+
+void play_pong();
+
 
 
 

@@ -1,6 +1,5 @@
 // TODO- REMEMBER DELAY DOESN'T WORK ON PCSOUND API (INTERUPT PRIORITY)
 #include <kernel/fos.h>
-#define TIMER_IRQ 0
 void timer_phase(int hz)
 {
     int divisor = 1193180 / hz;       /* Calculate our divisor */
@@ -19,12 +18,10 @@ int timer_ticks = 0;
 *  been smoking something funky */
 
 char* buff;
-void timer_handler(struct regs *r){
+void timer_handler(irq_handler_t * handler){
     /* Increment our 'tick count' */
     timer_ticks++;
     cycles++;
-    draw_str("f.O.S. - Made By Amar Lakshya",0,20);
-    draw_str("Time: ",2, 55);
     /* Every 100 clocks (approximately 1 second), we will
     *  display a message on the screen */
     if(cycles % 100 == 0){
@@ -45,6 +42,9 @@ void timer_handler(struct regs *r){
     if(hours % 24 == 0){
         hours = 0;
     }
+    draw_str("Console Buffer: ",10,50);
+    draw_str(term->buffer,11,50);
+    draw_str("Time: ",2, 55);
     itoa(hours, 10, buff);
     draw_str(buff,2,69);
     draw_str(":",2,71);
@@ -53,6 +53,9 @@ void timer_handler(struct regs *r){
     draw_str(":",2,74);
     itoa(seconds, 10, buff);
     draw_str(buff,2,75);
+
+    // Check if the game has begun or not
+    draw_str("f.O.S. - Made By Amar Lakshya",0,20);
     irq_ack(TIMER_IRQ);
 }
 

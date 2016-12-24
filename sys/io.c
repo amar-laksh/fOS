@@ -1,6 +1,6 @@
 #include <kernel/fos.h>
 #include <sys/io_list.h>
-#define cmd  13
+#define cmd  14
 char* commands[cmd] = {
     "clear",
     "beep",
@@ -14,6 +14,7 @@ char* commands[cmd] = {
     "settime",
     "lscpu",
     "lsmem",
+    "pong",
     "help"
 };
 console *term;
@@ -125,14 +126,11 @@ void getASCII(unsigned char c) {
         int code=0;
         //print_registers();
         char l = keytable[c-1].key_value;
-        draw_str("f.O.S. - Made By Amar Lakshya",0,20);
         append_buffer(l);
         if(l=='\r')
             code = process_buffer();
         if(code == -999)
             return;
-        draw_str("Console Buffer: ",10,50);
-        draw_str(term->buffer,11,50);
         write_char(l, COLOR_BLACK, COLOR_GREEN);
     }
 
