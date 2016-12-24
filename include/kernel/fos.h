@@ -460,7 +460,7 @@ typedef struct {
 typedef struct {
 	/* 				STANDARD FUNCTIONS 			*/
 
-	CPU_TABLE cpu_features[52];
+	CPU_TABLE cpu_flags[64];
 
 // struct CPU_INSTRUCTION{
 // 	int8_t FXSR;
@@ -493,8 +493,7 @@ typedef struct {
 // 	int8_t THREE_DNOW_INSTR;
 // 	int8_t RDTSCP;
 // };
-
-	CPU_TABLE cpu_instructions[23];
+// 
 
 	// Function 0x00 | Function 0x00
 	char cpu_vendor_string[12];

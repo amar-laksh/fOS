@@ -168,17 +168,15 @@ void lscpu(){
 	kprintf("Model:\t\t%s\n", cpu_t.model);
 	kprintf("Model Name:\t\t%s\n", cpu_t.model_name);
 
-	kprintf("CPU FEATURES:\n");
-	for (int i = 0; i < 52; ++i){
-		if(cpu.cpu_features[i].flag == 1)
-		kprintf("%s|",cpu.cpu_features[i].name);
+	kprintf("CPU FLAGS: ");
+	int c=0;
+	for (int i = 0; i < 64; ++i){
+		if(cpu.cpu_flags[i].flag == 1 &&  cpu.cpu_flags[i].flag != 2){
+			kprintf("%s|",cpu.cpu_flags[i].name);
+			c++;
+		}
 	}
-
-	kprintf("\n\nCPU INSTRUCTIONS:\n");
-	for (int i = 0; i < 23; ++i){
-		if(cpu.cpu_instructions[i].flag == 1)
-		kprintf("%s|",cpu.cpu_instructions[i].name);
-	}
+	kprintf("\nTotal CPU FLags: %d\n", c);
 }
 
 

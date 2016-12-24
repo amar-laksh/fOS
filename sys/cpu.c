@@ -2,86 +2,75 @@
 #include <kernel/fos.h>
 #define cpuid_simple(in, a, b, c, d) asm("cpuid": "=a" (a), "=b" (b), "=c" (c), "=d" (d) : "a" (in));
 
-CPU_TABLE cpu_fs[52] =
+CPU_TABLE cpu_flags_edx[32] =
 	{
 		{0,"FPU"},
 		{0,"VME"},
 		{0,"DE"},
 		{0,"PSE"},
+		{0,"TSC"},
+		{0,"MSR"},
 		{0,"PAE"},
 		{0,"MCE"},
+		{0,"CX8"},
 		{0,"APIC"},
+		{2,"RESERVED"},
+		{0,"SEP"},
 		{0,"MTRR"},
 		{0,"PGE"},
 		{0,"MCA"},
+		{0,"CMOV"},
 		{0,"PAT"},
 		{0,"PSE36"},
 		{0,"PSN"},
+		{0,"CLFLUSH"},
+		{2,"RESERVED"},
 		{0,"DS"},
 		{0,"ACPI"},
+		{0,"MMX"},
+		{0,"FXSR"},
+		{0,"SSE"},
+		{0,"SSE2"},
 		{0,"SS"},
 		{0,"HTT"},
 		{0,"TM"},
-		{0,"PBE"},
-		{0,"DTES64"},
-		{0,"MONITOR"},
-		{0,"DS_CPL"},
-		{0,"VMX"},
-		{0,"SMX"},
-		{0,"EST"},
-		{0,"TM2"},
-		{0,"CNXT_ID"},
-		{0,"XTPR"},
-		{0,"PDCM"},
-		{0,"PCID"},
-		{0,"DCA"},
-		{0,"X2APIC"},
-		{0,"TSC"},
-		{0,"F16C"},
-		{0,"TOPO_EXT"},
-		{0,"NODE_ID"},
-		{0,"LWP"},
-		{0,"WDT"},
-		{0,"SKINT"},
-		{0,"XOP"},
-		{0,"IBS"},
-		{0,"OSVW"},
-		{0,"MIS_SSE"},
-		{0,"ABM"},
-		{0,"ALT_MOV_CR8"},
-		{0,"XAPIC_SPACE"},
-		{0,"SVM"},
-		{0,"CMP_LEGACY"},
-		{0,"THREE_DNOW_EXT"},
-		{0,"LM"},
-		{0,"FFXSR"},
-		{0,"MMX_EXT"}
+		{2,"RESERVED"},
+		{0,"PBE"}
 	};
 
-CPU_TABLE cpu_ins[23] = {
-	{0,"MSR"},
-	{0,"CX8"},
-	{0,"SEP"},
-	{0,"CMOV"},
-	{0,"CLFLUSH"},
-	{0,"MMX"},
-	{0,"FFXSR"},
-	{0,"SSE"},
-	{0,"SSE2"},
+CPU_TABLE cpu_flags_ecx[32] = {
 	{0,"SSE3"},
 	{0,"PCLMUL"},
+	{0,"DTES64"},
+	{0,"MONITOR"},
+	{0,"DSCPL"},
+	{0,"VMX"},
+	{0,"SMX"},
+	{0,"EIST"},
+	{0,"TM2"},
 	{0,"SSSE3"},
+	{0,"CNXTID"},
+	{0,"SDBG"},
 	{0,"FMA"},
-	{0,"CX16"},
+	{0,"CMPXCHG16B"},
+	{0,"XTPR"},
+	{0,"PDCM"},
+	{2,"RESERVED"},
+	{0,"PCID"},
+	{0,"DCA"},
 	{0,"SSE41"},
 	{0,"SSE42"},
+	{0,"X2APIC"},
 	{0,"MOVBE"},
 	{0,"POPCNT"},
-	{0,"AESNI"},
+	{0,"TSCDEADLINE"},
+	{0,"AES"},
 	{0,"XSAVE"},
 	{0,"OSXSAVE"},
 	{0,"AVX"},
-	{0,"RDRAND"}
+	{0,"F16C"},
+	{0,"RDRAND"},
+	{2,"RESERVED"}
 };
 
 uint32_t highest_std_info, highest_ext_info;
@@ -133,14 +122,14 @@ void cpu_init(){
   }
 
 void intel_init(){
-	for (int i = 0; i < 52; ++i)
+	for (int i = 0; i < 32; ++i)
 	{
-		cpu.cpu_features[i] = cpu_fs[i];
+		cpu.cpu_flags[i] = cpu_flags_edx[i];
 	}
 
-	for (int i = 0; i < 23; ++i)
+	for (int i = 32; i < 64; ++i)
 	{
-		cpu.cpu_instructions[i] = cpu_ins[i];
+		cpu.cpu_flags[i] = cpu_flags_ecx[i-32];
 	}
 	cpuid(0x80000000, 
 		&highest_ext_info,
@@ -192,41 +181,14 @@ void intel_init(){
 	    cpu.processor_signature[4] = (eax & 0xF);
 	    cpu.processor_signature[5] = (eax & 0x6000);
 	    
-	    /** CPU Features **/
+	    /** CPU Flags **/
+	    CHECK_RANGE_FOR_BIT(0, 9, edx, cpu_flags);
+	    CHECK_RANGE_FOR_BIT(11, 19, edx, cpu_flags);
+	    CHECK_RANGE_FOR_BIT(21, 29, edx, cpu_flags);
+	    CHECK_RANGE_FOR_BIT(31, 31, edx, cpu_flags);
 
-	    CHECK_RANGE_FOR_BIT(0,3, edx, cpu_features);
-	    CHECK_RANGE_FOR_BIT(5,7, edx, cpu_features);
-	    CHECK_RANGE_FOR_BIT(9,9, edx, cpu_features);
-	    CHECK_RANGE_FOR_BIT(12,14, edx, cpu_features);
-	    CHECK_RANGE_FOR_BIT(16,18, edx, cpu_features);
-	    CHECK_RANGE_FOR_BIT(21,22, edx, cpu_features);
-	    CHECK_RANGE_FOR_BIT(27,29, edx, cpu_features);
-	    CHECK_RANGE_FOR_BIT(31,31, edx, cpu_features);
-	    CHECK_RANGE_FOR_BIT(21,22, edx, cpu_features);
-
-
-	    CHECK_RANGE_FOR_BIT(2,8, ecx, cpu_features);
-	    CHECK_RANGE_FOR_BIT(10,10, ecx, cpu_features);
-	    CHECK_RANGE_FOR_BIT(14,15, ecx, cpu_features);
-	    CHECK_RANGE_FOR_BIT(17,18, ecx, cpu_features);
-	    CHECK_RANGE_FOR_BIT(21,21, edx, cpu_features);
-	    CHECK_RANGE_FOR_BIT(29,29, edx, cpu_features);
-
-	    /** CPU Instructions **/
-	    CHECK_RANGE_FOR_BIT(5,5, edx, cpu_instructions);
-	    CHECK_RANGE_FOR_BIT(8,8, edx, cpu_instructions);
-	    CHECK_RANGE_FOR_BIT(11,11, edx, cpu_instructions);
-	    CHECK_RANGE_FOR_BIT(15,15, edx, cpu_instructions);
-	    CHECK_RANGE_FOR_BIT(19,19, edx, cpu_instructions);
-	    CHECK_RANGE_FOR_BIT(23,26, edx, cpu_instructions);
-
-	    CHECK_RANGE_FOR_BIT(0,1, ecx, cpu_instructions);
-	    CHECK_RANGE_FOR_BIT(9,9, ecx, cpu_instructions);
-	    CHECK_RANGE_FOR_BIT(12,13, ecx, cpu_instructions);
-	    CHECK_RANGE_FOR_BIT(19,20, ecx, cpu_instructions);
-	    CHECK_RANGE_FOR_BIT(22,23, ecx, cpu_instructions);
-	    CHECK_RANGE_FOR_BIT(25,28, ecx, cpu_instructions);
-	    CHECK_RANGE_FOR_BIT(30,30, ecx, cpu_instructions);
+	    CHECK_RANGE_FOR_BIT(32+0, 32+15, ecx, cpu_flags);
+	    CHECK_RANGE_FOR_BIT(32+17, 32+30, ecx, cpu_flags);
 	    
 	    /** CPU Miscellaneous Information **/
 	    cpu.cpu_misc_info[0] = (ebx & 0xFF000000);
