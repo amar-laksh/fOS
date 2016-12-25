@@ -18,7 +18,7 @@ int timer_ticks = 0;
 *  been smoking something funky */
 
 char* buff;
-void timer_handler(irq_handler_t * handler){
+void timer_handler(irq_handler_t* handler){
     /* Increment our 'tick count' */
     timer_ticks++;
     cycles++;

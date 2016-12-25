@@ -8,7 +8,7 @@ size_t sys_write(int fd, const void *buf, size_t count){
 			write_char(buffer[i], COLOR_BLACK, COLOR_GREEN);
 		}
 	}
-	else{
+	else if(fd != 0){
 		for(unsigned long i=0;i<count;i++){
 			while (is_transmit_empty() == 0)
 				;

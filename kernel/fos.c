@@ -1,7 +1,6 @@
 // TODO - Write unit tests for the entire kernel
 #include <kernel/fos.h>
 extern void*  endKernel;
-
 void *memset(void *dest, char val, size_t count){
 	char *temp = (char *)dest;
 	for( ; count != 0; count--) *temp++ = val;
@@ -37,7 +36,6 @@ void write(int fd, const void* buf, size_t count){
 void kmain(multiboot_info_t* mbd, unsigned int magic){
 	term->cursor = 162;
 	clear_screen();
-
 	serial_install();
 	kprintf("SERIAL initiated.\n");
 	int total_mem = multiboot_check(mbd, magic);
@@ -48,7 +46,8 @@ void kmain(multiboot_info_t* mbd, unsigned int magic){
 	kprintf("Multiboot check complete.\n");
 	// TODO - This is a hacky solution, change it
 	memory_t.mem_db = mbd;
-	
+	memory_t.magic = magic;
+
 	mm_init((uint32_t)&endKernel, total_mem);
 	kprintf("MM initiated.\n");
 	pci_install();
@@ -72,8 +71,12 @@ void kmain(multiboot_info_t* mbd, unsigned int magic){
 	poll_init();
 	kprintf("POLL initiated.\n");
 	clear_screen();
-	//__asm__ __volatile__("jmp %0"::"r"(mbd->mods_addr));
-	
+	IRQ_OFF;
+	typedef void (*call_module_t)(void);
+	call_module_t start_program = (call_module_t)mbd->mods_addr;
+	start_program();
+	IRQ_RES;
+	STOP;
 	vga_init();
 	asm("hlt");
 }

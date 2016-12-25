@@ -148,7 +148,7 @@ void fault_handler(struct regs *r) {
 		if (r->int_no == 8) {
 			STOP;
 		}
-		if (r->int_no >= 32 && r->int_no != 69) {
+		if (r->int_no >= 32) {
 			STOP;
 		}
 		IRQ_OFF;
@@ -160,7 +160,7 @@ void fault_handler(struct regs *r) {
 			clear_screen();
 			draw_str("Unhandled exception: ",0,1);
 			draw_str(exception_messages[r->int_no],0,30);
-			for(;;);
+			STOP;
 		}
 		IRQ_RES;
 	}

@@ -30,7 +30,7 @@ unsigned long long multiboot_check(multiboot_info_t* mbd, unsigned int magic){
 	if (CHECK_FLAG (mbd->flags, 3)){
 		int i;
 		kprintf ("mods_count = %d, mods_addr = 0x%x\n"
-			,(int) mbd->mods_count, (int) mbd->mods_addr);
+			,(int) mbd->mods_count, (uint32_t) mbd->mods_addr);
 
       for (i = 0; i < mbd->mods_count; ++i ) {
         uint32_t module_start = *((uint32_t*)mbd->mods_addr + 8 * i);

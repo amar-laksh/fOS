@@ -14,7 +14,6 @@
 /* Check if bit n in flags is set */
 #define check_flag(flags, n) ((flags) & bit(n))
 
-
 void create(char* args,int x, int y){
 	if(equals(args,"player") == 0){
 		draw_char(get_point(y,x-1),'=',0,COLOR_RED);
@@ -192,7 +191,7 @@ void exec_cmd(int n, char* buff[5]){
 			beep_it(atoi(buff[1]), atoi(buff[2]));
 			break;
 		case 2:
-			kprintf("\n II Well my name is:\n %s",cpu.processor_name);
+			kprintf("\nWell my name is:\n %s",cpu.processor_name);
 			break;
 		case 3:
 			cowsay(buff[1]);
@@ -205,11 +204,11 @@ void exec_cmd(int n, char* buff[5]){
 			break;
 		case 6:
 			note_test();
-			delay(200);
+			delay(200/441);
 			some_tune();
-			delay(200);
+			delay(200/441);
 			marry_song();
-			delay(200);
+			delay(200/441);
 			splash();
 			break;
 		case 7:

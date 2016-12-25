@@ -1,4 +1,3 @@
-
 #ifndef FOS_H
 #define FOS_H
 #include <stdint.h>
@@ -695,6 +694,8 @@ void amd_init();
 
 //------------------------------------------------COMMANDS.H
 
+void reboot();
+
 void exec_cmd(int n, char* buff[5]);
 
 //------------------------------------------------SYSCALLS.H
@@ -744,9 +745,9 @@ struct regs {
     uint32_t eip, cs, eflags, useresp, ss;   /* pushed by the processor automatically */ 
 };
 
-
 typedef struct{
 	multiboot_info_t* mem_db;
+	unsigned int magic;
 	unsigned long total_mem;
 	unsigned long unused_mem;
 	unsigned long used_mem;
