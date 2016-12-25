@@ -35,6 +35,9 @@ unsigned long long multiboot_check(multiboot_info_t* mbd, unsigned int magic){
       for (i = 0; i < mbd->mods_count; ++i ) {
         uint32_t module_start = *((uint32_t*)mbd->mods_addr + 8 * i);
         uint32_t module_end   = *(uint32_t*)(mbd->mods_addr + 8 * i + 4);
+        typedef void (*call_module_t)(void);
+        call_module_t start_program = (call_module_t)module_start;
+        start_program();
         kprintf("Module %d is at 0x%x:0x%x\n", i+1, module_start, module_end);
       }
     }

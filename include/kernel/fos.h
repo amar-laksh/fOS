@@ -170,8 +170,8 @@ unsigned long type;
 } memory_map_t;
 
 unsigned long long multiboot_check(multiboot_info_t* mbd, unsigned int magic);
-
 #endif /* ! ASM */
+
 
 
 //------------------------------------------------MALLOC.H

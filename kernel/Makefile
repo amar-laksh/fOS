@@ -43,7 +43,7 @@ kernel.elf: $(OBJECTS)
 	$(CC) $(LDFLAGS) $(OBJECTS) -lgcc
 
 run: os.iso
-	qemu-system-i386 -D /tmp/current.log -display sdl -m 8G -serial stdio -cdrom fos.iso
+	qemu-system-i386 -D /tmp/current.log -display sdl -m 6G -serial stdio -cdrom fos.iso
 
 debug: os.iso
 	qemu-system-i386 -s -S fos.iso
