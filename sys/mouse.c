@@ -62,12 +62,6 @@ void mouse_handler(struct regs *a_r) //struct regs *a_r (not used but just there
   {
     case 0:
       mouse_byte[0]=inb(0x60);
-      if( (mouse_byte[0] & 0x07) > 0){
-        term->cursor_value = ".";
-      }
-      else{
-        term->cursor_value = " ";
-      }
       mouse_cycle++;
       turn++;
       break;
@@ -84,33 +78,35 @@ void mouse_handler(struct regs *a_r) //struct regs *a_r (not used but just there
       turn++;
       break;
   }
-  if(1){
-        if(mouse_cycle == 0 && turn == 9){
-          if(mouse_x == 0 && mouse_y < 0 && old_mouse_y != mouse_y){
-            term->cursor += 160;
-            old_mouse_y = mouse_y;
-            move_cursor(term->cursor/2);
-          }
-          else if(mouse_x == 0 && mouse_y >=0 && old_mouse_y != mouse_y){
-            term->cursor -= 160;
-            old_mouse_y = mouse_y;
-            move_cursor(term->cursor/2);
-          }
-          else if(mouse_y == 0 && mouse_x < 0 && old_mouse_x != mouse_x){
-            term->cursor -= 2;
-            old_mouse_x = mouse_x;
-            move_cursor(term->cursor/2);
-          }
-          else if(mouse_y == 0 && mouse_x >= 0 && old_mouse_x != mouse_x){
-            term->cursor += 2;
-            old_mouse_x = mouse_x;
-            move_cursor(term->cursor/2);
-          }
-          turn = 0;
-      }
-  }
-
-  draw_char(term->cursor, term->cursor_value[0],COLOR_BLACK, COLOR_GREEN);
+      if(mouse_cycle == 0 && turn == 9){
+        if( (mouse_byte[0] & 0x07) > 0){
+          term->cursor_value = ".";
+        }
+        else{
+          term->cursor_value = " ";
+        }
+        if(mouse_x == 0 && mouse_y < 0 && old_mouse_y != mouse_y){
+          term->cursor += 160;
+          old_mouse_y = mouse_y;
+        }
+        else if(mouse_x == 0 && mouse_y >= 0 && old_mouse_y != mouse_y){
+          term->cursor -= 160;
+          old_mouse_y = mouse_y;
+        }
+        else if(mouse_y == 0 && mouse_x < 0 && old_mouse_x != mouse_x){
+          term->cursor -= 2;
+          old_mouse_x = mouse_x;
+        }
+        else if(mouse_y == 0 && mouse_x >= 0 && old_mouse_x != mouse_x){
+          term->cursor += 2;
+          old_mouse_x = mouse_x;
+        }
+        turn = 0;
+        move_cursor(term->cursor/2);
+        mouse_x = 0;
+        mouse_y = 0;
+        draw_char(term->cursor, term->cursor_value[0],COLOR_BLACK, COLOR_GREEN);
+    }
   irq_ack(12);
 }
 
