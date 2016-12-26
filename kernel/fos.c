@@ -1,11 +1,15 @@
 // TODO - Write unit tests for the entire kernel
 #include <kernel/fos.h>
 extern void*  endKernel;
-
 void *memset(void *dest, char val, size_t count){
 	char *temp = (char *)dest;
 	for( ; count != 0; count--) *temp++ = val;
 	return dest;
+}
+
+void * memcpy(void * restrict dest, const void * restrict src, size_t count) {
+        asm volatile ("cld; rep movsb" : "+c" (count), "+S" (src), "+D" (dest) :: "memory");
+        return dest;
 }
 
 void * memmove(void * restrict dest
@@ -48,6 +52,7 @@ void kmain(multiboot_info_t* mbd, unsigned int magic){
 	
 	serial_install();
 	kprintf("SERIAL initiated.\n");
+	
 	int total_mem = multiboot_check(mbd, magic);
 	if(total_mem == -1){
 		kprintf("FAILURE: MULTIBOOT INFO DIDN'T CHECK");
@@ -69,8 +74,12 @@ void kmain(multiboot_info_t* mbd, unsigned int magic){
 	timer_install();
 	kprintf("TIMER initiated.\n");
 
+	mouse_install();
+	kprintf("MOUSE initiated.\n");
+
 	poll_init();
 	kprintf("POLL initiated.\n");
+	
 	vga_init();
 	asm("hlt");
 }

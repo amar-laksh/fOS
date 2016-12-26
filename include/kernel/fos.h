@@ -187,7 +187,7 @@ typedef struct {
  char* malloc(size_t size);
  void free(void *mem);
 
- void* memcpy(const void* dest, const void* src, size_t num );
+void * memcpy(void * restrict dest, const void * restrict src, size_t count);
 // void* memset (void * ptr, int value, size_t num );
  void* memset16 (void *ptr, uint16_t value, size_t num);
 
@@ -309,6 +309,7 @@ typedef struct {
     char buffer[100];
     int8_t offset;
     int cursor;
+    char* cursor_value;
 } console;
 
 console *term;
@@ -694,6 +695,8 @@ void amd_init();
 
 //------------------------------------------------COMMANDS.H
 
+void read_text(char* ptr, unsigned int count);
+
 void reboot();
 
 void exec_cmd(int n, char* buff[5]);
@@ -702,7 +705,7 @@ void exec_cmd(int n, char* buff[5]);
 
 size_t sys_write(int fd, const void *buf, size_t count);
 
-//------------------------------------------------SYSCALLS.H
+//------------------------------------------------PONG.H
 
 struct {
 	int playing;
@@ -721,6 +724,12 @@ typedef struct {
 void process_controls(unsigned char scancode);
 
 void play_pong();
+
+//------------------------------------------------MOUSE.H
+
+
+void mouse_install();
+
 
 
 
@@ -764,3 +773,5 @@ void * memmove(void * restrict dest, const void * restrict src, size_t count);
 void kmain();
 
 #endif
+
+

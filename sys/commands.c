@@ -1,7 +1,7 @@
 /* TODO- The case 3 is temperory. Create a text-based graphics engine.*/
 #include <kernel/fos.h>
 #define KBRD_INTRFC 0x64
- 
+
 /* keyboard interface bits */
 #define KBRD_BIT_KDATA 0 
 #define KBRD_BIT_UDATA 1 
@@ -10,9 +10,32 @@
 #define KBRD_RESET 0xFE 
  
 #define bit(n) (1<<(n)) 
+
+/* GIMP RGB C-Source image dump 1-byte-run-length-encoded (png.c) */
+
+
  
 /* Check if bit n in flags is set */
 #define check_flag(flags, n) ((flags) & bit(n))
+
+void read_text(char* ptr, unsigned int count){
+	        unsigned int j=0;
+        clear_screen();
+        term->cursor = 0;
+        while(j < (count)){
+          if(ptr[j] == 0x5c && ptr[j+1] == 0x6e){
+            ptr[j] = '\n';
+            ptr[j+1] = 0x0;
+          }
+          if(ptr[j] == 0x5c && ptr[j+1] == 0x74){
+            ptr[j] = '\t';
+            ptr[j+1] = 0x0;
+          }
+
+            write_char(ptr[j],COLOR_BLACK, COLOR_WHITE);
+          j++;
+        }
+}
 
 void create(char* args,int x, int y){
 	if(equals(args,"player") == 0){
