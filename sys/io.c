@@ -5,11 +5,9 @@ unsigned char caps = 0;
 unsigned char key_cycle= 0;
 
 struct {
-    int16_t mke;
-    int16_t bke;
     char buff;
 } kbd;
-#define cmd  14
+#define cmd  15
 char* commands[cmd] = {
     "clear",
     "beep",
@@ -24,6 +22,7 @@ char* commands[cmd] = {
     "lscpu",
     "lsmem",
     "pong",
+    "eval",
     "help"
 };
 console *term;
@@ -125,11 +124,10 @@ void keyboard_wait() {
 }
 
 
-void check_for(unsigned char flag, const char table, unsigned char c){
+void check_for(unsigned char flag, const char table){
     if(flag == 1){
         kbd.buff = table;
     }
-
 }
 
 /*
@@ -156,13 +154,11 @@ void getASCII(unsigned char c) {
             key_cycle++;
         }
         else{
-            check_for(shift, keytable[c-1].key_shift_value, c);
-            check_for(caps, keytable[c-1].key_caps_value, c);
+            check_for(shift, keytable[c-1].key_shift_value);
+            check_for(caps, keytable[c-1].key_caps_value);
             if(shift == 0 && caps == 0){
                     kbd.buff = keytable[c-1].key_value;
             }
-            kbd.mke = keytable[c-1].key_make;
-            kbd.bke = keytable[c-1].key_break;
             char l = kbd.buff;
                 append_buffer(l);
                 if(l=='\r')
