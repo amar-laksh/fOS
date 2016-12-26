@@ -138,7 +138,7 @@ void check_for(unsigned char flag, const char table, unsigned char c){
 void getASCII(unsigned char c) {
     int code=0;
     if(c & 0x80){
-        if(c == 0xB6)
+        if(c == 0xB6|| c== 0xAA)
             shift = 0;
         if(c == 0xBA && caps == 2)
             caps = 1;
@@ -148,7 +148,7 @@ void getASCII(unsigned char c) {
         }
     }
     else{
-        if(c == 0x36){
+        if(c == 0x36 || c == 0x2A){
             shift = 1;
         }
         else if(c == 0x3A){
