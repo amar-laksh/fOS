@@ -727,6 +727,7 @@ void play_pong();
 
 //------------------------------------------------MOUSE.H
 
+#define MOUSE_IRQ 12
 
 void mouse_install();
 

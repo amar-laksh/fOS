@@ -10,26 +10,19 @@ signed char old_mouse_x=1;         //signed char
 signed char old_mouse_y=1;         //signed char
 int turn=0;
 
-inline void mouse_wait(unsigned char a_type) //unsigned char
-{
+inline void mouse_wait(unsigned char a_type){
   unsigned int _time_out=100000; //unsigned int
-  if(a_type==0)
-  {
-    while(_time_out--) //Data
-    {
-      if((inb(0x64) & 1)==1)
-      {
+  if(a_type==0){
+    while(_time_out--){
+      if((inb(0x64) & 1)==1){
         return;
       }
     }
     return;
   }
-  else
-  {
-    while(_time_out--) //Signal
-    {
-      if((inb(0x64) & 2)==0)
-      {
+  else{
+    while(_time_out--){
+      if((inb(0x64) & 2)==0){
         return;
       }
     }
@@ -37,8 +30,7 @@ inline void mouse_wait(unsigned char a_type) //unsigned char
   }
 }
 
-inline void mouse_write(unsigned char a_write) //unsigned char
-{
+inline void mouse_write(unsigned char a_write){
   //Wait to be able to send a command
   mouse_wait(1);
   //Tell the mouse we are sending a command
@@ -49,17 +41,14 @@ inline void mouse_write(unsigned char a_write) //unsigned char
   outb(0x60, a_write);
 }
 
-unsigned char mouse_read()
-{
+unsigned char mouse_read(){
   //Get's response from mouse
   mouse_wait(0);
   return inb(0x60);
 }
 //Mouse functions
-void mouse_handler(struct regs *a_r) //struct regs *a_r (not used but just there)
-{
-  switch(mouse_cycle)
-  {
+void mouse_handler(struct regs *a_r){
+  switch(mouse_cycle){
     case 0:
       mouse_byte[0]=inb(0x60);
       mouse_cycle++;
@@ -107,12 +96,11 @@ void mouse_handler(struct regs *a_r) //struct regs *a_r (not used but just there
         mouse_y = 0;
         draw_char(term->cursor, term->cursor_value[0],COLOR_BLACK, COLOR_GREEN);
     }
-  irq_ack(12);
+  irq_ack(MOUSE_IRQ);
 }
 
 
-void mouse_install()
-{
+void mouse_install(){
   unsigned char _status;  //unsigned char
 
   //Enable the auxiliary mouse device
@@ -138,5 +126,5 @@ void mouse_install()
   mouse_read();  //Acknowledge
 
   //Setup the mouse handler
-  irq_install_handler(12, mouse_handler);
+  irq_install_handler(MOUSE_IRQ, mouse_handler);
 }
