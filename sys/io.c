@@ -1,5 +1,14 @@
 #include <kernel/fos.h>
 #include <sys/io_list.h>
+unsigned char shift = 0;
+unsigned char caps = 0;
+unsigned char key_cycle= 0;
+
+struct {
+    int16_t mke;
+    int16_t bke;
+    char buff;
+} kbd;
 #define cmd  14
 char* commands[cmd] = {
     "clear",
@@ -35,8 +44,7 @@ int process_buffer(){
             argc++;
     }
 
-    /* If arguments & offset are equal we have all spaces
-    /* So we skip the command.*/
+    /* If arguments & offset are equal we have all spaces So we skip the command.*/
     if(argc == term->offset){
         null_buffer();
         return;
@@ -83,8 +91,8 @@ void keyboard_handler(irq_handler_t handler) {
     unsigned char scancode;
     keyboard_wait();
     scancode = inb(KEY_DEVICE);
-    irq_ack(KEYBOARD_IRQ);
     getASCII(scancode);
+    irq_ack(KEYBOARD_IRQ);
 }
 
 
@@ -116,22 +124,52 @@ void keyboard_wait() {
     while(inb(KEY_PENDING) & 2);
 }
 
+
+void check_for(unsigned char flag, const char table, unsigned char c){
+    if(flag == 1){
+        kbd.buff = table;
+    }
+
+}
+
 /*
  * Add a character to the device buffer.
  */
 void getASCII(unsigned char c) {
+    int code=0;
     if(c & 0x80){
+        if(c == 0xB6)
+            shift = 0;
+        if(c == 0xBA && caps == 2)
+            caps = 1;
+        if(c == 0xBA && key_cycle >1){
+            caps = 0;
+            key_cycle = 0;
+        }
     }
     else{
-        int code=0;
-        //print_registers();
-        char l = keytable[c-1].key_value;
-        append_buffer(l);
-        if(l=='\r')
-            code = process_buffer();
-        if(code == -999)
-            return;
-        write_char(l, COLOR_BLACK, COLOR_GREEN);
+        if(c == 0x36){
+            shift = 1;
+        }
+        else if(c == 0x3A){
+            caps = 2;
+            key_cycle++;
+        }
+        else{
+            check_for(shift, keytable[c-1].key_shift_value, c);
+            check_for(caps, keytable[c-1].key_caps_value, c);
+            if(shift == 0 && caps == 0){
+                    kbd.buff = keytable[c-1].key_value;
+            }
+            kbd.mke = keytable[c-1].key_make;
+            kbd.bke = keytable[c-1].key_break;
+            char l = kbd.buff;
+                append_buffer(l);
+                if(l=='\r')
+                    code = process_buffer();
+                if(code == -999)
+                    return;
+                write_char(l, COLOR_BLACK, COLOR_GREEN);
+        }
     }
-
 }

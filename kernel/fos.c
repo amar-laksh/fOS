@@ -79,7 +79,7 @@ void kmain(multiboot_info_t* mbd, unsigned int magic){
 
 	poll_init();
 	kprintf("POLL initiated.\n");
-	
+
 	vga_init();
 	asm("hlt");
 }
