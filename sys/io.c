@@ -7,7 +7,7 @@ unsigned char key_cycle= 0;
 struct {
     char buff;
 } kbd;
-#define cmd  15
+#define cmd  14
 char* commands[cmd] = {
     "clear",
     "beep",
@@ -22,7 +22,6 @@ char* commands[cmd] = {
     "lscpu",
     "lsmem",
     "pong",
-    "eval",
     "help"
 };
 console *term;

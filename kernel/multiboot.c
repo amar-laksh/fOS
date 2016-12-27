@@ -37,8 +37,13 @@ unsigned long long multiboot_check(multiboot_info_t* mbd, unsigned int magic){
         uint32_t module_end   = *(uint32_t*)(mbd->mods_addr + 8 * i + 4);
         kprintf("Module %d is at 0x%x:0x%x\n", i+1, module_start, module_end);
         kprintf("Module %d is at 0x%x:0x%x\n", i+1, module_start, module_end);
-        char* ptr = module_start;
-        read_text(ptr,(module_end - module_start));
+        // char* ptr = module_start;
+        // char*  p = str_tok(ptr,"\n");
+          // while(p != NULL){
+          //   kprintf("%s \n", p);
+          //   p = str_tok(NULL, "\n");
+          // }
+        //read_text(ptr,(module_end - module_start)); 
         //typedef void (*call_module_t)(void);
         //call_module_t start_program = (call_module_t)module_start;
         //start_program();

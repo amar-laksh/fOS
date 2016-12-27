@@ -207,23 +207,6 @@ void *memset_h(void *dest, int16_t val, size_t count){
 	return dest;
 }
 
-void eval(char* buff, char* buff2, int count){
-	int16_t value = 0x00CD;
-	if(equals(buff2,"$01"))
-		value = 0x01CD;
-	typedef void(*call_module_t)(void);
-	char *ptr = 0x150000;
-	memset_h(ptr,value,16);
-	int i=0;
-	while(i <16){
-		kprintf("\n%x\n",ptr[i]);
-		i++;
-	}
-	uint32_t module_start = 0x150000;
-	call_module_t start_program = (call_module_t)module_start;
-	kprintf("Module %x\n",module_start);
-	start_program();
-}
 
 
 void exec_cmd(int n, char* buff[5]){
@@ -275,9 +258,6 @@ void exec_cmd(int n, char* buff[5]){
 			break;
 		case 12:
 			play_pong();
-			break;
-		case 13:
-			eval(buff[1], buff[2], strlen(buff));
 			break;
 		default:
 			if(strlen((const char*)buff) > 1){
