@@ -1,12 +1,6 @@
 // TODO - Completely refactor this shitty code
 #include <kernel/fos.h>
-#define	VIDMEM 0x000B8000
-#define VIDMEM_END 0x00BFFFF
-#define VIDMEM_SIZE 32767
-#define MAX_ROWS 24//767//639//24
-#define MAX_COLUMNS 79//1023//479//79
-#define ERROR_CODE -12321
-#define PASS_CODE 32123
+
 
 int32_t get_row(uint32_t p){
 	if(p>MAX_ROWS)

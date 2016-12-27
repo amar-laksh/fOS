@@ -239,7 +239,13 @@ uint64_t get_control_register(int number);
 void poll_init();
 
 //------------------------------------------------VGA.H
-
+#define	VIDMEM 0x000B8000
+#define VIDMEM_END 0x00BFFFF
+#define VIDMEM_SIZE 32767
+#define MAX_ROWS 24//767//639//24
+#define MAX_COLUMNS 79//1023//479//79
+#define ERROR_CODE -12321
+#define PASS_CODE 32123
 enum vga_color
 {
 	COLOR_BLACK = 0,

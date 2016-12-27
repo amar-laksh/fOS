@@ -1,4 +1,4 @@
-// TODO - ADD MOUSE FUNCTIONALITY
+// TODO - SEPERATE MOUSE AND TERMINAL CURSOR AND EXTRACT API OF MOUSE
 
 #include <kernel/fos.h>
 
@@ -68,12 +68,6 @@ void mouse_handler(struct regs *a_r){
       break;
   }
       if(mouse_cycle == 0 && turn == 9){
-        if( (mouse_byte[0] & 0x07) > 0){
-          term->cursor_value = ".";
-        }
-        else{
-          term->cursor_value = " ";
-        }
         if(mouse_x == 0 && mouse_y < 0 && old_mouse_y != mouse_y){
           term->cursor += 160;
           old_mouse_y = mouse_y;
@@ -94,9 +88,10 @@ void mouse_handler(struct regs *a_r){
         move_cursor(term->cursor/2);
         mouse_x = 0;
         mouse_y = 0;
-        draw_char(term->cursor, term->cursor_value[0],COLOR_BLACK, COLOR_GREEN);
-    }
-  irq_ack(MOUSE_IRQ);
+        char *fb = (char*)VIDMEM;
+        draw_char(term->cursor,fb[term->cursor],COLOR_BLACK, COLOR_GREEN);
+      }
+      irq_ack(MOUSE_IRQ);
 }
 
 
