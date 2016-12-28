@@ -112,4 +112,5 @@ void vga_init(){
 	draw_char(get_point(1,0), '#', COLOR_BLACK, COLOR_GREEN);
     null_buffer();
 	keyboard_install();
+	mouse_install();
 }

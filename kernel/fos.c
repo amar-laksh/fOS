@@ -74,9 +74,6 @@ void kmain(multiboot_info_t* mbd, unsigned int magic){
 	timer_install();
 	kprintf("TIMER initiated.\n");
 
-	mouse_install();
-	kprintf("MOUSE initiated.\n");
-
 	poll_init();
 	kprintf("POLL initiated.\n");
 

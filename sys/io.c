@@ -1,5 +1,7 @@
 #include <kernel/fos.h>
 #include <sys/io_list.h>
+#define CHECK_FOR(flag ,table)          if(flag == 1){kbd.buff = table;};
+
 unsigned char shift = 0;
 unsigned char caps = 0;
 unsigned char key_cycle= 0;
@@ -123,11 +125,7 @@ void keyboard_wait() {
 }
 
 
-void check_for(unsigned char flag, const char table){
-    if(flag == 1){
-        kbd.buff = table;
-    }
-}
+
 
 /*
  * Add a character to the device buffer.
@@ -153,8 +151,8 @@ void getASCII(unsigned char c) {
             key_cycle++;
         }
         else{
-            check_for(shift, keytable[c-1].key_shift_value);
-            check_for(caps, keytable[c-1].key_caps_value);
+            CHECK_FOR(shift, keytable[c-1].key_shift_value);
+            CHECK_FOR(caps, keytable[c-1].key_caps_value);
             if(shift == 0 && caps == 0){
                     kbd.buff = keytable[c-1].key_value;
             }
