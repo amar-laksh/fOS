@@ -1,0 +1,98 @@
+
+Amar Lakshya
+============
+
+E-mail:	 amar.lakshya@xaviers.edu.in
+Phone:	  +919412506677
+Website:	http://amar-laksh.github.io/
+Address:	20/2, R.K. Puram Phase -2, Taj Nagari, Agra - 282001
+
+Projects
+========================
+I have worked on the following individual projects (non-academic) - 
+	
+* fOS (C/ASM) 
+	* An alpha-level Monolithic UNIX-like Kernel for the i386 platform.
+	* It supports PCI and Serial Communication.* western notes API for PC 	    Speaker.
+	* Intended to provide ring 0 control of hardware for students to learn 	   about low-level computing.
+	* http://github.com/amar-laksh/fOS
+
+* Vitae (Python)
+	* An Esoteric, Interpreted python-built language called Vitae. 
+	* Vitae's interpreter is built by regular expressions and not ASTs.
+	* Used to introduce non-technical people to programming in their lives
+	* http://github.com/amar-laksh/vitae
+
+* TryingToKnowYouBetter (Bash/Python)
+	* The Election Commission's website accidentally leaks a lot of Data.* All the public data can be accessed and analyzed to yield powerful results.
+	* Analyzing the data, one could basically track any registered voter's location.
+	*https://github.com/amar-laksh/TryinToKnowYouBetter
+
+* CISCE (Python/ Bash)
+	*The CISCE Website contains publicly accessible data.
+	* This data can be extracted through scripts easily.
+	* It allows one to hoard contact information about every head of a school.
+	* Over 2000 Emails were collected.
+	* https://github.com/amar-laksh/CISCE  
+
+* focusTV(Python/OPENCV)
+	* An extremely responsive face detection system which works with Youtube and VLC. 
+	* It can pause videos automatically based on your faces' proximity and direction to the screen. 
+	* Implemented with Python and openCV.
+	* http://github.com/amar-laksh/focusTV
+
+* Pyrain (Python)
+	* An easy solution for Mumbai Local train info.
+	* It aggregates data about the various stations and trains on all lines.
+	* It provides feedback in the form of-
+		*The distance between two stations.
+		* The money for 2nd class ticket.
+		* Themoney for 1st class ticket
+	* It is implemented using python and BeautifulSoup.
+	* https://github.com/amar-laksh/Pyrain
+
+Education
+========================
+	> BSc-.I.T. (2014 - 2017), St. Xaviers College, Mumbai
+	Studying in the Third Year with .C.G.P.A of 3.13/4.00
+	--------
+
+	> 12th (2013 - 2014), St. Peters College, Agra
+	Completed 12th from .I.S.C. with 81.00%
+	--------
+
+	> 10th (2011 - 2012), St. Peters College, Agra
+	Completed 10th from .I.C.S.E with 86.00%
+
+Positions Held
+========================
+	Web
+	Designer                                                                                                      
+	2014 - 2015
+	Xenith'15 - .I.T. Festival 
+	Core Member 
+
+	2014 - 2015
+	.I.T. Society 
+	
+	Class Representative     
+
+	2014 - 2017
+	 
+
+Interests
+========================
+	* An avid reader and a published writer
+	(http://www.amazon.in/Crossed-Knotted-Various-Authors/dp/8192997529)
+	* An amateur hardware enthusiast.
+	* Possessed with a knack for Vulnerability
+	Testing.
+
+References
+========================
+	Ms. Lydia Fernandes 
+	(Professor at St. Xavier's College)
+	Phone Number:
+	+919930280196
+	Email: Lydia_fdes@yahoo.co.in 
+
