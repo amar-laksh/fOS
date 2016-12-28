@@ -6,9 +6,6 @@ unsigned char shift = 0;
 unsigned char caps = 0;
 unsigned char key_cycle= 0;
 
-struct {
-    char buff;
-} kbd;
 #define cmd  14
 char* commands[cmd] = {
     "clear",

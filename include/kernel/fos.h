@@ -184,12 +184,17 @@ typedef struct {
  void mm_init(uint32_t end, unsigned long total_mem);
  void mm_print_out();
 
- char* malloc(size_t size);
- void free(void *mem);
+char* malloc(size_t size);
+
+void free(void *mem);
+
+void *memset(void *dest, char val, size_t count);
 
 void * memcpy(void * restrict dest, const void * restrict src, size_t count);
-// void* memset (void * ptr, int value, size_t num );
- void* memset16 (void *ptr, uint16_t value, size_t num);
+
+void *memset(void *dest, char val, size_t count);
+
+ //void* memset16 (void *ptr, uint16_t value, size_t num);
 
 //------------------------------------------------GDT.H
 
@@ -306,9 +311,9 @@ void vga_init();
 #define KEYBOARD_NOTICES 0
 #define KEYBOARD_IRQ 1
 
-
-
-
+struct {
+    char buff;
+} kbd;
 
 typedef struct {
     char *frame_buffer;
