@@ -69,27 +69,27 @@ void mouse_handler(struct regs *a_r){
   }
       if(mouse_cycle == 0 && turn == 9){
         if(mouse_x == 0 && mouse_y < 0 && old_mouse_y != mouse_y){
-          term->cursor += 160;
+          term.cursor += 160;
           old_mouse_y = mouse_y;
         }
         else if(mouse_x == 0 && mouse_y >= 0 && old_mouse_y != mouse_y){
-          term->cursor -= 160;
+          term.cursor -= 160;
           old_mouse_y = mouse_y;
         }
         else if(mouse_y == 0 && mouse_x < 0 && old_mouse_x != mouse_x){
-          term->cursor -= 2;
+          term.cursor -= 2;
           old_mouse_x = mouse_x;
         }
         else if(mouse_y == 0 && mouse_x >= 0 && old_mouse_x != mouse_x){
-          term->cursor += 2;
+          term.cursor += 2;
           old_mouse_x = mouse_x;
         }
         turn = 0;
-        move_cursor(term->cursor/2);
+        move_cursor(term.cursor/2);
         mouse_x = 0;
         mouse_y = 0;
         char *fb = (char*)VIDMEM;
-        draw_char(term->cursor,fb[term->cursor],COLOR_BLACK, COLOR_GREEN);
+        draw_char(term.cursor,fb[term.cursor],COLOR_BLACK, COLOR_GREEN);
       }
       irq_ack(MOUSE_IRQ);
 }

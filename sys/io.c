@@ -23,31 +23,30 @@ char* commands[cmd] = {
     "pong",
     "help"
 };
-console *term;
-io_buffer *io_buff;
+
 
 int process_buffer(){
     char b[2];
     int8_t c=0;
-    itoa(term->offset,10,b);
+    itoa(term.offset,10,b);
     draw_str("Console offset: ",12,50);
     draw_str(b,13,50);
     char* argv[5];
     int argc = 0;
     int count;
-    count = term->offset;
+    count = term.offset;
     for (int i = 0; i < count; ++i){
-        if(term->buffer[i] == ' ')
+        if(term.buffer[i] == ' ')
             argc++;
     }
 
     /* If arguments & offset are equal we have all spaces So we skip the command.*/
-    if(argc == term->offset){
+    if(argc == term.offset){
         null_buffer();
         return;
     }
 
-    argv[0] = str_tok(term->buffer," ");
+    argv[0] = str_tok(term.buffer," ");
     for (int i = 1; i < argc+1; i++){
         argv[i] = str_tok(NULL," ");
     }
@@ -67,7 +66,7 @@ int process_buffer(){
         }
     }
     if(c == 0){
-        exec_cmd(cmd+1, term->buffer);
+        exec_cmd(cmd+1, term.buffer);
         null_buffer();
     }
 
@@ -76,11 +75,11 @@ int process_buffer(){
 
 void append_buffer(char l){
     if(l == '\b')
-        term->buffer
-        [(term->offset > 0)?--term->offset:0]
+        term.buffer
+        [(term.offset > 0)?--term.offset:0]
         = 0;
     else if(l !='\r'){
-        term->buffer[term->offset++] = l;
+        term.buffer[term.offset++] = l;
     }
 }
 

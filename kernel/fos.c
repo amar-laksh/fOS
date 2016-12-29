@@ -4,9 +4,13 @@ extern void*  endKernel;
 
 
 void kmain(multiboot_info_t* mbd, unsigned int magic){
-	term->cursor = 162;
+	vga_fb.vga_buffer = malloc(VIDMEM_SIZE*2);
+	memset(vga_fb.vga_buffer, 0, VIDMEM_SIZE*2);
+	
+	term.cursor = 162;
 	clear_screen();
-		gdt_install();
+	
+	gdt_install();
 	kprintf("GDT initiated.\n");
 	
 	idt_install();

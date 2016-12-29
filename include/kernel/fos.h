@@ -188,8 +188,6 @@ char* malloc(size_t size);
 
 void free(void *mem);
 
-void *memset(void *dest, char val, size_t count);
-
 void * memcpy(void * restrict dest, const void * restrict src, size_t count);
 
 void *memset(void *dest, char val, size_t count);
@@ -251,6 +249,11 @@ void poll_init();
 #define MAX_COLUMNS 79//1023//479//79
 #define ERROR_CODE -12321
 #define PASS_CODE 32123
+
+struct {
+	char* vga_buffer;
+	int vga_offset;
+} vga_fb;
 enum vga_color
 {
 	COLOR_BLACK = 0,
@@ -323,7 +326,7 @@ typedef struct {
     char* cursor_value;
 } console;
 
-console *term;
+console term;
 
 typedef struct {
 	char* keyboard_buffer;

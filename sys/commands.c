@@ -21,7 +21,7 @@
 void read_text(char* ptr, unsigned int count){
 	        unsigned int j=0;
         clear_screen();
-        term->cursor = 0;
+        term.cursor = 0;
         while(j < (count)){
           if(ptr[j] == 0x5c && ptr[j+1] == 0x6e){
             ptr[j] = '\n';
@@ -213,7 +213,7 @@ void exec_cmd(int n, char* buff[5]){
 	switch(n){
 		case 0:
 			clear_screen();
-			term->cursor = 2;
+			term.cursor = 2;
 			break;
 		case 1:
 			kprintf("\nHere's a beep at: %dHz with delay of: %d\n"
@@ -246,6 +246,19 @@ void exec_cmd(int n, char* buff[5]){
 			break;
 		case 8:
 			kprintf("\nThe system has been up for %d cycles.\n", cycles);
+			char* fb = (char*) VIDMEM;
+			int i=0;
+			while(i < (VIDMEM_SIZE+160)){
+				vga_fb.vga_buffer[i] = fb[i+160];
+				i++;
+			}
+			i=0;
+			clear_screen();
+			while(i < VIDMEM_SIZE){
+				fb[i] = vga_fb.vga_buffer[i];
+				i++;
+			}
+
 			break;
 		case 9:
 			set_clock(atoi(buff[1]), atoi(buff[2]), atoi(buff[3]));
