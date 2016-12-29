@@ -19,8 +19,8 @@
 #define check_flag(flags, n) ((flags) & bit(n))
 
 void read_text(char* ptr, unsigned int count){
-	        unsigned int j=0;
-        clear_screen();
+	clear_screen();
+	    unsigned int j=0;
         term.cursor = 0;
         while(j < (count)){
           if(ptr[j] == 0x5c && ptr[j+1] == 0x6e){
@@ -207,7 +207,43 @@ void *memset_h(void *dest, int16_t val, size_t count){
 	return dest;
 }
 
+void scroll(int flag){
+	char* fb = (char*) VIDMEM;
+    	int i=0;
+    	if(flag == 1){
+			while(i < (VIDMEM_SIZE+160)){
+				vga_fb.vga_buffer[i] = fb[i+160];
+				i++;
+			}
+			clear_screen();
+			i=0;
+			while(i < VIDMEM_SIZE){
+				fb[i] = vga_fb.vga_buffer[i];
+				i++;
+			}
+    	}
+    	else{
+			i=0;
+			while(i < VIDMEM_SIZE+160){
+				fb[i] = vga_fb.vga_buffer[i];
+				i++;
+			}    		
+    	}
+}
 
+void resume(){
+	vga_fb.vga_buffer = malloc(VIDMEM_SIZE);
+	memset(vga_fb.vga_buffer, 0, VIDMEM_SIZE);
+	mm_print_out();
+	char* ptr = (char*)memory_t.module_start;
+    read_text(ptr,(memory_t.module_end - memory_t.module_start));
+    here:
+    if(inb(KEY_DEVICE) == 0x24)
+    	scroll(1);
+    if(inb(KEY_DEVICE) == 0x25)
+    	scroll(0);
+    goto here;
+}
 
 void exec_cmd(int n, char* buff[5]){
 	switch(n){
@@ -246,19 +282,6 @@ void exec_cmd(int n, char* buff[5]){
 			break;
 		case 8:
 			kprintf("\nThe system has been up for %d cycles.\n", cycles);
-			char* fb = (char*) VIDMEM;
-			int i=0;
-			while(i < (VIDMEM_SIZE+160)){
-				vga_fb.vga_buffer[i] = fb[i+160];
-				i++;
-			}
-			i=0;
-			clear_screen();
-			while(i < VIDMEM_SIZE){
-				fb[i] = vga_fb.vga_buffer[i];
-				i++;
-			}
-
 			break;
 		case 9:
 			set_clock(atoi(buff[1]), atoi(buff[2]), atoi(buff[3]));
@@ -271,6 +294,9 @@ void exec_cmd(int n, char* buff[5]){
 			break;
 		case 12:
 			play_pong();
+			break;
+		case 13:
+			resume();
 			break;
 		default:
 			if(strlen((const char*)buff) > 1){

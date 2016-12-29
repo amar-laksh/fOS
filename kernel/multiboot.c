@@ -36,7 +36,11 @@ unsigned long long multiboot_check(multiboot_info_t* mbd, unsigned int magic){
         uint32_t module_start = *((uint32_t*)mbd->mods_addr + 8 * i);
         uint32_t module_end   = *(uint32_t*)(mbd->mods_addr + 8 * i + 4);
         kprintf("Module %d is at 0x%x:0x%x\n", i+1, module_start, module_end);
-        kprintf("Module %d is at 0x%x:0x%x\n", i+1, module_start, module_end);
+        ramdisk = (char*)0x07000000;
+        memory_t.module_start = (uint32_t)ramdisk;
+        memory_t.module_end = ((uint32_t)ramdisk + (module_end - module_start));
+        memmove(ramdisk, (char *)module_start, (module_end - module_start));
+        kprintf("Relocating... Now the module %d is at 0x%x:0x%x\n", i+1, ramdisk, (ramdisk+8*i+4));
         // char* ptr = module_start;
         // // char*  p = str_tok(ptr,"\n");
         //   // while(p != NULL){

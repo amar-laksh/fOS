@@ -4,9 +4,6 @@ extern void*  endKernel;
 
 
 void kmain(multiboot_info_t* mbd, unsigned int magic){
-	vga_fb.vga_buffer = malloc(VIDMEM_SIZE*2);
-	memset(vga_fb.vga_buffer, 0, VIDMEM_SIZE*2);
-	
 	term.cursor = 162;
 	clear_screen();
 	

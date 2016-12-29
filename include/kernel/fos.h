@@ -23,7 +23,8 @@
 
 
 
-
+char* ramdisk;
+uint32_t ramdisk_top;
 
 
 
@@ -777,7 +778,9 @@ typedef struct{
 	unsigned long used_mem;
 	unsigned long kernel_start;
 	unsigned long kernel_end;
-} memory;
+	uint32_t module_start;
+	uint32_t module_end;
+} memory __attribute__((packed));
 
 memory memory_t;
 

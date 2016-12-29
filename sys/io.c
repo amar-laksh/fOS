@@ -6,7 +6,7 @@ unsigned char shift = 0;
 unsigned char caps = 0;
 unsigned char key_cycle= 0;
 
-#define cmd  14
+#define cmd  15
 char* commands[cmd] = {
     "clear",
     "beep",
@@ -21,6 +21,7 @@ char* commands[cmd] = {
     "lscpu",
     "lsmem",
     "pong",
+    "resume",
     "help"
 };
 
@@ -153,12 +154,12 @@ void getASCII(unsigned char c) {
                     kbd.buff = keytable[c-1].key_value;
             }
             char l = kbd.buff;
-                append_buffer(l);
-                if(l=='\r')
-                    code = process_buffer();
-                if(code == -999)
-                    return;
-                write_char(l, COLOR_BLACK, COLOR_GREEN);
+            append_buffer(l);
+            if(l=='\r')
+                code = process_buffer();
+            if(code == -999)
+                return;
+            write_char(l, COLOR_BLACK, COLOR_GREEN);
         }
     }
 }

@@ -45,6 +45,7 @@ void mm_init(uint32_t kernel_end, unsigned long total_mem){
 	memory_t.used_mem = (last_alloc-0x000000)/1024;
 	memory_t.unused_mem = (memory_t.total_mem*1024 - memory_t.used_mem);
 	//kprintf("Kernel heap starts at 0x%x\n", last_alloc);
+	mm_print_out();
 }
 void mm_print_out(){
 	kprintf("Kernel heap starts at 0x%x\n", last_alloc);
