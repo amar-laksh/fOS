@@ -24,28 +24,34 @@ I have worked on the following individual projects (non-academic) -
 	* http://github.com/amar-laksh/vitae
 
 * TryingToKnowYouBetter (Bash/Python)
-	* The Election Commission's website accidentally leaks a lot of Data.* All the public data can be accessed and analyzed to yield powerful results.
-	* Analyzing the data, one could basically track any registered voter's location.
+	* The Election Commission's website accidentally leaks a lot of Data.
+	* All the public data can be accessed and analyzed to yield powerful
+	  results.
+	* Analyzing the data, one could basically track any registered voter's
+	  location.
 	*https://github.com/amar-laksh/TryinToKnowYouBetter
 
 * CISCE (Python/ Bash)
 	*The CISCE Website contains publicly accessible data.
 	* This data can be extracted through scripts easily.
-	* It allows one to hoard contact information about every head of a school.
+	* It allows one to hoard information about every head of a school.
 	* Over 2000 Emails were collected.
-	* https://github.com/amar-laksh/CISCE  
+	* https://github.com/amar-laksh/CISCE
 
 * focusTV(Python/OPENCV)
-	* An extremely responsive face detection system which works with Youtube and VLC. 
-	* It can pause videos automatically based on your faces' proximity and direction to the screen. 
+	* An extremely responsive face detection system which works with 
+	  Youtube and VLC. 
+	* It can pause videos automatically based on your faces' proximity 
+	  and direction to the screen. 
 	* Implemented with Python and openCV.
 	* http://github.com/amar-laksh/focusTV
 
 * Pyrain (Python)
 	* An easy solution for Mumbai Local train info.
-	* It aggregates data about the various stations and trains on all lines.
+	* It aggregates data about the various stations and trains on all
+	  lines.
 	* It provides feedback in the form of-
-		*The distance between two stations.
+		* The distance between two stations.
 		* The money for 2nd class ticket.
 		* Themoney for 1st class ticket
 	* It is implemented using python and BeautifulSoup.
@@ -64,9 +70,10 @@ Education
 
 Positions Held
 ========================
-	Web
-	Designer
-          
+	2014 - 2015
+	Web Designer
+	Xenith'14 - .I.T. Festival
+
 	2014 - 2015
 	Xenith'15 - .I.T. Festival
 	Core Member
@@ -89,9 +96,7 @@ Interests
 
 References
 ========================
-	Ms. Lydia Fernandes 
+	Ms. Lydia Fernandes
 	(Professor at St. Xavier's College)
-	Phone Number:
-	+919930280196
-	Email: Lydia_fdes@yahoo.co.in 
-
+	Phone Number: +919930280196
+	Email: Lydia_fdes@yahoo.co.in

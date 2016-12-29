@@ -1,4 +1,5 @@
 // TODO - USE MULTIBOOT 2 INSTEAD OF MULTIBOOT 1
+// TODO - RELOCATE ALL CRITICAL INFO TO SAFE MEMORY (LAST AVAILABLE SECTION MAYBE?)
 #include <kernel/fos.h>
 
 #define CHECK_FLAG(flag,bit) ((flag) & (1<<bit))

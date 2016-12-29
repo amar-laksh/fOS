@@ -223,11 +223,7 @@ void scroll(int flag){
 			}
     	}
     	else{
-			i=0;
-			while(i < VIDMEM_SIZE+160){
-				fb[i] = vga_fb.vga_buffer[i];
-				i++;
-			}    		
+
     	}
 }
 
@@ -242,6 +238,10 @@ void resume(){
     	scroll(1);
     if(inb(KEY_DEVICE) == 0x25)
     	scroll(0);
+    if(inb(KEY_DEVICE) == 0x10){
+    	clear_screen();
+    	return;
+    }
     goto here;
 }
 
