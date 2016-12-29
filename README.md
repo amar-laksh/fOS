@@ -1,7 +1,6 @@
 
 # fOS
-It's a hobby 32-bit, Monolithic, Multi-boot Kernel destined to run a JIT C compiler
-and a Resume of its Author.
+It's a hobby 32-bit, Monolithic, Multi-boot Kernel which can ofcourse also present an interactive copy of a Resume of its author. :)
 
 
 #Progress
