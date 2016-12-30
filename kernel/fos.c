@@ -18,7 +18,6 @@ void kmain(multiboot_info_t* mbd, unsigned int magic){
 	
 	serial_install();
 	kprintf("SERIAL initiated.\n");
-	
 	int total_mem = multiboot_check(mbd, magic);
 	if(total_mem == -1){
 		kprintf("FAILURE: MULTIBOOT INFO DIDN'T CHECK");
