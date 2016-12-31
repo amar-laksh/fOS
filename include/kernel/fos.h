@@ -780,7 +780,7 @@ typedef struct{
 	unsigned long kernel_end;
 	uint32_t module_start;
 	uint32_t module_end;
-} memory __attribute__((packed));
+} memory;
 
 memory memory_t;
 
