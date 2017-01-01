@@ -42,8 +42,8 @@ void timer_handler(irq_handler_t* handler){
     if(hours % 24 == 0){
         hours = 0;
     }
-    draw_str("Console Buffer: ",10,50);
-    draw_str(term.buffer,11,50);
+    // draw_str("Console Buffer: ",10,50);
+    // draw_str(term.buffer,11,50);
     draw_str("Time: ",2, 55);
     itoa(hours, 10, buff);
     draw_str(buff,2,69);

@@ -147,19 +147,45 @@ void intel_init(){
 	cpu.processor_serial_number[0] = edx;
 	cpu.processor_serial_number[1] = ecx;
 	
-	/** Deterministic Cache Parameters **/
-	cpuid(0x04,&eax, &ebx, &ecx, &edx);
-	cpu.det_cache_params[0] = (eax & 0x1F);
-	cpu.det_cache_params[1] = (eax & 0xE0);
-	cpu.det_cache_params[2] = (eax & 0x100);
-	cpu.det_cache_params[3] = (eax & 0x200);
-	cpu.det_cache_params[4] = (eax & 0x3FFC000);
-	cpu.det_cache_params[5] = (eax & 0xFC000000);
-	cpu.det_cache_params[6] = (ebx & 0xFFF);
-	cpu.det_cache_params[7] = (ebx & 0x3FF000);
-	cpu.det_cache_params[8] = (ebx & 0xFFC00000);
-	cpu.det_cache_params[9] = ecx;
-	cpu.det_cache_params[10] = edx;
+	/**
+	 * Deterministic Cache Parameters 
+	 * This Cache Size in Bytes
+	 * 		= (Ways + 1) * (Partitions + 1) * (Line_Size + 1) * (Sets + 1)
+	 * 	 	= (EBX[31:22] + 1) * (EBX[21:12] + 1) * (EBX[11:0] + 1) * (ECX + 1)
+	 */
+	int i=0;
+	for(i=0;i<32;i++){
+		uint32_t eax, ebx, ecx, edx;
+
+		/* get cache type, and set the current cache id */
+		eax = 4; 
+		ecx = i;
+
+		__asm__ __volatile__ ("cpuid"
+								:"+a"(eax)
+								,"=b"(ebx)
+								,"+c"(ecx)
+								,"=d"(edx)
+								);
+		cpu.det_cache_params.cache_type[i] = eax & 0x1F;
+
+		if(cpu.det_cache_params.cache_type[i] == 0)
+			break;
+
+		cpu.det_cache_params.cache_level[i] = (eax >>= 5) & 0x7;
+		cpu.det_cache_params.cache_self_initializing[i] = (eax >>= 3) & 0x1;
+        cpu.det_cache_params.cache_fully_associative[i] = (eax >>= 1) & 0x1;
+        cpu.det_cache_params.cache_sets[i] = ecx + 1;
+        cpu.det_cache_params.cache_coherency_line_size[i] = (ebx & 0xFFF) + 1;
+        cpu.det_cache_params.cache_physical_line_partitions[i] = ((ebx >>= 12) & 0x3FF) + 1;
+        cpu.det_cache_params.cache_ways_of_associativity[i] = ((ebx >>= 10) & 0x3FF) + 1;
+        cpu.det_cache_params.cache_total_size[i] = cpu.det_cache_params.cache_ways_of_associativity[i]
+        							* cpu.det_cache_params.cache_physical_line_partitions[i]
+        							* cpu.det_cache_params.cache_coherency_line_size[i]
+        							* cpu.det_cache_params.cache_sets[i];
+
+	}
+
 
 	/** cpu.monitor Features **/
 	cpuid(0x05,&eax, &ebx, &ecx, &edx);
@@ -194,6 +220,7 @@ void intel_init(){
 	    cpu.cpu_misc_info[0] = (ebx & 0xFF000000);
 	    cpu.cpu_misc_info[1] = (ebx & 0xF00);
 	    cpu.cpu_misc_info[2] = (ebx & 0xFF);
+
 
 	    /* Extended Function CPUID Information */
 	    cpuid(0x80000001, &eax, &ebx, &ecx, &edx);

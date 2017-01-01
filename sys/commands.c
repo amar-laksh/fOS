@@ -177,20 +177,14 @@ void lscpu(){
 	cpu_t_set();
 	kprintf("\n");
 	kprintf("Architecture:\t\t%s\n", cpu_t.arc);
-	kprintf("CPU op-mode(s):\t\t%s\n", cpu_t.op_modes);
-	kprintf("Byte order:\t\t%s\n", cpu_t.byte_order);
-	kprintf("CPU(s):\t\t%s\n", cpu_t.cpus);
-	kprintf("On-line CPU(s) list:\t\t%s\n", cpu_t.online_cpu_list);
-	kprintf("Thread(s) per core:\t\t%s\n", cpu_t.threads_per_core);
-	kprintf("Core(s) per socket:\t\t%s\n", cpu_t.cores_per_socket);
-	kprintf("Socket(s):\t\t%s\n", cpu_t.sockets);
-	kprintf("NUMA node(s):\t\t%s\n", cpu_t.NUMA_nodes);
-	kprintf("Vendor ID:\t\t%s\n", cpu_t.vendor_id);
-	kprintf("CPU Family:\t\t%s\n", cpu_t.cpu_family);
-	kprintf("Model:\t\t%s\n", cpu_t.model);
-	kprintf("Model Name:\t\t%s\n", cpu_t.model_name);
+	kprintf("CPU op-mode(s):\t      %s\n", cpu_t.op_modes);
+	kprintf("Byte order:\t\t  %s\n", cpu_t.byte_order);
 
-	kprintf("CPU FLAGS: ");
+	kprintf("L1i Cache:\t\t   %dK\n", cpu.det_cache_params.cache_total_size[0] >> 10);
+	kprintf("L1d Cache:\t\t   %dK\n", cpu.det_cache_params.cache_total_size[1] >> 10);
+	kprintf("L2 Cache:\t\t    %dK\n", cpu.det_cache_params.cache_total_size[2] >> 10);
+	kprintf("L3 Cache:\t\t    %dK\n", cpu.det_cache_params.cache_total_size[3] >> 10);
+	kprintf("CPU FLAGS:\t\t  ");
 	int c=0;
 	for (int i = 0; i < 64; ++i){
 		if(cpu.cpu_flags[i].flag == 1 &&  cpu.cpu_flags[i].flag != 2){
@@ -287,6 +281,7 @@ void exec_cmd(int n, char* buff[5]){
 			set_clock(atoi(buff[1]), atoi(buff[2]), atoi(buff[3]));
 			break;
 		case 10:
+			kprintf("\nThe summary about the CPU: \n");
 			lscpu();
 			break;
 		case 11:

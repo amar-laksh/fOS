@@ -28,7 +28,7 @@ void kmain(multiboot_info_t* mbd, unsigned int magic){
 	memory_t.mem_db = mbd;
 	memory_t.magic = magic;
 
-	mm_init((uint32_t)&endKernel, total_mem);
+	mm_init((uint32_t)&endKernel,0x100000);
 	kprintf("MM initiated.\n");
 	pci_install();
 	kprintf("PCI initiated.\n");

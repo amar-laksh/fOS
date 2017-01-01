@@ -27,11 +27,11 @@ char* commands[cmd] = {
 
 
 int process_buffer(){
-    char b[2];
+    // char b[2];
     int8_t c=0;
-    itoa(term.offset,10,b);
-    draw_str("Console offset: ",12,50);
-    draw_str(b,13,50);
+    // itoa(term.offset,10,b);
+    // draw_str("Console offset: ",12,50);
+    // draw_str(b,13,50);
     char* argv[5];
     int argc = 0;
     int count;

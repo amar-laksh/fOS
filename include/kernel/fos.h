@@ -473,6 +473,18 @@ typedef struct {
 		char* name;
 	}CPU_TABLE;
 
+	typedef struct {
+		int8_t cache_type[32];
+		int8_t cache_level[32];
+		int8_t cache_self_initializing[32];
+		int8_t cache_fully_associative[32];
+		uint32_t cache_sets[32];
+		uint32_t cache_coherency_line_size[32];
+		uint32_t cache_physical_line_partitions[32];
+		uint32_t cache_ways_of_associativity[32];
+		size_t cache_total_size[32];
+	} __attribute__((packed)) det_cache_params_t;
+	
 
 
 typedef struct {
@@ -559,7 +571,8 @@ typedef struct {
 // 	int32_t NO_OF_SETS;
 // 	int8_t WBINVD_COMPACT;
 // };
-	int32_t det_cache_params[11];
+
+	det_cache_params_t det_cache_params;
 
 	// Function 0x05 | Function 0x05
 // struct MONITOR{
