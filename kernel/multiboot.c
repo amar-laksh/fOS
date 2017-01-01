@@ -6,7 +6,8 @@
 
 unsigned long long multiboot_check(multiboot_info_t* mbd, unsigned int magic){
     unsigned long long total_mem_low = 0;
-   	if (magic != MULTIBOOT_BOOTLOADER_MAGIC){
+   	
+    if (magic != MULTIBOOT_BOOTLOADER_MAGIC){
    		kprintf("Invalid magic number: 0x%x\n"
    							, (unsigned) magic);
    		return -1;
@@ -29,12 +30,12 @@ unsigned long long multiboot_check(multiboot_info_t* mbd, unsigned int magic){
 		kprintf ("cmdline = %s\n"
 			, (char *) mbd->cmdline);
 
-    if (CHECK_FLAG (mbd->flags, 6)){
-    memory_map_t *mmap;
+  if (CHECK_FLAG (mbd->flags, 6)){
     kprintf ("mmap_addr = 0x%x, mmap_length = 0x%x\n"
-           ,(unsigned) mbd->mmap_addr
-           ,(unsigned) mbd->mmap_length);
-
+      ,(unsigned) mbd->mmap_addr
+      ,(unsigned) mbd->mmap_length
+      );
+    memory_map_t *mmap;
     mmap = (memory_map_t *) mbd->mmap_addr;
     while((unsigned long)mmap < mbd->mmap_addr + mbd->mmap_length){
       kprintf (" size = 0x%x, base_addr = 0x%x,"
@@ -84,17 +85,6 @@ unsigned long long multiboot_check(multiboot_info_t* mbd, unsigned int magic){
         memmove(ramdisk, (char *)module_start, (module_end - module_start));
         kprintf("Relocating... Now the module %d is at 0x%x:0x%x\n", i+1, ramdisk, ramdisk_top);
         kprintf("The ramdisk now starts from 0x%x for I/O\n", memory_t.module_end);
-        // char* ptr = module_start;
-        // // char*  p = str_tok(ptr,"\n");
-        //   // while(p != NULL){
-        //   //   kprintf("%s \n", p);
-        //   //   p = str_tok(NULL, "\n");
-        //   // }
-        // read_text(ptr,(module_end - module_start)); 
-        // STOP;
-        //typedef void (*call_module_t)(void);
-        //call_module_t start_program = (call_module_t)module_start;
-        //start_program();
       }
     }
 

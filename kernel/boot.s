@@ -1,9 +1,8 @@
-
 # Constants declared for the Multi-boot specification header. 
 .set ALIGN,    1<<0             				# align loaded modules on page boundaries
 .set MEMINFO,  1<<1             				# provide memory map
-.set VIDEOTABLE, 1<<2							# provide video table information
-.set FLAGS,    ALIGN | MEMINFO | VIDEOTABLE  	# this is the Multiboot 'flag' field
+.set VIDEOTABLE, 1<<2						# provide video table information
+.set FLAGS,    ALIGN | MEMINFO | VIDEOTABLE  			# this is the Multiboot 'flag' field
 .set MAGIC,    0x1BADB002       				# 'magic number' lets bootloader find the header
 .set CHECKSUM, -(MAGIC + FLAGS) 				# checksum of above, to prove we are multiboot
 
@@ -18,7 +17,7 @@
 
 .section .bootstrap_stack, "aw", @nobits
 stack_bottom:
-.skip 16384#2*1024*1024#16384 # 16 KiB
+.skip 16384							# 16 KiB
 stack_top:
 
 .section .text
@@ -39,7 +38,6 @@ _start:
 	jmp 1b
 
 # Flushes the old gdt set by GRUB
-
 .global gdt_flush
 .extern gp 
 
