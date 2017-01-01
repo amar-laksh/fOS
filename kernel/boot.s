@@ -12,8 +12,8 @@
 .long FLAGS
 .long CHECKSUM
 .long 0, 0, 0, 0, 0
-.long 1 										#set graphics mode
-.long 0, 0, 32									#width, height, depth
+.long 1 							#set graphics mode
+.long 0, 0, 32							#width, height, depth
 
 .section .bootstrap_stack, "aw", @nobits
 stack_bottom:
