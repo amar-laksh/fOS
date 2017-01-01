@@ -8,12 +8,15 @@ size_t sys_write(int fd, const void *buf, size_t count){
 			write_char(buffer[i], COLOR_BLACK, COLOR_GREEN);
 		}
 	}
-	else if(fd != 0){
+	else if(fd == 13){
 		for(unsigned long i=0;i<count;i++){
 			while (is_transmit_empty() == 0)
 				;
 				outb(serial.COM_PORT,buffer[i]);
 		}
+	}
+	else if(fd == 1){
+		
 	}
 	return 0;
 } 

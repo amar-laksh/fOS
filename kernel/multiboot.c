@@ -83,7 +83,7 @@ unsigned long long multiboot_check(multiboot_info_t* mbd, unsigned int magic){
         kprintf("Allocating a ramdisk and clearing it for use...\n");
         memset(ramdisk,0,(ramdisk_top - (unsigned long)ramdisk));
         memmove(ramdisk, (char *)module_start, (module_end - module_start));
-        kprintf("Relocating... Now the module %d is at 0x%x:0x%x\n", i+1, ramdisk, ramdisk_top);
+        kprintf("Relocating... Now the module %d is at 0x%x:0x%x\n", i+1, ramdisk, memory_t.module_end);
         kprintf("The ramdisk now starts from 0x%x for I/O\n", memory_t.module_end);
       }
     }

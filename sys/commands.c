@@ -127,6 +127,8 @@ void marry_song(){
 
 
 void reboot(){
+	fs_install();
+	STOP;
     uint8_t temp;
     asm volatile ("cli"); 
     do{
