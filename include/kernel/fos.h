@@ -676,34 +676,7 @@ typedef struct {
 CPU_TOPOLOGY cpu;
 
 
-typedef struct {
-	char* arc;
-	char* op_modes;
-	char* byte_order;
-	char* cpus;
-	char* online_cpu_list;
-	char* threads_per_core;
-	char* cores_per_socket;
-	char* sockets;
-	char* NUMA_nodes;
-	char* vendor_id;
-	char* cpu_family;
-	char* model;
-	char* model_name;
-	char* stepping;
-	char* cpu_mhz;
-	char* cpu_max_mhz;
-	char* cpu_min_mhz;
-	char* bogo_MIPS;
-	char* virtualization;
-	char* l1d_cache;
-	char* l1i_cache;
-	char* l2_cache;
-	char* l3_cache;
-	char* flags[100];
-} LSCPU;
 
-LSCPU cpu_t;
 static inline void cpuid(uint32_t reg, uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t *edx)
 {
     __asm__ __volatile__("cpuid"

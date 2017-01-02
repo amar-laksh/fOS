@@ -127,8 +127,6 @@ void marry_song(){
 
 
 void reboot(){
-	fs_install();
-	STOP;
     uint8_t temp;
     asm volatile ("cli"); 
     do{
@@ -151,22 +149,6 @@ void set_clock(int h, int m, int s){
 	return;
 }
 
-void cpu_t_set(){
-	if(cpu.extended_cpu_features[3] & (1<<29))
-		cpu_t.arc = "x86_64";
-	else
-		cpu_t.arc = "x86";
-	
-	if(equals(cpu_t.arc, "x86_64") == 0 
-		|| equals(cpu_t.arc, "x86") == 0){
-			if(equals(cpu_t.arc, "x86_64") == 0)
-				cpu_t.op_modes = "32-bit, 64-bit";
-			else
-				cpu_t.op_modes = "32-bit";
-			cpu_t.byte_order = "Little Endian";
-	}
-}
-
 void lsmem(){
 	kprintf("\n");
 	kprintf("Total Memory:%d MB\n", memory_t.total_mem);
@@ -176,12 +158,18 @@ void lsmem(){
 	kprintf("Kernel End at:0x%x\n", memory_t.kernel_end);
 }
 void lscpu(){
-	cpu_t_set();
-	kprintf("\n");
-	kprintf("Architecture:\t\t%s\n", cpu_t.arc);
-	kprintf("CPU op-mode(s):\t      %s\n", cpu_t.op_modes);
-	kprintf("Byte order:\t\t  %s\n", cpu_t.byte_order);
-
+	if(cpu.extended_cpu_features[3] & (1<<29)){
+		kprintf("Architecture:\t\tx86_64\n");
+		kprintf("CPU op-mode(s):\t      32-bit, 64-bit\n");
+		kprintf("Byte order:\t\t  Little-Endian\n");
+	}
+	else{
+		kprintf("Architecture:\t\tx86\n");
+		kprintf("CPU op-mode(s):\t      32-bit\n");
+		kprintf("Byte order:\t\t  Little-Endian\n");
+	}
+	kprintf("Vendor ID\t\t    %s\n",cpu.cpu_vendor_string);
+	kprintf("Model Name\t\t   %s\n",cpu.processor_name);
 	kprintf("L1i Cache:\t\t   %dK\n", cpu.det_cache_params.cache_total_size[0] >> 10);
 	kprintf("L1d Cache:\t\t   %dK\n", cpu.det_cache_params.cache_total_size[1] >> 10);
 	kprintf("L2 Cache:\t\t    %dK\n", cpu.det_cache_params.cache_total_size[2] >> 10);
