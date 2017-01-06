@@ -9,7 +9,8 @@
 #define KBRD_IO 0x60 
 #define KBRD_RESET 0xFE 
  
-#define bit(n) (1<<(n)) 
+#define bit(n) (1<<(n))
+#define GetInInterrupt(arg)  __asm__ __volatile__ ("int %0"::"N"(arg));
 
 /* GIMP RGB C-Source image dump 1-byte-run-length-encoded (png.c) */
 
@@ -229,6 +230,32 @@ void resume(){
     goto here;
 }
 
+void asm_execute(char* buff[5]){
+	if(equals(buff[1],"int") == 0){
+		switch(atoi(buff[2])){
+			case 0:
+				GetInInterrupt(0);
+				break;
+			case 1:
+				GetInInterrupt(1);
+				break;
+			case 2:
+				GetInInterrupt(2);
+				break;
+			case 3:
+				GetInInterrupt(4);
+				break;
+			case 4:
+				GetInInterrupt(4);
+				break;
+			case 5:
+				GetInInterrupt(5);
+				break;
+		}
+	}
+	kprintf("\n%s, %d\n", buff[1], atoi(buff[2]));
+
+}
 void exec_cmd(int n, char* buff[5]){
 	switch(n){
 		case 0:
@@ -282,6 +309,9 @@ void exec_cmd(int n, char* buff[5]){
 			break;
 		case 13:
 			resume();
+			break;
+		case 14:
+			asm_execute(buff);
 			break;
 		default:
 			if(strlen((const char*)buff) > 1){

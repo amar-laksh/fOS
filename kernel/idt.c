@@ -24,10 +24,13 @@ extern void idt_load();
 
 /* Use this function to set an entry in the IDT. Alot simpler
 *  than twiddling with the GDT ;) */
-void idt_set_gate(uint8_t num
+void idt_set_gate   (
+                    uint8_t num
                     , uint64_t base
                     , uint16_t sel
-                    , uint8_t flags) {
+                    , uint8_t flags
+                    )
+{
 	idt[num].base_low = (base & 0xFFFF);
 	idt[num].base_high  = ( (base >> 16) & 0xFFFF);
 	idt[num].selector = sel;

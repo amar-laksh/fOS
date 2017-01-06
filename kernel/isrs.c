@@ -36,16 +36,18 @@ extern void isr69();
 
 static irq_handler_t isrs_routines[33] = { NULL };
 
-void isrs_install_handler(
-		int isrs,
-		irq_handler_t handler
-		) {
+void isrs_install_handler	(
+							int isrs
+							, irq_handler_t handler
+							)
+{
 	isrs_routines[isrs] = handler;
 }
 
-void isrs_uninstall_handler(
-		int isrs
-		) {
+void isrs_uninstall_handler	(
+							int isrs
+							)
+{
 	isrs_routines[isrs] = 0;
 }
 
@@ -127,7 +129,10 @@ void isrs_install(){
 	idt_set_gate(69,(unsigned)isr69,0x08,0x8E);
 }
 
-void syscall_handler(struct regs* r){
+void syscall_handler(
+					struct regs* r
+					)
+{
 	sprintf("The parameters:\n%d\n%d\n%d\n%d\n"
 		,r->eax
 		,r->ebx
@@ -138,7 +143,10 @@ void syscall_handler(struct regs* r){
 	}
 }
 
-void fault_handler(struct regs *r) {
+void fault_handler	(
+					struct regs *r
+					)
+{
 	if (r->int_no == 69){
 		IRQ_OFF;
 		syscall_handler(r);

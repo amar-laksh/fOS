@@ -3,7 +3,11 @@
 extern void*  endKernel;
 
 
-void kmain(multiboot_info_t* mbd, unsigned int magic){
+void kmain	(
+			multiboot_info_t* mbd
+			, unsigned int magic
+			)
+{
 	term.cursor = 162;
 	clear_screen();
 	

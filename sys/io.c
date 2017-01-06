@@ -6,7 +6,7 @@ unsigned char shift = 0;
 unsigned char caps = 0;
 unsigned char key_cycle= 0;
 
-#define cmd  15
+#define cmd  16
 char* commands[cmd] = {
     "clear",
     "beep",
@@ -22,6 +22,7 @@ char* commands[cmd] = {
     "lsmem",
     "pong",
     "resume",
+    "asm",
     "help"
 };
 

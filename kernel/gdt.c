@@ -2,6 +2,7 @@
 
 
 static void write_tss(int32_t, uint16_t, uint32_t);
+
 typedef struct tss_entry {
 	uint32_t	prev_tss;
 	uint32_t	esp0;
@@ -57,8 +58,14 @@ extern void gdt_flush();
 extern void tss_flush();
 
 /* Setup a descriptor in the Global Descriptor Table */
-void gdt_set_gate(int num, uint64_t base, uint64_t limit,
-		uint8_t access, uint8_t gran){
+void gdt_set_gate	(
+					int num
+					, uint64_t base
+					, uint64_t limit
+					, uint8_t access
+					, uint8_t gran
+					)
+{
     /* Setup the descriptor base address */
     gdt[num].base_low = (base & 0xFFFF);
     gdt[num].base_middle = (base >> 16) & 0xFF;
@@ -95,11 +102,12 @@ void gdt_install() {
 /**
  * Write a TSS (we only do this once)
  */
-static void write_tss(
-		int32_t num,
-		uint16_t ss0,
-		uint32_t esp0
-		) {
+static void write_tss	(
+						int32_t num
+						,uint16_t ss0
+						,uint32_t esp0
+						)
+{
 	uintptr_t base  = (uintptr_t)&tss_entry;
 	uintptr_t limit = base + sizeof(tss_entry);
 
@@ -120,10 +128,10 @@ static void write_tss(
 	tss_entry.iomap_base = sizeof(tss_entry);
 }
 
-void
-set_kernel_stack(
-		uintptr_t stack
-		) {
+void set_kernel_stack	(
+						uintptr_t stack
+						)
+{
 	tss_entry.esp0 = stack;
 }
 
