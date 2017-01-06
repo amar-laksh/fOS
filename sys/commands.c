@@ -10,16 +10,18 @@
 #define KBRD_RESET 0xFE 
  
 #define bit(n) (1<<(n))
-#define GetInInterrupt(arg)  __asm__ __volatile__ ("int %0"::"N"(arg));
-
-/* GIMP RGB C-Source image dump 1-byte-run-length-encoded (png.c) */
-
+#define GetInInterrupt(arg)  __asm__ __volatile__ \
+							("int %0"::"N"(arg));
 
  
 /* Check if bit n in flags is set */
 #define check_flag(flags, n) ((flags) & bit(n))
 
-void read_text(char* ptr, unsigned int count){
+void read_text	(
+				char* ptr
+				, unsigned int count
+				)
+{
 	clear_screen();
 	    unsigned int j=0;
         term.cursor = 0;
@@ -38,7 +40,12 @@ void read_text(char* ptr, unsigned int count){
         }
 }
 
-void create(char* args,int x, int y){
+void create(
+			char* args
+			,int x
+			, int y
+			)
+{
 	if(equals(args,"player") == 0){
 		draw_char(get_point(y,x-1),'=',0,COLOR_RED);
 		draw_char(get_point(y,x),'#',0,COLOR_RED);
@@ -51,7 +58,10 @@ void create(char* args,int x, int y){
 	}
 }
 
-void cowsay(char buff[]){
+void cowsay(
+			char buff[]
+			)
+{
 	kprintf("\n");
 	int length = strlen(buff);
 	for(int i=1;i<length;i+=2){
@@ -141,7 +151,12 @@ loop:
     goto loop; 
 }
 
-void set_clock(int h, int m, int s){
+void set_clock	(
+				int h
+				, int m
+				, int s
+				)
+{
 	seconds = s;
 	minutes = m;
 	hours = h;
@@ -169,16 +184,24 @@ void lscpu(){
 		kprintf("CPU op-mode(s):\t      32-bit\n");
 		kprintf("Byte order:\t\t  Little-Endian\n");
 	}
-	kprintf("Vendor ID\t\t    %s\n",cpu.cpu_vendor_string);
-	kprintf("Model Name\t\t   %s\n",cpu.processor_name);
-	kprintf("L1i Cache:\t\t   %dK\n", cpu.det_cache_params.cache_total_size[0] >> 10);
-	kprintf("L1d Cache:\t\t   %dK\n", cpu.det_cache_params.cache_total_size[1] >> 10);
-	kprintf("L2 Cache:\t\t    %dK\n", cpu.det_cache_params.cache_total_size[2] >> 10);
-	kprintf("L3 Cache:\t\t    %dK\n", cpu.det_cache_params.cache_total_size[3] >> 10);
+	kprintf("Vendor ID\t\t    %s\n"
+				,cpu.cpu_vendor_string);
+	kprintf("Model Name\t\t   %s\n"
+				,cpu.processor_name);
+	kprintf("L1i Cache:\t\t   %dK\n"
+				, cpu.det_cache_params.cache_total_size[0] >> 10);
+	kprintf("L1d Cache:\t\t   %dK\n"
+				, cpu.det_cache_params.cache_total_size[1] >> 10);
+	kprintf("L2 Cache:\t\t    %dK\n"
+				, cpu.det_cache_params.cache_total_size[2] >> 10);
+	kprintf("L3 Cache:\t\t    %dK\n"
+				, cpu.det_cache_params.cache_total_size[3] >> 10);
 	kprintf("CPU FLAGS:\t\t  ");
 	int c=0;
 	for (int i = 0; i < 64; ++i){
-		if(cpu.cpu_flags[i].flag == 1 &&  cpu.cpu_flags[i].flag != 2){
+		if(	cpu.cpu_flags[i].flag == 1 
+				&&  
+			cpu.cpu_flags[i].flag != 2){
 			kprintf("%s|",cpu.cpu_flags[i].name);
 			c++;
 		}
@@ -186,13 +209,21 @@ void lscpu(){
 	kprintf("\nTotal CPU FLags: %d\n", c);
 }
 
-void *memset_h(void *dest, int16_t val, size_t count){
+void *memset_h	(
+				void *dest
+				, int16_t val
+				, size_t count
+				)
+{
 	int16_t *temp = (int16_t *)dest;
 	for( ; count != 0; count--) *temp++ = val;
 	return dest;
 }
 
-void scroll(int flag){
+void scroll(
+			int flag
+			)
+{
 	char* fb = (char*) VIDMEM;
     	int i=0;
     	if(flag == 1){
@@ -230,7 +261,10 @@ void resume(){
     goto here;
 }
 
-void asm_execute(char* buff[5]){
+void asm_execute(
+				char* buff[5]
+				)
+{
 	if(equals(buff[1],"int") == 0){
 		switch(atoi(buff[2])){
 			case 0:
@@ -256,7 +290,11 @@ void asm_execute(char* buff[5]){
 	kprintf("\n%s, %d\n", buff[1], atoi(buff[2]));
 
 }
-void exec_cmd(int n, char* buff[5]){
+void exec_cmd	(
+				int n
+				, char* buff[5]
+				)
+{
 	switch(n){
 		case 0:
 			clear_screen();
@@ -264,7 +302,7 @@ void exec_cmd(int n, char* buff[5]){
 			break;
 		case 1:
 			kprintf("\nHere's a beep at: %dHz with delay of: %d\n"
-									,atoi(buff[1]),atoi(buff[2]));
+							,atoi(buff[1]),atoi(buff[2]));
 			beep_it(atoi(buff[1]), atoi(buff[2]));
 			break;
 		case 2:
@@ -292,10 +330,15 @@ void exec_cmd(int n, char* buff[5]){
 			reboot();
 			break;
 		case 8:
-			kprintf("\nThe system has been up for %d cycles.\n", cycles);
+			kprintf("\nThe system has been up for %d cycles.\n"
+						, cycles);
 			break;
 		case 9:
-			set_clock(atoi(buff[1]), atoi(buff[2]), atoi(buff[3]));
+			set_clock	(
+						atoi(buff[1])
+						, atoi(buff[2])
+						, atoi(buff[3])
+						);
 			break;
 		case 10:
 			kprintf("\nThe summary about the CPU: \n");

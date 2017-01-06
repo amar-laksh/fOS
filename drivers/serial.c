@@ -2,7 +2,10 @@
 #include <drivers/serial_list.h>
 
 
-int8_t loopback_test(int com_port){
+int8_t loopback_test (
+                     int com_port
+                     )
+{
    char t = 0xAA;
    outb(com_port+7,t);
    char l =  inb(com_port+7);
@@ -12,7 +15,11 @@ int8_t loopback_test(int com_port){
       return -1;
 }
 
-int8_t serial_enable(int com_port, int baud_rate){
+int8_t serial_enable (
+                     int com_port
+                     , int baud_rate
+                     )
+{
    outb(com_port + 1, 0x00);
    outb(com_port + 3, 0x80);
    outb(com_port + 0, (baud_rate >> 8));
@@ -41,7 +48,7 @@ void serial_install() {
       }
    }
    if(c == 0){
-      kprintf("Error: no Serial port detected (loopback test failed)\n");
+      kprintf("Error: loopback_test failed!\n");
       serial.works = -1;
    }
    else{
@@ -62,7 +69,10 @@ int8_t is_transmit_empty() {
    return inb(serial.COM_PORT + 5) & 0x20;
 }
 
-void write_serial(char* a) {
+void write_serial(
+                  char* a
+                  )
+{
 	for(int i=0;i<strlen(a);i++){
 		while (is_transmit_empty() == 0);
 		outb(serial.COM_PORT,a[i]);

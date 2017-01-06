@@ -1,6 +1,6 @@
 #include <kernel/fos.h>
 #include <sys/io_list.h>
-#define CHECK_FOR(flag ,table)          if(flag == 1){kbd.buff = table;};
+#define CHECK_FOR(flag ,table) if(flag == 1){kbd.buff = table;};
 
 unsigned char shift = 0;
 unsigned char caps = 0;
@@ -42,7 +42,7 @@ int process_buffer(){
             argc++;
     }
 
-    /* If arguments & offset are equal we have all spaces So we skip the command.*/
+/* If arguments == offset, we have all spaces So skip the command.*/
     if(argc == term.offset){
         null_buffer();
         return;
@@ -55,7 +55,7 @@ int process_buffer(){
 
     for(int i=0; i<cmd;i++){
         if(equals(commands[cmd-1],argv[0]) == 0){
-            kprintf("\nThese are the following available commands:\n\n");
+            kprintf("\nThe available commands are:\n\n");
             for (int i = 0; i < cmd; ++i)
                 kprintf("%s\n",commands[i]);
             c++;
@@ -75,7 +75,10 @@ int process_buffer(){
     return 0;
 }
 
-void append_buffer(char l){
+void append_buffer  (
+                    char l
+                    )
+{
     if(l == '\b')
         term.buffer
         [(term.offset > 0)?--term.offset:0]
@@ -85,7 +88,10 @@ void append_buffer(char l){
     }
 }
 
-void keyboard_handler(irq_handler_t handler) {
+void keyboard_handler   (
+                        irq_handler_t handler
+                        )
+{
     unsigned char scancode;
     keyboard_wait();
     scancode = inb(KEY_DEVICE);
@@ -108,7 +114,10 @@ void keyboard_reset_ps2() {
 }
 
 
-void move_cursor(int32_t pos) {
+void move_cursor(
+                int32_t pos
+                )
+{
         outb(FB_COMMAND_PORT, FB_HIGH_BYTE_COMMAND);
         outb(FB_DATA_PORT, ((pos >> 8) & 0x00FF));
         outb(FB_COMMAND_PORT, FB_LOW_BYTE_COMMAND);
@@ -128,7 +137,10 @@ void keyboard_wait() {
 /*
  * Add a character to the device buffer.
  */
-void getASCII(unsigned char c) {
+void getASCII   (
+                unsigned char c
+                )
+{
     int code=0;
     if(c & 0x80){
         if(c == 0xB6|| c== 0xAA)

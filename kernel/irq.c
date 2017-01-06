@@ -24,12 +24,19 @@ extern void irq15();
 *  this to handle custom IRQ handlers for a given IRQ */
 static irq_handler_t *irq_routines[16] = { NULL };
 
-void irq_install_handler(int irq, irq_handler_t handler) {
+void irq_install_handler(
+                        int irq
+                        , irq_handler_t handler
+                        )
+{
     irq_routines[irq] = (void*)handler;
 }
 
 
-void irq_uninstall_handler(int irq) {
+void irq_uninstall_handler  (
+                            int irq
+                            )
+{
     irq_routines[irq] = 0;
 }
 
@@ -71,14 +78,20 @@ void irq_install() {
     IRQ_RES;
 }
 
-void irq_ack(int irq_no) {
+void irq_ack(
+            int irq_no
+            )
+{
 	if (irq_no >= 12) {
 		outb(0xA0, 0x20);
 	}
 	outb(0x20, 0x20);
 }
 
-void irq_handler(struct regs *r) {
+void irq_handler(
+                struct regs *r
+                )
+{
 	IRQ_OFF;
 	void (*handler)(struct regs *r);
     	if(r->int_no > 47 || r->int_no <32){

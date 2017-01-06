@@ -1,6 +1,9 @@
 // TODO - SOLVE MESSED UP FEATURES TO ARRAY CONVERSION
 #include <kernel/fos.h>
-#define cpuid_simple(in, a, b, c, d) asm("cpuid": "=a" (a), "=b" (b), "=c" (c), "=d" (d) : "a" (in));
+#define cpuid_simple(in, a, b, c, d) asm("cpuid": "=a" (a) \
+										, "=b" (b) \
+										, "=c" (c) \
+										, "=d" (d) : "a" (in));
 
 CPU_TABLE cpu_flags_edx[32] =
 	{
@@ -84,14 +87,20 @@ char* vendor_strings[3] ={
 
 
 
-static void get_vendor_string(char* where) {
+static void get_vendor_string	(
+								char* where
+								)
+{
       cpuid(0, 0, (uint32_t *)(where + 0),
 		      (uint32_t *)(where + 8), 
 		      (uint32_t *)(where + 4));
       where[12] = '\0';
   }
 
-static void get_processor_name(char* name){
+static void get_processor_name	(
+								char* name
+								)
+{
      cpuid(0x80000002, (uint32_t *)(name +  0), 
 		     (uint32_t *)(name +  4), 
 		     (uint32_t *)(name +  8), 
@@ -147,12 +156,12 @@ void intel_init(){
 	cpu.processor_serial_number[0] = edx;
 	cpu.processor_serial_number[1] = ecx;
 	
-	/**
-	 * Deterministic Cache Parameters 
-	 * This Cache Size in Bytes
-	 * 		= (Ways + 1) * (Partitions + 1) * (Line_Size + 1) * (Sets + 1)
-	 * 	 	= (EBX[31:22] + 1) * (EBX[21:12] + 1) * (EBX[11:0] + 1) * (ECX + 1)
-	 */
+/**
+ * Deterministic Cache Parameters 
+ * This Cache Size in Bytes
+ * 	= (Ways + 1) * (Partitions + 1) * (Line_Size + 1) * (Sets + 1)
+ * 	= (EBX[31:22] + 1) * (EBX[21:12] + 1) * (EBX[11:0] + 1) * (ECX + 1)
+ */
 	int i=0;
 	for(i=0;i<32;i++){
 		uint32_t eax, ebx, ecx, edx;
@@ -172,17 +181,33 @@ void intel_init(){
 		if(cpu.det_cache_params.cache_type[i] == 0)
 			break;
 
-		cpu.det_cache_params.cache_level[i] = (eax >>= 5) & 0x7;
-		cpu.det_cache_params.cache_self_initializing[i] = (eax >>= 3) & 0x1;
-        cpu.det_cache_params.cache_fully_associative[i] = (eax >>= 1) & 0x1;
-        cpu.det_cache_params.cache_sets[i] = ecx + 1;
-        cpu.det_cache_params.cache_coherency_line_size[i] = (ebx & 0xFFF) + 1;
-        cpu.det_cache_params.cache_physical_line_partitions[i] = ((ebx >>= 12) & 0x3FF) + 1;
-        cpu.det_cache_params.cache_ways_of_associativity[i] = ((ebx >>= 10) & 0x3FF) + 1;
-        cpu.det_cache_params.cache_total_size[i] = cpu.det_cache_params.cache_ways_of_associativity[i]
-        							* cpu.det_cache_params.cache_physical_line_partitions[i]
-        							* cpu.det_cache_params.cache_coherency_line_size[i]
-        							* cpu.det_cache_params.cache_sets[i];
+		cpu.det_cache_params.cache_level[i]
+							= (eax >>= 5) & 0x7;
+
+		cpu.det_cache_params.cache_self_initializing[i]
+							= (eax >>= 3) & 0x1;
+
+		cpu.det_cache_params.cache_fully_associative[i] 
+							= (eax >>= 1) & 0x1;
+
+		cpu.det_cache_params.cache_sets[i] 
+							= ecx + 1;
+
+		cpu.det_cache_params.cache_coherency_line_size[i] 
+							= (ebx & 0xFFF) + 1;
+
+		cpu.det_cache_params.cache_physical_line_partitions[i]
+							= ((ebx >>= 12) & 0x3FF) + 1;
+
+		cpu.det_cache_params.cache_ways_of_associativity[i]
+							= ((ebx >>= 10) & 0x3FF) + 1;
+
+		cpu.det_cache_params.cache_total_size[i]
+							=
+		cpu.det_cache_params.cache_ways_of_associativity[i]
+        	* cpu.det_cache_params.cache_physical_line_partitions[i]
+        	* cpu.det_cache_params.cache_coherency_line_size[i]
+        	* cpu.det_cache_params.cache_sets[i];
 
 	}
 

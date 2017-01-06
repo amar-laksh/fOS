@@ -2,13 +2,12 @@
 #include <kernel/fos.h>
 void timer_phase(int hz)
 {
-    int divisor = 1193180 / hz;       /* Calculate our divisor */
-    outb(0x43, 0x36);             /* Set our command byte 0x36 */
-    outb(0x40, divisor & 0xFF);   /* Set low byte of divisor */
-    outb(0x40, divisor >> 8);     /* Set high byte of divisor */
+    int divisor = 1193180 / hz;
+    outb(0x43, 0x36);
+    outb(0x40, divisor & 0xFF);
+    outb(0x40, divisor >> 8);
 }
-/* This will keep track of how many ticks that the system
-*  has been running for */
+
 int timer_ticks = 0;
 
 /* Handles the timer. In this case, it's very simple: We
@@ -54,15 +53,15 @@ void timer_handler(irq_handler_t* handler){
     itoa(seconds, 10, buff);
     draw_str(buff,2,75);
 
-    // Check if the game has begun or not
     draw_str("f.O.S. - Made By Amar Lakshya",0,20);
     irq_ack(TIMER_IRQ);
 }
 
+//TODO-  This is really hacky, remove it
 void delay(int t){
     long long st = t + cycles;
     while((cycles) < st){
-        draw_char(800,' ',0,0); //TODO-  This is really hacky, remove it
+        draw_char(800,' ',0,0);
     }
     return;
 }
