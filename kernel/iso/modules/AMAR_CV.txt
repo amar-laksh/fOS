@@ -13,7 +13,8 @@ I have worked on the following individual projects (non-academic) -
 	
 * fOS (C/ASM) 
 	* An alpha-level Monolithic UNIX-like Kernel for the i386 platform.
-	* It supports PCI and Serial Communication.* western notes API for PC 	    Speaker.
+	* It supports PCI and Serial Communication.
+	* western notes API for PC Speaker.
 	* Intended to provide ring 0 control of hardware for students to learn 	   about low-level computing.
 	* http://github.com/amar-laksh/fOS
 
