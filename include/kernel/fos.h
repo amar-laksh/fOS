@@ -254,6 +254,7 @@ void poll_init();
 struct {
 	char* vga_buffer;
 	int vga_offset;
+	int array_offset;
 } vga_fb;
 enum vga_color
 {

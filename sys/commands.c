@@ -1,4 +1,5 @@
 /* TODO- The case 3 is temperory. Create a text-based graphics engine.*/
+/* TODO - Create a proper scrolling mechanism */
 #include <kernel/fos.h>
 #define KBRD_INTRFC 0x64
 
@@ -23,21 +24,21 @@ void read_text	(
 				)
 {
 	clear_screen();
-	    unsigned int j=0;
-        term.cursor = 0;
-        while(j < (count)){
-          if(ptr[j] == 0x5c && ptr[j+1] == 0x6e){
-            ptr[j] = '\n';
-            ptr[j+1] = 0x0;
-          }
-          if(ptr[j] == 0x5c && ptr[j+1] == 0x74){
-            ptr[j] = '\t';
-            ptr[j+1] = 0x0;
-          }
+		unsigned int j=0;
+		term.cursor = 0;
+		while(j < (count)){
+		  if(ptr[j] == 0x5c && ptr[j+1] == 0x6e){
+			ptr[j] = '\n';
+			ptr[j+1] = 0x0;
+		  }
+		  if(ptr[j] == 0x5c && ptr[j+1] == 0x74){
+			ptr[j] = '\t';
+			ptr[j+1] = 0x0;
+		  }
 
-            write_char(ptr[j],COLOR_BLACK, COLOR_WHITE);
-          j++;
-        }
+			write_char(ptr[j],COLOR_BLACK, COLOR_WHITE);
+		  j++;
+		}
 }
 
 void create(
@@ -138,17 +139,17 @@ void marry_song(){
 
 
 void reboot(){
-    uint8_t temp;
-    asm volatile ("cli"); 
-    do{
-        temp = inb(KBRD_INTRFC);
-        if (check_flag(temp, KBRD_BIT_KDATA) != 0)
-            inb(KBRD_IO); 
-    } while (check_flag(temp, KBRD_BIT_UDATA) != 0);
-    outb(KBRD_INTRFC, KBRD_RESET); 
+	uint8_t temp;
+	asm volatile ("cli"); 
+	do{
+		temp = inb(KBRD_INTRFC);
+		if (check_flag(temp, KBRD_BIT_KDATA) != 0)
+			inb(KBRD_IO); 
+	} while (check_flag(temp, KBRD_BIT_UDATA) != 0);
+	outb(KBRD_INTRFC, KBRD_RESET); 
 loop:
-    asm volatile ("hlt");
-    goto loop; 
+	asm volatile ("hlt");
+	goto loop; 
 }
 
 void set_clock	(
@@ -225,40 +226,40 @@ void scroll(
 			)
 {
 	char* fb = (char*) VIDMEM;
-    	int i=0;
-    	if(flag == 1){
-			while(i < (VIDMEM_SIZE+160)){
-				vga_fb.vga_buffer[i] = fb[i+160];
-				i++;
-			}
-			clear_screen();
-			i=0;
-			while(i < VIDMEM_SIZE){
-				fb[i] = vga_fb.vga_buffer[i];
-				i++;
-			}
-    	}
-    	else{
+		if  (
+			vga_fb.array_offset != VIDMEM_SIZE 
+						&&
+			vga_fb.vga_offset != 0
+			)
+		{
+			vga_fb.array_offset = VIDMEM_SIZE;
+			vga_fb.vga_offset = 0;
+		}
+		int i=0, j=0;
+		if(flag == 1){
 
-    	}
+		}
+		else{
+		}
 }
 
 void resume(){
-	vga_fb.vga_buffer = malloc(VIDMEM_SIZE);
-	memset(vga_fb.vga_buffer, 0, VIDMEM_SIZE);
+	vga_fb.vga_buffer = malloc(VIDMEM_SIZE*2);
+	memset(vga_fb.vga_buffer, 0, VIDMEM_SIZE*2);
+	sprintf("\n");
 	mm_print_out();
 	char* ptr = (char*)memory_t.module_start;
-    read_text(ptr,(memory_t.module_end - memory_t.module_start));
-    here:
-    if(inb(KEY_DEVICE) == 0x24)
-    	scroll(1);
-    if(inb(KEY_DEVICE) == 0x25)
-    	scroll(0);
-    if(inb(KEY_DEVICE) == 0x10){
-    	clear_screen();
-    	return;
-    }
-    goto here;
+	read_text(ptr,(memory_t.module_end - memory_t.module_start));
+	here:
+	if(inb(KEY_DEVICE) == 0x24)
+		scroll(1);
+	if(inb(KEY_DEVICE) == 0x25)
+		scroll(0);
+	if(inb(KEY_DEVICE) == 0x10){
+		clear_screen();
+		return;
+	}
+	goto here;
 }
 
 void asm_execute(
@@ -315,7 +316,7 @@ void exec_cmd	(
 			pci_proc_dump(atoi(buff[1]));
 			break;
 		case 5:
-		    sprintf("\n%s\n",buff[1]);
+			sprintf("\n%s\n",buff[1]);
 			break;
 		case 6:
 			note_test();
