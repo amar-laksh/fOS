@@ -357,6 +357,9 @@ void exec_cmd	(
 		case 14:
 			asm_execute(buff);
 			break;
+		case 15:
+			vim();
+			break;
 		default:
 			if(strlen((const char*)buff) > 1){
 				kprintf("\n%s: not found!\n",buff);

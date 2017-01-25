@@ -298,7 +298,7 @@ void write_str(char* string, int fg, int bg);
 void vga_init();
 
 //------------------------------------------------IO.H
-
+#include <sys/io_list.h>
 #define FB_COMMAND_PORT 0x3D4
 #define FB_DATA_PORT 0x3D5
 #define FB_HIGH_BYTE_COMMAND 14
@@ -385,9 +385,6 @@ void keyboard_reset_ps2();
 void keyboard_wait();
 
 void move_cursor(int32_t pos);
-
-void getASCII(unsigned char c);
-
 
 char readb(unsigned char c);
 
@@ -726,6 +723,10 @@ typedef struct {
 void process_controls(unsigned char scancode);
 
 void play_pong();
+
+//------------------------------------------------VIM.H
+
+void vim();
 
 //------------------------------------------------MOUSE.H
 

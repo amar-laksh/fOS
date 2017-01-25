@@ -1,5 +1,5 @@
-#ifndef IO_LIST_H
-#define IO_LIST_H
+#ifndef IO_LIST_H_
+#define IO_LIST_H_
 
 
 
@@ -12,7 +12,7 @@ typedef struct {
 	const char key_nums_value;
 } keytable_format;
 
-keytable_format keytable[] = {
+static keytable_format keytable[] = {
 	// Main Keys
 	{0x01,0x81,'\xE5CA7E','\xE5CA7E','\xE5CA7E','\xE5CA7E'},
 	{0x02,0x82,'1','!','1',' '},
