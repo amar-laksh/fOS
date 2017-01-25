@@ -4,7 +4,7 @@
 unsigned int shift_v = 0;
 unsigned int caps_v = 0;
 unsigned int key_cycle_v= 0;
-unsigned int p=162;
+unsigned int p=642;
 unsigned int vim_cycles = 0;
 
 void vim_keyboard_handler	(
@@ -65,7 +65,8 @@ void getWords   (
 			}
 			draw_char(p, l, COLOR_BLACK, COLOR_WHITE);
 			p+=2;
-			move_cursor(p);
+			draw_char(p+2, ' ', COLOR_BLACK, COLOR_WHITE);
+			move_cursor((p/2));
 		}
 	}
 }
