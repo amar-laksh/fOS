@@ -6,6 +6,8 @@ unsigned int caps_v = 0;
 unsigned int key_cycle_v= 0;
 unsigned int p=642;
 unsigned int vim_cycles = 0;
+unsigned int column = 0;
+char* buff;
 
 void vim_keyboard_handler	(
 							irq_handler_t* handler
@@ -20,6 +22,7 @@ void vim_keyboard_handler	(
 
 void vim()
 {
+	p = 642;
 	clear_screen();
 	irq_uninstall_handler(KEYBOARD_IRQ);
 	irq_install_handler(KEYBOARD_IRQ, vim_keyboard_handler);
@@ -64,9 +67,13 @@ void getWords   (
 				irq_install_handler(TIMER_IRQ, timer_handler);
 			}
 			draw_char(p, l, COLOR_BLACK, COLOR_WHITE);
-			p+=2;
 			draw_char(p+2, ' ', COLOR_BLACK, COLOR_WHITE);
+			column = p%80;
+			itoa(column, 10, buff);
+			draw_str(":",24,4);
+			draw_str(buff, 24, 1);
 			move_cursor((p/2));
+			p+=2;
 		}
 	}
 }
