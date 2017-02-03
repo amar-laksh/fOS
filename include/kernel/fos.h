@@ -734,6 +734,41 @@ void vim();
 
 void mouse_install();
 
+//------------------ELF.H---------------------------------------------
+
+typedef uint32_t Elf32_Word;
+typedef uint32_t Elf32_Addr;
+typedef uint32_t Elf32_Off;
+typedef uint32_t Elf32_Sword;
+typedef uint16_t Elf32_Half;
+
+#define ELFMAG0   0x7f
+#define ELFMAG1   'E'
+#define ELFMAG2   'L'
+#define ELFMAG3   'F'
+#define EI_IDENT	16
+
+
+typedef struct {
+	unsigned char	elf_ident[EI_IDENT];
+	ELF32_Half		elf_type;
+	ELF32_Half		elf_machine;
+	ELF32_Word		elf_version;
+	ELF32_Addr		elf_entry;
+	ELF32_Off		elf_phoff;
+	ELF32_Off		elf_shoff;
+	ELF32_Word		elf_flags;
+	ELF32_Half		elf_ehsize;
+	ELF32_Half		elf_phentsize;
+	ELF32_Half		elf_phnum;
+	ELF32_Half		elf_shentsize;
+	ELF32_Half		elf_shnum;
+	ELF32_Half		elf_shstrndx;
+} ELF32_Header
+
+
+
+
 
 
 
