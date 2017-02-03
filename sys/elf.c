@@ -31,8 +31,14 @@ void elf_load_header(
 					:0
 					:0
 					:0;
-	if(status == 1)
-		sprintf("\nYes it is an ELF\n");
+	if(status == 1){
+		sprintf("\nYes it is an ELF. The header value is:\n");
+		for (int i = 0; i < 16; ++i)
+		{
+			elf32_header.elf_ident[i] = *(char*)(ptr_to_header + i);
+			sprintf("\t%x\n", elf32_header.elf_ident[i]);
+		}
+	}
 	else
 		sprintf("\nSorry this is not an ELF\n");
 	

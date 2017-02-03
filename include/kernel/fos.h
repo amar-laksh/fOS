@@ -767,7 +767,7 @@ typedef struct {
 } ELF32_Header;
 
 
-
+ELF32_Header elf32_header;
 
 
 
