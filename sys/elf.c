@@ -18,13 +18,13 @@ void elf_load_header(
 {
 	char* elf_identification;
 	elf_identification = ptr_to_header;
-	int status	=	elf_identification[0] == ELFMAG0 
+	int status	=	*(elf_identification) == ELFMAG0 
 							?
-					elf_identification[1] == ELFMAG1
+					*(elf_identification+1) == ELFMAG1
 							?
-					elf_identification[2] == ELFMAG2
+					*(elf_identification+2) == ELFMAG2
 							?
-					elf_identification[3] == ELFMAG3
+					*(elf_identification+3) == ELFMAG3
 							?
 							1
 					:0
@@ -32,9 +32,9 @@ void elf_load_header(
 					:0
 					:0;
 	if(status == 1)
-		kprintf("Yes it is an ELF");
+		sprintf("\nYes it is an ELF\n");
 	else
-		kprintf("Sorry this is not an ELF");
+		sprintf("\nSorry this is not an ELF\n");
 	
 }
 

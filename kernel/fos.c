@@ -43,6 +43,8 @@ void kmain	(
 	timer_install();
 	kprintf("TIMER initiated.\n");
 
+
+	elf_install();
 	poll_init();
 	kprintf("POLL initiated.\n");
 
