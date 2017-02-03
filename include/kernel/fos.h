@@ -736,11 +736,11 @@ void mouse_install();
 
 //------------------ELF.H---------------------------------------------
 
-typedef uint32_t Elf32_Word;
-typedef uint32_t Elf32_Addr;
-typedef uint32_t Elf32_Off;
-typedef uint32_t Elf32_Sword;
-typedef uint16_t Elf32_Half;
+typedef uint32_t ELF32_Word;
+typedef uint32_t ELF32_Addr;
+typedef uint32_t ELF32_Off;
+typedef uint32_t ELF32_Sword;
+typedef uint16_t ELF32_Half;
 
 #define ELFMAG0   0x7f
 #define ELFMAG1   'E'
@@ -764,7 +764,7 @@ typedef struct {
 	ELF32_Half		elf_shentsize;
 	ELF32_Half		elf_shnum;
 	ELF32_Half		elf_shstrndx;
-} ELF32_Header
+} ELF32_Header;
 
 
 

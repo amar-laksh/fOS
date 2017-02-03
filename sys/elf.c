@@ -16,15 +16,15 @@ void elf_load_header(
 					void* ptr_to_header
 					)
 {
-	char elf_identification[EI_IDENT];
+	char* elf_identification;
 	elf_identification = ptr_to_header;
-	int status	=	elf_identification[0] && EI_MAG0 
+	int status	=	elf_identification[0] == ELFMAG0 
 							?
-					elf_identification[1] && EI_MAG1
+					elf_identification[1] == ELFMAG1
 							?
-					elf_identification[2] && EI_MAG2
+					elf_identification[2] == ELFMAG2
 							?
-					elf_identification[3] && EI_MAG3
+					elf_identification[3] == ELFMAG3
 							?
 							1
 					:0
