@@ -56,39 +56,6 @@ void elf_parse_header(
 }
 
 
-void elf_parse_phdrs(
-					void* ptr_to_header,
-					ELF32_Phdr elf32_phdr
-					)
-{
-	elf32_phdr.p_type = *(int*)(ptr_to_header);
-	elf32_phdr.p_offset = *(int*)(ptr_to_header+4);
-	elf32_phdr.p_vaddr = *(int*)(ptr_to_header+8);
-	elf32_phdr.p_paddr = *(int*)(ptr_to_header+12);
-	elf32_phdr.p_filesz = *(int*)(ptr_to_header+16);
-	elf32_phdr.p_memsz = *(int*)(ptr_to_header+20);
-	elf32_phdr.p_flags = *(int*)(ptr_to_header+24);
-	elf32_phdr.p_align = *(int*)(ptr_to_header+28);
-}
-
-
-void elf_parse_shdrs(
-					void* ptr_to_header,
-					ELF32_Shdr elf32_shdr
-					)
-{
-	elf32_shdr.sh_name = *(int*)(ptr_to_header);
-	elf32_shdr.sh_type = *(int*)(ptr_to_header+4);
-	elf32_shdr.sh_flags = *(int*)(ptr_to_header+8);
-	elf32_shdr.sh_addr = *(int*)(ptr_to_header+12);
-	elf32_shdr.sh_offset = *(int*)(ptr_to_header+16);
-	elf32_shdr.sh_size = *(int*)(ptr_to_header+20);
-	elf32_shdr.sh_link = *(int*)(ptr_to_header+24);
-	elf32_shdr.sh_info = *(int*)(ptr_to_header+28);
-	elf32_shdr.sh_addralign = *(int*)(ptr_to_header+32);
-	elf32_shdr.sh_entsize = *(int*)(ptr_to_header+36);
-}
-
 
 void elf_dump_info	(
 					ELF32_Shdr elf32_shdr[]
@@ -97,7 +64,7 @@ void elf_dump_info	(
 {
 	sprintf("\nELF information:\n");
 	sprintf("\nELF Header\n");
-	sprintf("ELF identification info:");
+	sprintf("ELF identification info:\n");
 	for (int i = 0; i < 16; ++i){
 		sprintf(" %x", elf32_header.elf_ident[i]);
 	}
@@ -119,33 +86,34 @@ void elf_dump_info	(
 
 
 	sprintf("\nELF Program Headers\n\n");
-
+	sprintf("Type\t  Offset\t  VirtAddr\t  PhyAddr\t  FileSiz\t  MemSiz\t  Flg\t  Align\n");
 	for (int i = 0; i < elf32_header.elf_phnum; ++i){
-		sprintf("ELF Segment Type: %d\n", elf32_phdr[i].p_type);
-		sprintf("ELF Segment offset: 0x%x\n", elf32_phdr[i].p_offset);
-		sprintf("ELF Segment Virtual Address offset: 0x%x\n", elf32_phdr[i].p_vaddr);
-		sprintf("ELF Segment Physical Address offset: 0x%x\n", elf32_phdr[i].p_paddr);
-		sprintf("ELF Segment file size: %d\n", elf32_phdr[i].p_filesz);
-		sprintf("ELF Segment memory size: %d\n", elf32_phdr[i].p_memsz);
-		sprintf("ELF Segment flags: %d\n", elf32_phdr[i].p_flags);
-		sprintf("ELF Segment align: %d\n", elf32_phdr[i].p_align);
-		sprintf("\n\n\n");
+		sprintf("%d\t0x%x\t0x%x\t0x%x\t0x%x\t0x%x\t%d\t0x%x\n"
+			, elf32_phdr[i].p_type
+			, elf32_phdr[i].p_offset
+			, elf32_phdr[i].p_vaddr
+			, elf32_phdr[i].p_paddr
+			, elf32_phdr[i].p_filesz
+			, elf32_phdr[i].p_memsz
+			, elf32_phdr[i].p_flags
+			, elf32_phdr[i].p_align);
 	}
+	sprintf("\n\n\n");
 
-	sprintf("\nELF Section Header\n\n");
-
+	sprintf("\nELF Section Headers\n\n");
+	sprintf("Name\tType\t  Addr  \t  Off\t\tSize\t\tES\t\tFlg\tLk\tInf\tAl\n");
 	for (int i = 0; i < elf32_header.elf_shnum; ++i){
-		sprintf("ELF Section Name: %d\n", elf32_shdr[i].sh_name);
-		sprintf("ELF Section Type: %d\n", elf32_shdr[i].sh_type);
-		sprintf("ELF Section Flags: %d\n", elf32_shdr[i].sh_flags);
-		sprintf("ELF Section Address: 0x%x\n", elf32_shdr[i].sh_addr);
-		sprintf("ELF Section Offset: 0x%x\n", elf32_shdr[i].sh_offset);
-		sprintf("ELF Section Size: %d\n", elf32_shdr[i].sh_size);
-		sprintf("ELF Section Link: 0x%x\n", elf32_shdr[i].sh_link);
-		sprintf("ELF Section Information: %d\n", elf32_shdr[i].sh_info);
-		sprintf("ELF Section Address Alginment: %d\n", elf32_shdr[i].sh_addralign);
-		sprintf("ELF Section Entry size: %d\n", elf32_shdr[i].sh_entsize);
-		sprintf("\n\n\n");
+		sprintf("%d\t%d\t%x\t%x\t%x\t%x\t%d\t%d\t%d\t%d\n"
+			, elf32_shdr[i].sh_name
+			, elf32_shdr[i].sh_type
+			, elf32_shdr[i].sh_addr
+			, elf32_shdr[i].sh_offset
+			, elf32_shdr[i].sh_size
+			, elf32_shdr[i].sh_entsize
+			, elf32_shdr[i].sh_flags
+			, elf32_shdr[i].sh_link
+			, elf32_shdr[i].sh_info
+			, elf32_shdr[i].sh_addralign);
 	}
 }
 
@@ -153,20 +121,32 @@ void elf_install()
 {
 	elf_parse_header(ramdisk);
 	ELF32_Phdr phdrs_array[elf32_header.elf_phnum];
-	ELF32_Shdr shdrs_array[elf32_header.elf_shnum];
+	ELF32_Shdr shdrs_array[elf32_header.elf_shnum]; 
 
 	for (int i = 0; i < elf32_header.elf_phnum; ++i){
-		elf_parse_phdrs(ramdisk
-						+(elf32_header.elf_phoff
-						+(elf32_header.elf_phentsize*i))
-						, phdrs_array[i]);
+		void* ptr_to_header = (ramdisk+(elf32_header.elf_phoff + (elf32_header.elf_phentsize*i)));
+		phdrs_array[i].p_type = *(int*)(ptr_to_header);
+		phdrs_array[i].p_offset = *(int*)(ptr_to_header+4);
+		phdrs_array[i].p_vaddr = *(int*)(ptr_to_header+8);
+		phdrs_array[i].p_paddr = *(int*)(ptr_to_header+12);
+		phdrs_array[i].p_filesz = *(int*)(ptr_to_header+16);
+		phdrs_array[i].p_memsz = *(int*)(ptr_to_header+20);
+		phdrs_array[i].p_flags = *(int*)(ptr_to_header+24);
+		phdrs_array[i].p_align = *(int*)(ptr_to_header+28);
 	}
 
 	for (int i = 0; i < elf32_header.elf_shnum; ++i){
-		elf_parse_shdrs(ramdisk
-						+(elf32_header.elf_shoff
-						+(elf32_header.elf_shentsize*i))
-						, shdrs_array[i]);
+		void* ptr_to_header = (ramdisk+(elf32_header.elf_shoff + (elf32_header.elf_shentsize*i)));
+		shdrs_array[i].sh_name = *(int*)(ptr_to_header);
+		shdrs_array[i].sh_type = *(int*)(ptr_to_header+4);
+		shdrs_array[i].sh_flags = *(int*)(ptr_to_header+8);
+		shdrs_array[i].sh_addr = *(int*)(ptr_to_header+12);
+		shdrs_array[i].sh_offset = *(int*)(ptr_to_header+16);
+		shdrs_array[i].sh_size = *(int*)(ptr_to_header+20);
+		shdrs_array[i].sh_link = *(int*)(ptr_to_header+24);
+		shdrs_array[i].sh_info = *(int*)(ptr_to_header+28);
+		shdrs_array[i].sh_addralign = *(int*)(ptr_to_header+32);
+		shdrs_array[i].sh_entsize = *(int*)(ptr_to_header+36);
 	}
-	elf_dump_info(phdrs_array, shdrs_array);
+	elf_dump_info(shdrs_array, phdrs_array);
 }
