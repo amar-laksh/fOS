@@ -766,9 +766,33 @@ typedef struct {
 	ELF32_Half		elf_shstrndx;
 } ELF32_Header;
 
+typedef struct {
+	ELF32_Word		p_type;
+	ELF32_Off		p_offset;
+	ELF32_Addr		p_vaddr;
+	ELF32_Addr		p_paddr;
+	ELF32_Word		p_filesz;
+	ELF32_Word		p_memsz;
+	ELF32_Word		p_flags;
+	ELF32_Word		p_align;
+} ELF32_Phdr;
+
+typedef struct {
+	ELF32_Word	sh_name;
+	ELF32_Word	sh_type;
+	ELF32_Word	sh_flags;
+	ELF32_Addr	sh_addr;
+	ELF32_Off	sh_offset;
+	ELF32_Word	sh_size;
+	ELF32_Word	sh_link;
+	ELF32_Word	sh_info;
+	ELF32_Word	sh_addralign;
+	ELF32_Word	sh_entsize;
+} ELF32_Shdr;
 
 ELF32_Header elf32_header;
-
+ELF32_Shdr elf32_shdr;
+ELF32_Phdr elf32_phdr;
 
 
 
