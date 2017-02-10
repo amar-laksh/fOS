@@ -174,7 +174,7 @@ void elf_install()
 	ELF32_Shdr section = elf_get_section(shdrs_array, ".text");
 	void* ptr = (ramdisk + section.sh_offset);
 	sprintf("section is at: 0x%x\n", ptr);
-	for (int i = 0; i < section.sh_size; i++){
+	for (int i = 0; i < section.sh_size; i+=4){
 		sprintf("%x  ", *(int*)(ptr+i));
 	}
 	elf_dump_info(shdrs_array, phdrs_array);
