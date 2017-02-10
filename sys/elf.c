@@ -56,6 +56,19 @@ void elf_parse_header(
 }
 
 
+ELF32_Shdr elf_get_section	(
+						ELF32_Shdr shdrs_array[]
+						, const char* section_name
+						)
+{
+	ELF32_Shdr ptr;
+	for (int i = 0; i < elf32_header.elf_shnum; ++i){
+		if(equals(shdrs_array[i].sh_text_name, section_name) == 0){
+			ptr = shdrs_array[i];
+		}
+	}
+	return ptr;
+}
 
 void elf_dump_info	(
 					ELF32_Shdr elf32_shdr[]
@@ -69,7 +82,7 @@ void elf_dump_info	(
 		sprintf(" %x", elf32_header.elf_ident[i]);
 	}
 	sprintf("\n");
-
+	sprintf("ELF File is at:0x%x\n", ramdisk);
 	sprintf("ELF File type: %d\n", elf32_header.elf_type);
 	sprintf("ELF Machine type: %d\n", elf32_header.elf_machine);
 	sprintf("ELF Version: %d\n", elf32_header.elf_version);
@@ -82,7 +95,7 @@ void elf_dump_info	(
 	sprintf("ELF No of entries in Program header : %d\n", elf32_header.elf_phnum);
 	sprintf("ELF Section header entry size: %d\n", elf32_header.elf_shentsize);
 	sprintf("ELF No of entries in Section header: %d\n", elf32_header.elf_shnum);
-	sprintf("ELF Section header table index: %d\n", elf32_header.elf_shstrndx);
+	sprintf("ELF Section header table index: 0x%x\n", elf32_header.elf_shstrndx);
 
 
 	sprintf("\nELF Program Headers\n\n");
@@ -101,10 +114,10 @@ void elf_dump_info	(
 	sprintf("\n\n\n");
 
 	sprintf("\nELF Section Headers\n\n");
-	sprintf("Name\tType\t  Addr  \t  Off\t\tSize\t\tES\t\tFlg\tLk\tInf\tAl\n");
+	sprintf("Name\t\tType\t  Addr  \t  Off\t\tSize\t\tES\t\tFlg\tLk\tInf\tAl\n");
 	for (int i = 0; i < elf32_header.elf_shnum; ++i){
-		sprintf("%d\t%d\t%x\t%x\t%x\t%x\t%d\t%d\t%d\t%d\n"
-			, elf32_shdr[i].sh_name
+		sprintf("%s\t\t%d\t%x\t%x\t%x\t%x\t%d\t%d\t%d\t%d\n"
+			, elf32_shdr[i].sh_text_name
 			, elf32_shdr[i].sh_type
 			, elf32_shdr[i].sh_addr
 			, elf32_shdr[i].sh_offset
@@ -123,6 +136,8 @@ void elf_install()
 	ELF32_Phdr phdrs_array[elf32_header.elf_phnum];
 	ELF32_Shdr shdrs_array[elf32_header.elf_shnum]; 
 
+
+	// Accumulating Program headers
 	for (int i = 0; i < elf32_header.elf_phnum; ++i){
 		void* ptr_to_header = (ramdisk+(elf32_header.elf_phoff + (elf32_header.elf_phentsize*i)));
 		phdrs_array[i].p_type = *(int*)(ptr_to_header);
@@ -135,6 +150,7 @@ void elf_install()
 		phdrs_array[i].p_align = *(int*)(ptr_to_header+28);
 	}
 
+	// Accumulating Section headers
 	for (int i = 0; i < elf32_header.elf_shnum; ++i){
 		void* ptr_to_header = (ramdisk+(elf32_header.elf_shoff + (elf32_header.elf_shentsize*i)));
 		shdrs_array[i].sh_name = *(int*)(ptr_to_header);
@@ -147,6 +163,19 @@ void elf_install()
 		shdrs_array[i].sh_info = *(int*)(ptr_to_header+28);
 		shdrs_array[i].sh_addralign = *(int*)(ptr_to_header+32);
 		shdrs_array[i].sh_entsize = *(int*)(ptr_to_header+36);
+	}
+
+	void* _shstrtable = ramdisk+shdrs_array[elf32_header.elf_shstrndx].sh_offset;
+	// Parsing the string table
+	for (int i = 0; i < elf32_header.elf_shnum; ++i){
+		shdrs_array[i].sh_text_name = _shstrtable+shdrs_array[i].sh_name;
+	}
+
+	ELF32_Shdr section = elf_get_section(shdrs_array, ".text");
+	void* ptr = (ramdisk + section.sh_offset);
+	sprintf("section is at: 0x%x\n", ptr);
+	for (int i = 0; i < section.sh_size; i++){
+		sprintf("%x  ", *(int*)(ptr+i));
 	}
 	elf_dump_info(shdrs_array, phdrs_array);
 }

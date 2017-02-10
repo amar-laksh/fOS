@@ -779,6 +779,7 @@ typedef struct {
 
 typedef struct {
 	ELF32_Word	sh_name;
+	char*		sh_text_name;
 	ELF32_Word	sh_type;
 	ELF32_Word	sh_flags;
 	ELF32_Addr	sh_addr;
