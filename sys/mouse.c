@@ -89,7 +89,7 @@ void mouse_handler(struct regs *a_r){
         mouse_x = 0;
         mouse_y = 0;
         char *fb = (char*)VIDMEM;
-        draw_char(term.cursor,fb[term.cursor],COLOR_BLACK, COLOR_GREEN);
+        draw_char(term.cursor,fb[term.cursor],term.color_bg_value, term.color_fg_value);
       }
       irq_ack(MOUSE_IRQ);
 }

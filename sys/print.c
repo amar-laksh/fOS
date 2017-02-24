@@ -148,7 +148,8 @@ int sprintf(
 	va_start(args, fmt);
 	int out = vasprintf(buf, fmt, args);
 	va_end(args);
-	write_serial(buf);
+	if(serial.works == 13)
+		write_serial(buf);
 	return out;
 }
 

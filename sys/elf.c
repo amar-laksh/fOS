@@ -171,11 +171,11 @@ void elf_install()
 		shdrs_array[i].sh_text_name = _shstrtable+shdrs_array[i].sh_name;
 	}
 
-	ELF32_Shdr section = elf_get_section(shdrs_array, ".text");
-	void* ptr = (ramdisk + section.sh_offset);
-	sprintf("section is at: 0x%x\n", ptr);
-	for (int i = 0; i < section.sh_size; i+=4){
-		sprintf("%x  ", *(int*)(ptr+i));
-	}
-	elf_dump_info(shdrs_array, phdrs_array);
+	// ELF32_Shdr section = elf_get_section(shdrs_array, ".text");
+	// void* ptr = (ramdisk + section.sh_offset);
+	// sprintf("section is at: 0x%x\n", ptr);
+	// for (int i = 0; i < section.sh_size; i+=4){
+	// 	sprintf("%x  ", *(int*)(ptr+i));
+	// }
+	//elf_dump_info(shdrs_array, phdrs_array);
 }

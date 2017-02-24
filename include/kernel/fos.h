@@ -285,6 +285,8 @@ int32_t get_point(uint32_t r, uint32_t c);
 
 void clear_screen();
 
+void paint_screen();
+
 char get_char_cell(int r, int c);
 
 void draw_char(uint32_t p, char ch, uint8_t fg, uint8_t bg);
@@ -326,6 +328,8 @@ typedef struct {
     int8_t offset;
     int cursor;
     char* cursor_value;
+    enum vga_color color_fg_value;
+    enum vga_color color_bg_value;
 } console;
 
 console term;

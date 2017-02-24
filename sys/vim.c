@@ -23,10 +23,14 @@ void vim_keyboard_handler	(
 void vim()
 {
 	p = 642;
+	// irq_uninstall_handler(KEYBOARD_IRQ);
+	// irq_install_handler(KEYBOARD_IRQ, vim_keyboard_handler);
 	clear_screen();
-	irq_uninstall_handler(KEYBOARD_IRQ);
-	irq_install_handler(KEYBOARD_IRQ, vim_keyboard_handler);
-	clear_screen();
+	term.color_fg_value = COLOR_WHITE;
+	term.color_bg_value = COLOR_DARK_GREY;
+	//paint_screen();
+	here:
+		goto here;
 }
 
 
@@ -36,7 +40,7 @@ void getWords   (
 {
 	int code=0;
 	if(c & 0x80){
-		if(c == 0xB6|| c== 0xAA)
+		if(c == 0xB6|| c == 0xAA)
 			shift_v = 0;
 		if(c == 0xBA && caps_v == 2)
 			caps_v = 1;
@@ -62,17 +66,17 @@ void getWords   (
 			char l = kbd.buff;
 			if(l == ':'){
 				irq_uninstall_handler(KEYBOARD_IRQ);
+				term.color_bg_value = COLOR_BLACK;
+				term.color_fg_value = COLOR_GREEN;
 				irq_install_handler(KEYBOARD_IRQ, keyboard_handler);
-				irq_uninstall_handler(TIMER_IRQ);
-				irq_install_handler(TIMER_IRQ, timer_handler);
 			}
-			draw_char(p, l, COLOR_BLACK, COLOR_WHITE);
-			draw_char(p+2, ' ', COLOR_BLACK, COLOR_WHITE);
-			column = p%80;
+			draw_char(p, l, term.color_bg_value, term.color_fg_value);
+			draw_char(p+2, ' ', term.color_bg_value, term.color_fg_value);
+			column = (p/2)%80;
 			itoa(column, 10, buff);
 			draw_str(":",24,4);
 			draw_str(buff, 24, 1);
-			move_cursor((p/2));
+			move_cursor((p/2)+1);
 			p+=2;
 		}
 	}

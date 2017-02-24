@@ -111,11 +111,11 @@ void splash(){
 		char notes[7] = {
 		'A','B','C','D','E','F','G'
 	};
-	for (int i = 0; i < 8; ++i)
+	for (int i = 0; i < 7; ++i)
 	{
 		play_note(notes[i],6,4);
 	}
-	for (int i = 7; i >= 0 ; --i)
+	for (int i = 6; i >= 0 ; --i)
 	{
 		play_note(notes[i],6,4);
 	}
@@ -132,7 +132,7 @@ void marry_song(){
 					,'E','D','C','D','E','E','E'
 					,'E','D','D','E','D','C'
 					};
-	for (int i = 0; i < 27; ++i){
+	for (int i = 0; i < 26; ++i){
 		play_note(notes[i],6,1);
 	}
 }
@@ -235,7 +235,7 @@ void scroll(
 			vga_fb.array_offset = VIDMEM_SIZE;
 			vga_fb.vga_offset = 0;
 		}
-		int i=0, j=0;
+		int i=0;
 		if(flag == 1){
 
 		}
@@ -367,4 +367,6 @@ void exec_cmd	(
 			
 			break;
 	}
+	term.color_bg_value = COLOR_BLACK;
+	term.color_fg_value = COLOR_GREEN;
 }

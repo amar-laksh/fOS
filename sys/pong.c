@@ -60,6 +60,7 @@ void first_push_ball(){
 }
 
 void pong_time_handler(irq_handler_t * handler){
+	cycles++;
 	game_cycles++;
 	if(left_pedal.moved == 1){
 		draw_pedal(left_pedal.x,left_pedal.y);

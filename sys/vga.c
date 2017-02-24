@@ -53,6 +53,12 @@ void clear_screen(){
 	term.cursor = 162;
 }
 
+void paint_screen(){
+	for (int i = 0; i < VIDMEM_SIZE; i+=2){
+		draw_char(i ,' ', term.color_bg_value, term.color_fg_value);
+	}
+}
+
 int32_t draw_str	(
 					char string[]
 					, int32_t r
@@ -62,7 +68,7 @@ int32_t draw_str	(
 	uint32_t i=0,j=0,sp=0;
 	sp = get_point(r,c);
 	for(i=sp;i<(sp+(strlen(string)*2) )-1;i=i+2){
-			draw_char(i,string[j++],0,15);
+			draw_char(i,string[j++],term.color_bg_value, term.color_fg_value);
 	}
 	return PASS_CODE;
 }
@@ -86,13 +92,13 @@ void write_char	(
 				term.cursor = term.cursor + 2;
 			}
 			draw_char(term.cursor,'#',fg,bg);
-			draw_char(term.cursor+2,' ',COLOR_BLACK,bg);
+			draw_char(term.cursor+2,' ',term.color_bg_value,bg);
 			term.cursor +=2;
 			move_cursor(term.cursor/2);
 	}
 	else if(ascii == '\t'){
 		for(int i=0;i<8;i++){
-			draw_char(term.cursor+2,' ',COLOR_BLACK,bg);
+			draw_char(term.cursor+2,' ',term.color_bg_value,bg);
 			term.cursor += 2;
 		}
 		move_cursor(term.cursor/2);
@@ -106,7 +112,7 @@ void write_char	(
 	}
 	else{
 		draw_char(term.cursor,ascii,fg,bg);
-		draw_char(term.cursor+2,' ',COLOR_BLACK,bg);
+		draw_char(term.cursor+2,' ',term.color_bg_value,bg);
 		term.cursor += 2;
 		move_cursor(term.cursor/2);
 	}

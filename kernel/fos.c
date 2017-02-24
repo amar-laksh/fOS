@@ -8,6 +8,8 @@ void kmain	(
 			, unsigned int magic
 			)
 {
+	term.color_fg_value = COLOR_GREEN;
+	term.color_bg_value = COLOR_BLACK;
 	term.cursor = 162;
 	clear_screen();
 	
@@ -28,12 +30,14 @@ void kmain	(
 		return;
 	}
 	kprintf("Multiboot check complete.\n");
+	
 	// TODO - This is a hacky solution, change it
 	memory_t.mem_db = mbd;
 	memory_t.magic = magic;
 
 	mm_init((uint32_t)&endKernel, total_mem);
 	kprintf("MM initiated.\n");
+	
 	pci_install();
 	kprintf("PCI initiated.\n");
 
