@@ -23,12 +23,12 @@ void vim_keyboard_handler	(
 void vim()
 {
 	p = 642;
-	// irq_uninstall_handler(KEYBOARD_IRQ);
-	// irq_install_handler(KEYBOARD_IRQ, vim_keyboard_handler);
+	irq_uninstall_handler(KEYBOARD_IRQ);
+	irq_install_handler(KEYBOARD_IRQ, vim_keyboard_handler);
 	clear_screen();
 	term.color_fg_value = COLOR_WHITE;
 	term.color_bg_value = COLOR_DARK_GREY;
-	//paint_screen();
+	paint_screen();
 	here:
 		goto here;
 }
