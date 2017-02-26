@@ -82,7 +82,7 @@ void elf_dump_info	(
 		sprintf(" %x", elf32_header.elf_ident[i]);
 	}
 	sprintf("\n");
-	sprintf("ELF File is at:0x%x\n", ramdisk);
+	sprintf("ELF File is at:0x%x\n", memory_t.modules[0].module_start);
 	sprintf("ELF File type: %d\n", elf32_header.elf_type);
 	sprintf("ELF Machine type: %d\n", elf32_header.elf_machine);
 	sprintf("ELF Version: %d\n", elf32_header.elf_version);
@@ -139,7 +139,7 @@ void elf_install()
 
 	// Accumulating Program headers
 	for (int i = 0; i < elf32_header.elf_phnum; ++i){
-		void* ptr_to_header = (ramdisk+(elf32_header.elf_phoff + (elf32_header.elf_phentsize*i)));
+		void* ptr_to_header = (memory_t.modules[0].module_start+(elf32_header.elf_phoff + (elf32_header.elf_phentsize*i)));
 		phdrs_array[i].p_type = *(int*)(ptr_to_header);
 		phdrs_array[i].p_offset = *(int*)(ptr_to_header+4);
 		phdrs_array[i].p_vaddr = *(int*)(ptr_to_header+8);
@@ -152,7 +152,7 @@ void elf_install()
 
 	// Accumulating Section headers
 	for (int i = 0; i < elf32_header.elf_shnum; ++i){
-		void* ptr_to_header = (ramdisk+(elf32_header.elf_shoff + (elf32_header.elf_shentsize*i)));
+		void* ptr_to_header = (memory_t.modules[0].module_start+(elf32_header.elf_shoff + (elf32_header.elf_shentsize*i)));
 		shdrs_array[i].sh_name = *(int*)(ptr_to_header);
 		shdrs_array[i].sh_type = *(int*)(ptr_to_header+4);
 		shdrs_array[i].sh_flags = *(int*)(ptr_to_header+8);
@@ -165,17 +165,18 @@ void elf_install()
 		shdrs_array[i].sh_entsize = *(int*)(ptr_to_header+36);
 	}
 
-	void* _shstrtable = ramdisk+shdrs_array[elf32_header.elf_shstrndx].sh_offset;
+	void* _shstrtable = memory_t.modules[0].module_start+shdrs_array[elf32_header.elf_shstrndx].sh_offset;
 	// Parsing the string table
 	for (int i = 0; i < elf32_header.elf_shnum; ++i){
 		shdrs_array[i].sh_text_name = _shstrtable+shdrs_array[i].sh_name;
 	}
+	elf_dump_info(shdrs_array, phdrs_array);
 
-	// ELF32_Shdr section = elf_get_section(shdrs_array, ".text");
-	// void* ptr = (ramdisk + section.sh_offset);
-	// sprintf("section is at: 0x%x\n", ptr);
-	// for (int i = 0; i < section.sh_size; i+=4){
-	// 	sprintf("%x  ", *(int*)(ptr+i));
+	// ELF32_Shdr section = elf_get_section(shdrs_array, ".strtab");
+	// void* ptr = (memory_t.modules[0].module_start + section.sh_offset);
+	// sprintf("\n %s Section is at: 0x%x\n",section.sh_text_name, ptr);
+	// for (int i = 0; i < section.sh_size; i++){
+	// 	sprintf("%c ", *(int*)(ptr+i));
 	// }
-	//elf_dump_info(shdrs_array, phdrs_array);
+	// sprintf("\n");
 }
