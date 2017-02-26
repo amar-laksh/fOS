@@ -248,8 +248,8 @@ void resume(){
 	memset(vga_fb.vga_buffer, 0, VIDMEM_SIZE*2);
 	sprintf("\n");
 	mm_print_out();
-	char* ptr = (char*)memory_t.module_start;
-	read_text(ptr,(memory_t.module_end - memory_t.module_start));
+	char* ptr = (char*)memory_t.modules[1].module_start;
+	read_text(ptr,(memory_t.modules[0].module_end - memory_t.modules[0].module_start));
 	here:
 	if(inb(KEY_DEVICE) == 0x24)
 		scroll(1);

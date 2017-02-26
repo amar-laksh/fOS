@@ -822,6 +822,14 @@ struct regs {
     uint32_t eip, cs, eflags, useresp, ss;   /* pushed by the processor automatically */ 
 };
 
+
+typedef struct {
+	uint32_t module_start;
+	uint32_t module_end;
+} MEMORY_MODULE;
+
+
+
 typedef struct{
 	multiboot_info_t* mem_db;
 	unsigned int magic;
@@ -830,8 +838,7 @@ typedef struct{
 	unsigned long used_mem;
 	unsigned long kernel_start;
 	unsigned long kernel_end;
-	uint32_t module_start;
-	uint32_t module_end;
+	MEMORY_MODULE modules[];
 } memory;
 
 memory memory_t;

@@ -132,7 +132,7 @@ void elf_dump_info	(
 
 void elf_install()
 {
-	elf_parse_header(ramdisk_top);
+	elf_parse_header(memory_t.modules[0].module_start);
 	ELF32_Phdr phdrs_array[elf32_header.elf_phnum];
 	ELF32_Shdr shdrs_array[elf32_header.elf_shnum]; 
 

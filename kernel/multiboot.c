@@ -79,21 +79,22 @@ unsigned long long multiboot_check(
 
 		kprintf("Allocating a ramdisk and clearing it for use...\n");
 		memset(ramdisk,0,(ramdisk_top - (unsigned long)ramdisk));
-
+		int n = 0;
+		
 			for (i = 0; i <= mbd->mods_count; i+=2) {
 				uint32_t module_start = *(uint32_t*)(mbd->mods_addr + 8 * i);
 				uint32_t module_end   = *(uint32_t*)(mbd->mods_addr + 8 * i + 4);
 				kprintf("Module %d is at 0x%x:0x%x and ramdisk is at: 0x%x\n"
-								, i+1
+								, n+1
 								, module_start, module_end
 								, ramdisk
 								);
 				/**
 				 * We need to relocate all the modules to the ram disk
 				 */
-				memory_t.module_start = (uint32_t)ramdisk;
+				memory_t.modules[n].module_start = (uint32_t)ramdisk;
 				
-				memory_t.module_end = (uint32_t)ramdisk 
+				memory_t.modules[n].module_end = (uint32_t)ramdisk 
 															+ (module_end- module_start);
 				memmove (
 								ramdisk
@@ -102,13 +103,15 @@ unsigned long long multiboot_check(
 								);
 				
 				kprintf("Relocating... Now the module %d is at 0x%x:0x%x\n"
-								, i+1
+								, n+1
 								, ramdisk
-								, memory_t.module_end
+								, memory_t.modules[n].module_end
 								);
-				kprintf("The ramdisk now starts is at 0x%x:0x%x for I/O\n"
-								,ramdisk_top, memory_t.module_end);
-				ramdisk = memory_t.module_end;
+				kprintf("The ramdisk now is at 0x%x:0x%x for I/O\n"
+								,ramdisk_top
+								, memory_t.modules[n].module_end);
+				ramdisk = memory_t.modules[n].module_end;
+				n++;
 			}
 		}
 
