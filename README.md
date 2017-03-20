@@ -10,3 +10,12 @@ Just run the build.sh file and let it do the rest! :)
 
 #Progress
 ![Progress](dekho.gif)
+
+
+#Features
+
+- Support for ELF boot modules
+- PCI and Serial Communication
+- A western Notes API for PC Speaker(via PWM)
+- System Calls
+

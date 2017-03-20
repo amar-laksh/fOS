@@ -3,7 +3,7 @@
 unsigned int caps = 0;
 unsigned int shift = 0;
 unsigned int key_cycle = 0;
-#define cmd  17
+#define cmd  18
 char* commands[cmd] = {
 	"clear",
 	"beep",
@@ -21,7 +21,8 @@ char* commands[cmd] = {
 	"resume",
 	"asm",
 	"vi",
-	"help"
+	"help",
+	"?"
 };
 
 
@@ -52,7 +53,10 @@ int process_buffer(){
 	}
 
 	for(int i=0; i<cmd;i++){
-		if(equals(commands[cmd-1],argv[0]) == 0){
+		if(equals(commands[cmd-2],argv[0]) == 0 
+							||
+			equals(commands[cmd-1],argv[0]) == 0){
+
 			kprintf("\nThe available commands are:\n\n");
 			for (int i = 0; i < cmd; ++i)
 				kprintf("%s\n",commands[i]);

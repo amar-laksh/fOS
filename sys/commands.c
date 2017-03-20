@@ -278,7 +278,7 @@ void asm_execute(
 				GetInInterrupt(2);
 				break;
 			case 3:
-				GetInInterrupt(4);
+				GetInInterrupt(3);
 				break;
 			case 4:
 				GetInInterrupt(4);
