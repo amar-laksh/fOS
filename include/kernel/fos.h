@@ -440,9 +440,9 @@ struct __pci_driver;
 typedef struct {
 	uint32_t vendor;
 	uint32_t device;
-	uint16_t headerType;
-	uint16_t class;
-	uint16_t subClass;
+	uint8_t headerType;
+	uint8_t class;
+	uint8_t subClass;
 	uint16_t func;
 	
 	struct __pci_driver *driver;
