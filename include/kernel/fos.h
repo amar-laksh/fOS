@@ -1,3 +1,4 @@
+
 #ifndef FOS_H
 #define FOS_H
 #include <stdint.h>
@@ -28,7 +29,7 @@ uint32_t ramdisk_top;
 int button_on;
 int button_left;
 int button_right;
-
+int printed;
 
 //------------------------------------------------STRNG.H
 

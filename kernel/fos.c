@@ -13,6 +13,7 @@ void kmain	(
 	button_on = 0;
 	button_left = 0;
 	button_right = 0;
+	printed = 0;
 	clear_screen();
 	
 	gdt_install();
