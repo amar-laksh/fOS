@@ -4,9 +4,9 @@
 #define CHECK_FLAG(flag,bit) ((flag) & (1<<bit))
 
 unsigned long long multiboot_check(
-																		multiboot_info_t* mbd
-																		, unsigned int magic
-																	)
+									multiboot_info_t* mbd
+									, unsigned int magic
+									)
 {
 		unsigned long long total_mem_low = 0;
 		

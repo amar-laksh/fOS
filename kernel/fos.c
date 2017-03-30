@@ -1,4 +1,3 @@
-// TODO - Write unit tests for the entire kernel
 #include <kernel/fos.h>
 extern void*  endKernel;
 

@@ -9,4 +9,4 @@ echo -e "\033c"
 echo "Downloading the qemu emulator..."
 apt-get install qemu
 echo -e "\033c"
-echo "Done! Please run 'make run' to boot the kernel in qemu! (Look at the Makefile for more help :) )"
+echo "Done! Please run 'make run' to boot the kernel in qemu!"

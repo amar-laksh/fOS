@@ -119,6 +119,15 @@ uint8_t getHeaderType  (
 {
 		return pci_read_word(bus,device,function,0x0E);
 }
+
+uint32_t getBAR0(
+				uint16_t bus
+				, uint16_t device
+				, uint16_t function
+				)
+{
+	return pci_read_word(bus, device, function, 0x10) & 0xFFFFFFF0;
+}
 void pci_probe(){
 	for(uint32_t bus = 0; bus < 256; bus++){
 		for(uint32_t slot = 0; slot < 32; slot++){
@@ -149,6 +158,11 @@ void pci_probe(){
 													, slot
 													, function
 													);
+				uint32_t BAR0 = getBAR0(
+										bus
+										, slot
+										, function
+										);
 
 				pci_device *pdev = (pci_device *)
 									malloc(sizeof(pci_device));
@@ -159,6 +173,7 @@ void pci_probe(){
 				pdev->subClass = subClass;
 				pdev->func = function;
 				pdev->driver = 0;
+				pdev->BAR0 = BAR0;
 				/**
 				sprintf("%x-->[%x:%x:%x]::[%x:%x]\n"
 				, pdev->headerType
@@ -256,13 +271,14 @@ void pci_proc_dump  (
 					getVendorName(pci_dev);
 					getDeviceName(pci_dev);
 					getClasses(pci_dev);
-				kprintf("\n%x==>[%x:%x]:[%x:%x:%x]\n"
+				kprintf("\n%x==>[%x:%x]:[%x:%x:%x]:[%x]\n"
 					, pci_dev->headerType
 					, pci_dev->vendor
 					, pci_dev->device
 					, pci_dev->class
 					, pci_dev->subClass
 					, pci_dev->func
+					, pci_dev->BAR0
 					);
 			}
 		}

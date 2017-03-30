@@ -53,5 +53,3 @@ debug: os.iso
 
 %.o: %.s
 	$(AS) $< -o $@
-
-
