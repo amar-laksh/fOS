@@ -61,9 +61,11 @@ void timer_handler(irq_handler_t* handler){
 	if(term.cursor >= 2060 && term.cursor <= 2074){
 		button_on = 1;
 	}
-
+	term.color_fg_value = COLOR_RED;
+	term.color_bg_value = COLOR_GREY;
 	draw_str("SHOW MEM", 12, 70);
-
+	term.color_fg_value = COLOR_GREEN;
+	term.color_bg_value = COLOR_BLACK;
 	if(button_on == 1 && button_left == 1){
 		draw_str("Memory Information", 5, 55);
 		draw_str("Memory used:         KB", 7, 55);
