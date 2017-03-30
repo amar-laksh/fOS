@@ -53,18 +53,31 @@ void timer_handler(irq_handler_t* handler){
 	itoa(seconds, 10, buff);
 	draw_str(buff,2,75);
 
-	draw_str("Memory Information", 5, 55);
-	draw_str("Memory used:         KB", 7, 55);
-	itoa(memory_t.used_mem, 10, buff);
-	draw_str(buff, 7, 71);
-	
-	draw_str("Memory un-used:        KB", 8, 55);
-	itoa(memory_t.unused_mem, 10, buff);
-	draw_str(buff, 8, 71);
+	itoa(term.cursor, 10, buff);
+	draw_str(buff, 1, 55);
 
-	draw_str("Total Memory:         MB", 9, 55);
-	itoa(memory_t.total_mem, 10, buff);
-	draw_str(buff, 9, 71);
+
+
+	if(term.cursor >= 2060 && term.cursor <= 2074){
+		button_on = 1;
+	}
+
+	draw_str("SHOW MEM", 12, 70);
+
+	if(button_on == 1 && button_left == 1){
+		draw_str("Memory Information", 5, 55);
+		draw_str("Memory used:         KB", 7, 55);
+		itoa(memory_t.used_mem, 10, buff);
+		draw_str(buff, 7, 71);
+		
+		draw_str("Memory un-used:        KB", 8, 55);
+		itoa(memory_t.unused_mem, 10, buff);
+		draw_str(buff, 8, 71);
+
+		draw_str("Total Memory:         MB", 9, 55);
+		itoa(memory_t.total_mem, 10, buff);
+		draw_str(buff, 9, 71);
+	}
 
 	draw_str("f.O.S. - Made By Amar Lakshya",0,20);
 	irq_ack(TIMER_IRQ);

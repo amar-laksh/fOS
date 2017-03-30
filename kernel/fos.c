@@ -10,6 +10,9 @@ void kmain	(
 	term.color_fg_value = COLOR_GREEN;
 	term.color_bg_value = COLOR_BLACK;
 	term.cursor = 162;
+	button_on = 0;
+	button_left = 0;
+	button_right = 0;
 	clear_screen();
 	
 	gdt_install();
