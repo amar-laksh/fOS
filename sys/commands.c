@@ -320,11 +320,11 @@ void exec_cmd	(
 			break;
 		case 6:
 			note_test();
-			delay(200/441);
+			delay(10);
 			some_tune();
-			delay(200/441);
+			delay(10);
 			marry_song();
-			delay(200/441);
+			delay(10);
 			splash();
 			break;
 		case 7:
@@ -367,6 +367,4 @@ void exec_cmd	(
 			
 			break;
 	}
-	term.color_bg_value = COLOR_BLACK;
-	term.color_fg_value = COLOR_GREEN;
 }

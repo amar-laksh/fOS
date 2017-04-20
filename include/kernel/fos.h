@@ -20,6 +20,7 @@
 
 #include <sys/va_list.h>
 
+#define LOG 552013
 
 
 

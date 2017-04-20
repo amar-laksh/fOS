@@ -99,9 +99,11 @@ void timer_handler(irq_handler_t* handler){
 
 //TODO-  This is really hacky, remove it
 void delay(int t){
-	long long st = t + cycles;
-	while((cycles) < st){
+	int limit=100000;
+	int i=0;
+	while(i < (limit * t)){
 		draw_char(800,' ',0,0);
+		i++;
 	}
 	return;
 }

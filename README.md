@@ -8,11 +8,11 @@ It's a hobby 32-bit, Monolithic, Multi-boot Kernel which can ofcourse also prese
 Just run the build.sh file and let it do the rest! :)
 (Works on Ubuntu for now)
 
-#Progress
+# Progress
 ![Progress](dekho.gif)
 
 
-#Features
+# Features
 
 - Support for ELF boot modules
 - PCI and Serial Communication
