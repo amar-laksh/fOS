@@ -1,14 +1,13 @@
-#include<kernel/fos.h>
+#include <kernel/fos.h>
 
-void fs_write(void* ptr, char* buff){
+void
+fs_write(void* ptr, char* buff)
+{}
 
-}
+char*
+fs_read(void* ptr, unsigned int count)
+{}
 
-char* fs_read(void* ptr, unsigned int count){
-
-}
-
-
-void fs_install(){
-
-}
+void
+fs_install()
+{}
